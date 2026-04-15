@@ -1,0 +1,4406 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaufmann App — Auth & Onboarding · Versión Final</title>
+    <style>
+      /* ══════════════════════════════════════════════════════════
+   Auth & Onboarding — Versión Final
+   ══════════════════════════════════════════════════════════ */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #06090f;
+        display: flex;
+        min-height: 100vh;
+        color: var(--text-primary);
+      }
+
+      /* ── CSS TOKENS: dark default (V3 Best Of) ── */
+      :root {
+        --primary: #0071bb;
+        --primary-dark: #003a6e;
+        --background: #0b1018;
+        --surface: #131a24;
+        --text-primary: #e8eef5;
+        --text-secondary: #8a96a6;
+        --text-tertiary: #5a6878;
+        --border: rgba(255, 255, 255, 0.04);
+        --hero-grad: linear-gradient(
+          160deg,
+          #050c16 0%,
+          #071426 30%,
+          #0a2040 65%,
+          #0d3060 100%
+        );
+        --card-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.45), 0 0 1px rgba(0, 113, 187, 0.12);
+        --success: #3fc76a;
+        --warning: #f0b840;
+        --danger: #f05454;
+        --header-bg: #000000;
+        --bnav-bg: #0b1018;
+        --bnav-active: #0071bb;
+        --bnav-inactive: #5a6878;
+      }
+      body[data-mode="light"] {
+        --background: #f0f3f8;
+        --surface: #ffffff;
+        --text-primary: #0f1923;
+        --text-secondary: #4a5a6e;
+        --border: #d6dde6;
+        --card-shadow:
+          0 1px 3px rgba(0, 30, 64, 0.07), 0 4px 14px rgba(0, 30, 64, 0.05);
+        --success: #18963a;
+        --warning: #d97706;
+        --danger: #dc2626;
+        --bnav-bg: #ffffff;
+        --bnav-active: #0071bb;
+        --bnav-inactive: #8896a8;
+      }
+
+      /* ══════════════════════════════════════════════════════════
+   SIDEBAR — 272px, fixed left, dark bg #06090F
+   ══════════════════════════════════════════════════════════ */
+      .sidebar {
+        width: 272px;
+        background: #06090f;
+        overflow-y: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #111820;
+      }
+      .sb-hdr {
+        padding: 22px 20px 16px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-brand {
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+      .sb-sub {
+        font-size: 9px;
+        color: #1e2e40;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-top: 6px;
+      }
+      .sb-info {
+        padding: 14px 20px 10px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-sname {
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 3px;
+      }
+      .sb-sdesc {
+        font-size: 10px;
+        color: #2e3f52;
+        line-height: 1.5;
+      }
+      .sb-ver {
+        display: inline-block;
+        background: #111820;
+        color: #0071bb;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 5px;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+      }
+
+      /* Toggle zones */
+      .toggle-zone {
+        padding: 12px 20px;
+        border-bottom: 1px solid #111820;
+      }
+      .tog-lbl {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .tog-wrap {
+        display: flex;
+        background: #111820;
+        border-radius: 9px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .tog-btn {
+        flex: 1;
+        padding: 7px 4px;
+        border: none;
+        border-radius: 7px;
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: #2e3f52;
+        line-height: 1.3;
+      }
+      .tog-btn.on {
+        background: #0071bb;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(0, 113, 187, 0.4);
+      }
+      .mode-zone {
+        padding: 10px 20px;
+        border-bottom: 1px solid #111820;
+      }
+      .tog-btn.on-dark {
+        background: #1a2a3a;
+        color: #e6edf3;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Nav */
+      .sb-nav {
+        padding: 8px 10px 4px;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .sb-nav::-webkit-scrollbar {
+        display: none;
+      }
+      .sb-nav-lbl {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        padding: 0 8px;
+        margin: 10px 0 4px;
+      }
+      .sb-btn {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: 100%;
+        text-align: left;
+        padding: 7px 10px;
+        border: none;
+        border-radius: 7px;
+        background: transparent;
+        color: #3a4a5a;
+        font-size: 11.5px;
+        cursor: pointer;
+        transition: all 0.15s;
+        line-height: 1.3;
+        margin-bottom: 1px;
+      }
+      .sb-btn:hover {
+        background: #111820;
+        color: #8aaabb;
+      }
+      .sb-btn.on {
+        background: #111820;
+        color: #fff;
+      }
+      .sb-btn-n {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 800;
+        flex-shrink: 0;
+        background: #0a1018;
+        color: #1e2e40;
+      }
+      .sb-btn.on .sb-btn-n {
+        background: #0071bb;
+        color: #fff;
+      }
+      .sb-btn-i {
+        flex: 1;
+        min-width: 0;
+      }
+      .sb-btn-t {
+        font-weight: 600;
+        font-size: 11.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sb-btn-d {
+        font-size: 9.5px;
+        color: #1e2e40;
+        margin-top: 1px;
+        line-height: 1.3;
+      }
+      .sb-btn.on .sb-btn-d {
+        color: #3a5a7a;
+      }
+
+      /* Notes */
+      .sb-notes {
+        padding: 12px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-notes-t {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .sb-note {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: flex-start;
+      }
+      .sb-nn {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #111820;
+        color: #0071bb;
+        font-size: 8px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .sb-nt {
+        color: #2e4055;
+        font-size: 9.5px;
+        line-height: 1.55;
+      }
+      .sb-foot {
+        padding: 10px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-foot-t {
+        color: #1a2a3a;
+        font-size: 8.5px;
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 1.6;
+      }
+
+      /* ══════════════════════════════════════════════════════════
+   MAIN + DEVICE FRAME
+   ══════════════════════════════════════════════════════════ */
+      .main {
+        margin-left: 272px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 32px 40px;
+      }
+      .device {
+        width: 390px;
+        height: 844px;
+        background: #060a0e;
+        border-radius: 48px;
+        padding: 10px;
+        box-shadow:
+          0 0 0 1px #2a3040,
+          0 0 0 3px #060a0e,
+          0 0 0 4.5px #181e28,
+          0 50px 120px rgba(0, 0, 0, 0.98);
+        position: relative;
+        flex-shrink: 0;
+      }
+      .notch {
+        width: 120px;
+        height: 30px;
+        background: #060a0e;
+        border-radius: 0 0 16px 16px;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .notch-pill {
+        width: 72px;
+        height: 6px;
+        background: #141c28;
+        border-radius: 3px;
+      }
+      .device-scr {
+        width: 100%;
+        height: 100%;
+        background: var(--background);
+        border-radius: 40px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* ══════════════════════════════════════════════════════════
+   V2 (VERSION FINAL) STYLES — scoped with .vf- prefix where needed
+   ══════════════════════════════════════════════════════════ */
+      .screen {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      /* V2 tokens (light default) */
+      .device-scr {
+        --primary: #0071bb;
+        --primary-dark: #003252;
+        --primary-light: #00bae0;
+        --accent: #0071bb;
+        --background: #f0f4f8;
+        --surface: #ffffff;
+        --text-primary: #1a2633;
+        --text-secondary: #5a6b7a;
+        --text-tertiary: #8a96a3;
+        --border: #d8dee5;
+        --border-light: #e8ecf0;
+        --nav-bg: #000000;
+        --nav-text: #ffffff;
+        --nav-border: rgba(255, 255, 255, 0.08);
+        --hero-bg: #000000;
+        --hero-gradient: linear-gradient(
+          160deg,
+          #000000 0%,
+          #0d1a28 60%,
+          #003252 100%
+        );
+        --btn-primary-bg: #00adef;
+        --btn-primary-text: #ffffff;
+        --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        --sidebar-accent: #0071bb;
+        --success: #2ab733;
+        --warning: #fca402;
+        --danger: #f02100;
+        --stepper-active-bg: #0071bb;
+        --stepper-active-text: #ffffff;
+        --stepper-done-bg: #2ab733;
+        --stepper-done-text: #ffffff;
+        --stepper-inactive-bg: #d8dee5;
+        --stepper-inactive-text: #8a96a3;
+        --stepper-line: #d8dee5;
+        --stepper-line-done: #2ab733;
+        --strength-bar-empty: #d8dee5;
+      }
+      /* V2 dark mode */
+      body[data-mode="dark"] {
+        --primary: #2d9ae5;
+        --primary-dark: #0071bb;
+        --primary-light: #4db8ff;
+        --accent: #2d9ae5;
+        --background: #0d1117;
+        --surface: #161b22;
+        --text-primary: #e6edf3;
+        --text-secondary: #8b949e;
+        --text-tertiary: #6e7681;
+        --border: #21262d;
+        --border-light: #1a1f27;
+        --nav-bg: #000000;
+        --nav-text: #e6edf3;
+        --nav-border: rgba(255, 255, 255, 0.06);
+        --hero-bg: #0a1929;
+        --hero-gradient: linear-gradient(
+          160deg,
+          #0a1929 0%,
+          #0d2e4e 50%,
+          #0f3d6b 100%
+        );
+        --btn-primary-bg: #2d9ae5;
+        --btn-primary-text: #ffffff;
+        --card-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+        --sidebar-accent: #2d9ae5;
+        --success: #3fb950;
+        --warning: #e3b341;
+        --danger: #f85149;
+        --stepper-active-bg: #2d9ae5;
+        --stepper-active-text: #ffffff;
+        --stepper-done-bg: #3fb950;
+        --stepper-done-text: #ffffff;
+        --stepper-inactive-bg: #21262d;
+        --stepper-inactive-text: #6e7681;
+        --stepper-line: #21262d;
+        --stepper-line-done: #3fb950;
+        --strength-bar-empty: #21262d;
+        --bnav-bg: #010409;
+        --bnav-border: rgba(255, 255, 255, 0.06);
+        --bnav-inactive: rgba(255, 255, 255, 0.3);
+        --bnav-active: #2d9ae5;
+      }
+      body[data-mode="dark"].seg {
+        background: #161b22;
+      }
+      body[data-mode="dark"].seg-btn.on {
+        background: #21262d;
+        color: #e6edf3;
+      }
+      body[data-mode="dark"].inp-wrap {
+        background: #161b22;
+        border-color: #21262d;
+      }
+      body[data-mode="dark"].inp-wrap.err {
+        background: #1f1215;
+      }
+      body[data-mode="dark"].ch-card {
+        background: #161b22;
+        border-color: #21262d;
+      }
+      body[data-mode="dark"].ch-card.sel {
+        background: #0d2040;
+        border-color: #2d9ae5;
+      }
+      body[data-mode="dark"].ch-icon {
+        background: #0d2040;
+      }
+      body[data-mode="dark"].int-card {
+        background: #161b22;
+        border-color: #21262d;
+      }
+      body[data-mode="dark"].int-card.sel {
+        background: #0d2040;
+        border-color: #2d9ae5;
+      }
+      body[data-mode="dark"].btn-ghost {
+        background: #161b22;
+        border-color: #21262d;
+        color: #e6edf3;
+      }
+      body[data-mode="dark"].alert-err {
+        background: #1f1215;
+        border-color: #4a1020;
+      }
+      body[data-mode="dark"].pw-wrap {
+        background: #161b22;
+        border-color: #21262d;
+      }
+      body[data-mode="dark"].stepper-wrap {
+        background: #161b22;
+        border-color: #1a1f27;
+      }
+
+      /* V2: Status bar */
+      .sbar {
+        height: 50px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 0 24px 8px;
+        flex-shrink: 0;
+      }
+      .sbar-w {
+        background: #ffffff;
+        color: var(--text-primary);
+      }
+      .sbar-d {
+        background: #000000;
+        color: #ffffff;
+      }
+      .sbar-time {
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .sbar-icons {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 1px;
+      }
+      .bar {
+        width: 3px;
+        border-radius: 1px;
+      }
+      .bar:nth-child(1) {
+        height: 4px;
+      }
+      .bar:nth-child(2) {
+        height: 7px;
+      }
+      .bar:nth-child(3) {
+        height: 10px;
+      }
+      .bar:nth-child(4) {
+        height: 13px;
+      }
+      .batt {
+        width: 22px;
+        height: 11px;
+        border: 1.5px solid currentColor;
+        border-radius: 3px;
+        padding: 1.5px;
+        position: relative;
+      }
+      .batt::after {
+        content: "";
+        position: absolute;
+        right: -4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 5px;
+        background: currentColor;
+        border-radius: 0 1px 1px 0;
+      }
+      .batt-f {
+        height: 100%;
+        border-radius: 1px;
+        width: 72%;
+        background: currentColor;
+      }
+
+      /* V2: Scroll body */
+      .scr-body {
+        flex: 1;
+        overflow-y: auto;
+        background: var(--background);
+      }
+      .scr-body::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* V2: Inputs */
+      .inp-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0 0 5px;
+      }
+      .inp-wrap {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        margin-bottom: 14px;
+        position: relative;
+      }
+      .inp-wrap.err {
+        border-color: var(--danger);
+        background: #fff8f7;
+      }
+      .inp-wrap.ok {
+        border-color: var(--success);
+      }
+      .inp {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        color: var(--text-primary);
+        background: transparent;
+        padding: 13px 0;
+        font-family: inherit;
+      }
+      .inp::placeholder {
+        color: var(--text-tertiary);
+      }
+      .inp-err {
+        font-size: 12px;
+        color: var(--danger);
+        margin: -10px 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .inp-toggle {
+        border: none;
+        background: none;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--primary);
+        cursor: pointer;
+        white-space: nowrap;
+        padding: 4px 0;
+        font-family: inherit;
+      }
+
+      /* V2: Buttons */
+      .btn-prim {
+        width: 100%;
+        padding: 15px;
+        border-radius: 13px;
+        border: none;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-text);
+        font-family: inherit;
+        transition: opacity 0.2s;
+      }
+      .btn-prim:disabled,
+      .btn-prim.dis {
+        opacity: 0.38;
+        cursor: not-allowed;
+      }
+      .btn-outline {
+        width: 100%;
+        padding: 14px;
+        border-radius: 13px;
+        border: 1.5px solid rgba(255, 255, 255, 0.25);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.8);
+        font-family: inherit;
+      }
+      .btn-ghost {
+        width: 100%;
+        padding: 13px;
+        border-radius: 13px;
+        border: 1.5px solid var(--border);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        background: var(--surface);
+        color: var(--text-primary);
+        font-family: inherit;
+      }
+      .btn-link {
+        border: none;
+        background: none;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--primary);
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn-back {
+        border: none;
+        background: none;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-family: inherit;
+        display: block;
+        text-align: center;
+        width: 100%;
+        padding: 10px 0;
+      }
+      .mb8 {
+        margin-bottom: 8px;
+      }
+      .mb12 {
+        margin-bottom: 12px;
+      }
+      .mb16 {
+        margin-bottom: 16px;
+      }
+
+      /* V2: Divider */
+      .div-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 14px 0;
+      }
+      .div-line {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .div-text {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        white-space: nowrap;
+      }
+
+      /* V2: Login hero + sheet */
+      .login-hero {
+        height: 140px;
+        background: var(--hero-gradient);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 0 24px 18px;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      .login-hero::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 55%;
+        background-image: url("../../Visual aprobada por kaufmann/Automoviles/vamos.jpg");
+        background-size: cover;
+        background-position: left center;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.35) 30%,
+          rgba(0, 0, 0, 0.55) 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.35) 30%,
+          rgba(0, 0, 0, 0.55) 100%
+        );
+        mix-blend-mode: luminosity;
+        opacity: 0.45;
+        pointer-events: none;
+      }
+      .login-hero-eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+      }
+      .login-hero-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.2;
+      }
+      .login-sheet {
+        flex: 1;
+        background: var(--background);
+        overflow-y: auto;
+      }
+      .login-sheet::-webkit-scrollbar {
+        display: none;
+      }
+      .lsheet-inner {
+        padding: 20px 20px 32px;
+      }
+      .seg {
+        display: flex;
+        background: #e4e9ee;
+        border-radius: 10px;
+        padding: 3px;
+        gap: 2px;
+        margin-bottom: 18px;
+      }
+      .seg-btn {
+        flex: 1;
+        padding: 9px 6px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: var(--text-secondary);
+        font-family: inherit;
+      }
+      .seg-btn.on {
+        background: var(--surface);
+        color: var(--text-primary);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      }
+      .alert-err {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .alert-err-icon {
+        font-size: 16px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .alert-err-text {
+        font-size: 13px;
+        color: #991b1b;
+        line-height: 1.45;
+        font-weight: 500;
+      }
+
+      /* V2: Splash */
+      .splash-bg {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          165deg,
+          #000000 0%,
+          #0d1826 55%,
+          #001a3a 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px 44px;
+        overflow: hidden;
+      }
+      .splash-bg::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 50% at 50% 42%,
+          rgba(0, 113, 187, 0.09) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .splash-car-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+        opacity: 0.22;
+        mix-blend-mode: luminosity;
+        filter: brightness(0.7) contrast(1.1);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .login-hero-img {
+        position: absolute;
+        right: -10px;
+        bottom: 0;
+        height: 130%;
+        width: 55%;
+        object-fit: cover;
+        object-position: left bottom;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.35) 30%,
+          rgba(0, 0, 0, 0.6) 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.35) 30%,
+          rgba(0, 0, 0, 0.6) 100%
+        );
+        mix-blend-mode: luminosity;
+        opacity: 0.45;
+      }
+      .ob1-vehicle-img {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 55%;
+        height: 100%;
+        object-fit: cover;
+        object-position: left center;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.4) 35%,
+          rgba(0, 0, 0, 0.65) 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.4) 35%,
+          rgba(0, 0, 0, 0.65) 100%
+        );
+        mix-blend-mode: luminosity;
+        opacity: 0.5;
+        border-radius: 0 14px 14px 0;
+      }
+      .splash-center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        position: relative;
+        z-index: 1;
+        padding-top: 20px;
+      }
+      .splash-ring {
+        width: 96px;
+        height: 96px;
+        border-radius: 28px;
+        background: rgba(0, 113, 187, 0.12);
+        border: 1.5px solid rgba(0, 113, 187, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 48px rgba(0, 113, 187, 0.15);
+      }
+      .splash-hl-w {
+        font-size: 29px;
+        font-weight: 800;
+        color: #fff;
+        display: block;
+        line-height: 1.1;
+        letter-spacing: -0.3px;
+        text-align: center;
+      }
+      .splash-hl-a {
+        font-size: 29px;
+        font-weight: 800;
+        color: #00bae0;
+        display: block;
+        line-height: 1.1;
+        letter-spacing: -0.3px;
+        text-align: center;
+        margin-top: 2px;
+      }
+      .splash-sub {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.38);
+        text-align: center;
+        margin-top: 10px;
+        line-height: 1.5;
+        padding: 0 8px;
+      }
+      .splash-loader {
+        width: 34px;
+        height: 34px;
+        border: 2.5px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #0071bb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-top: 28px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .splash-footer {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .splash-version {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.18);
+        text-align: center;
+        letter-spacing: 0.5px;
+      }
+
+      /* V2: Stepper */
+      .stepper-wrap {
+        padding: 14px 20px 12px;
+        flex-shrink: 0;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border-light);
+      }
+      .stepper {
+        display: flex;
+        align-items: center;
+      }
+      .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        position: relative;
+      }
+      .step-c {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 800;
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+      }
+      .step-c.done {
+        background: var(--stepper-done-bg);
+        color: var(--stepper-done-text);
+      }
+      .step-c.active {
+        background: var(--stepper-active-bg);
+        color: var(--stepper-active-text);
+        box-shadow: 0 0 0 4px rgba(0, 113, 187, 0.15);
+      }
+      .step-c.inactive {
+        background: var(--stepper-inactive-bg);
+        color: var(--stepper-inactive-text);
+      }
+      .step-lbl {
+        font-size: 9px;
+        font-weight: 600;
+        margin-top: 5px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .step-lbl.done {
+        color: var(--stepper-done-bg);
+      }
+      .step-lbl.active {
+        color: var(--stepper-active-bg);
+        font-weight: 700;
+      }
+      .step-lbl.inactive {
+        color: var(--stepper-inactive-text);
+      }
+      .step-line {
+        flex: 1;
+        height: 2px;
+        position: relative;
+        top: -10px;
+      }
+      .step-line.done {
+        background: var(--stepper-line-done);
+      }
+      .step-line.inactive {
+        background: var(--stepper-line);
+      }
+
+      /* V2: Password */
+      .pw-wrap {
+        margin: 0 16px 12px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .pw-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 10px 14px 0;
+        display: block;
+      }
+      .pw-row {
+        display: flex;
+        align-items: center;
+        padding: 6px 14px 10px;
+      }
+      .pw-inp {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        color: var(--text-primary);
+        background: transparent;
+        font-family: inherit;
+      }
+      .pw-eye {
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 4px;
+        color: var(--text-tertiary);
+        font-family: inherit;
+        font-size: 12px;
+      }
+      .pw-str-bars {
+        display: flex;
+        gap: 4px;
+        margin: 0 16px 6px;
+      }
+      .pw-bar {
+        flex: 1;
+        height: 3px;
+        border-radius: 2px;
+      }
+      .pw-req-list {
+        margin: 0 16px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .pw-req {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: var(--text-tertiary);
+      }
+      .pw-req.met {
+        color: var(--success);
+      }
+      .pw-req-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1.5px solid currentColor;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+
+      /* V2: Channel cards */
+      .ch-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 0 16px 10px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 16px;
+        cursor: pointer;
+        transition: all 0.18s;
+      }
+      .ch-card.sel {
+        border-color: var(--primary);
+        background: #eef5fc;
+      }
+      .ch-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #eef5fc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+      .ch-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      .ch-desc {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 2px;
+      }
+      .ch-radio {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        margin-left: auto;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ch-card.sel .ch-radio {
+        border-color: var(--primary);
+        background: var(--primary);
+      }
+      .ch-radio-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #fff;
+      }
+
+      /* V2: Interest grid */
+      .int-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 0 16px 12px;
+      }
+      .int-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 14px;
+        cursor: pointer;
+        transition: all 0.18s;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .int-card.sel {
+        border-color: var(--primary);
+        background: #eef5fc;
+      }
+      .int-icon {
+        font-size: 22px;
+      }
+      .int-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      .int-sub {
+        font-size: 11px;
+        color: var(--text-secondary);
+        line-height: 1.3;
+      }
+
+      /* V2: Recovery centered */
+      .centered-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 24px;
+        overflow-y: auto;
+      }
+      .centered-body::-webkit-scrollbar {
+        display: none;
+      }
+      .big-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
+        margin-bottom: 20px;
+      }
+
+      /* V2: Biometric */
+      .bio-layout {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 28px 48px;
+        background: var(--background);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══════════════════════════════════════════ SIDEBAR ══ -->
+    <aside class="sidebar">
+      <div class="sb-hdr">
+        <div class="sb-brand">KAUFMANN</div>
+        <div class="sb-sub">Auth & Onboarding</div>
+      </div>
+      <div class="sb-info">
+        <div class="sb-sname">Auth + Onboarding</div>
+        <div class="sb-sdesc">
+          Flujo completo: splash, login, registro, recuperación, biometría y
+          onboarding de 5 pasos.
+        </div>
+        <div class="sb-ver">Versión Final · 31 MAR 2026</div>
+      </div>
+
+      <!-- Mode toggle -->
+      <div class="toggle-zone mode-zone" id="mode-zone">
+        <div class="tog-lbl">Modo</div>
+        <div class="tog-wrap">
+          <button class="tog-btn on" id="btn-dark" onclick="setMode('dark')">
+            Oscuro
+          </button>
+          <button class="tog-btn" id="btn-light" onclick="setMode('light')">
+            Claro
+          </button>
+        </div>
+      </div>
+
+      <!-- Screen nav -->
+      <nav class="sb-nav" id="nav-final">
+        <div class="sb-nav-lbl">Auth — Acceso</div>
+        <button class="sb-btn on" onclick="goFinal('s-splash')">
+          <div class="sb-btn-n">1</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Splash</div>
+            <div class="sb-btn-d">Carga + acceso principal</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-login')">
+          <div class="sb-btn-n">2</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Login</div>
+            <div class="sb-btn-d">RUT + contraseña</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-login-err-pass')">
+          <div class="sb-btn-n">3</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Login Error</div>
+            <div class="sb-btn-d">Contraseña incorrecta</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-registro')">
+          <div class="sb-btn-n">4</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Registro</div>
+            <div class="sb-btn-d">7 campos + strength meter</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-recuperar')">
+          <div class="sb-btn-n">5</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Recuperar</div>
+            <div class="sb-btn-d">Ingreso email</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-recuperar-ok')">
+          <div class="sb-btn-n">6</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Enviado</div>
+            <div class="sb-btn-d">Confirmacion correo</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-biometría')">
+          <div class="sb-btn-n">7</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Biometría</div>
+            <div class="sb-btn-d">Face ID / Touch ID</div>
+          </div>
+        </button>
+        <div class="sb-nav-lbl">Onboarding — 5 pasos</div>
+        <button class="sb-btn" onclick="goFinal('s-ob1')">
+          <div class="sb-btn-n">8</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Bienvenida</div>
+            <div class="sb-btn-d">Paso 1/5</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-ob2')">
+          <div class="sb-btn-n">9</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Contraseña</div>
+            <div class="sb-btn-d">Paso 2/5</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-ob3')">
+          <div class="sb-btn-n">10</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Canal</div>
+            <div class="sb-btn-d">Paso 3/5</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-ob4')">
+          <div class="sb-btn-n">11</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Intereses</div>
+            <div class="sb-btn-d">Paso 4/5</div>
+          </div>
+        </button>
+        <button class="sb-btn" onclick="goFinal('s-ob5')">
+          <div class="sb-btn-n">12</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Listo</div>
+            <div class="sb-btn-d">Paso 5/5</div>
+          </div>
+        </button>
+      </nav>
+
+      <div class="sb-notes">
+        <div class="sb-notes-t">Notas de Diseño</div>
+        <div class="sb-note">
+          <div class="sb-nn">1</div>
+          <div class="sb-nt">
+            Paleta Max unificada: primary #0071BB, header negro #000000.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">2</div>
+          <div class="sb-nt">
+            Login solo por RUT (DEC-009). Sin tab de email.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">3</div>
+          <div class="sb-nt">
+            Sin bottom nav en pantallas pre-autenticación.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">4</div>
+          <div class="sb-nt">Iconos SVG Feather stroke 1.75. Sin emojis.</div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">5</div>
+          <div class="sb-nt">Versión Final = propuesta F aprobada.</div>
+        </div>
+      </div>
+      <div class="sb-foot">
+        <div class="sb-foot-t">
+          Kaufmann App · Auth & Onboarding · Versión Final<br />Diseñada por
+          CEBA · 31 MAR 2026
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══════════════════════════════════════════ DEVICE FRAME ══ -->
+    <div class="main">
+      <div class="device">
+        <div class="notch"><div class="notch-pill"></div></div>
+        <div class="device-scr">
+          <!-- ═══════════════════════════════════════════════════════
+         VERSION FINAL (Propuesta F)
+         ═══════════════════════════════════════════════════════ -->
+          <div id="layer-final">
+            <!-- 1. SPLASH -->
+            <div class="screen active" id="s-splash">
+              <div class="splash-bg">
+                <img
+                  class="splash-car-bg"
+                  src="../../../Visual aprobada por kaufmann/Automoviles/Clase E/AMG034587.jpg"
+                  alt=""
+                />
+                <div class="splash-center">
+                  <div
+                    style="
+                      font-size: 10px;
+                      font-weight: 800;
+                      color: rgba(255, 255, 255, 0.25);
+                      letter-spacing: 4px;
+                      text-transform: uppercase;
+                      margin-bottom: 32px;
+                    "
+                  >
+                    GRUPO KAUFMANN
+                  </div>
+                  <div class="splash-ring">
+                    <svg
+                      width="44"
+                      height="44"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#0071BB"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 8v4l3 3" />
+                    </svg>
+                  </div>
+                  <div style="margin-top: 28px">
+                    <span class="splash-hl-w">Tu auto,</span>
+                    <span class="splash-hl-a">en buenas manos.</span>
+                  </div>
+                  <div class="splash-sub">
+                    Gestion de servicios automotrices, reservas y postventa en
+                    un solo lugar.
+                  </div>
+                  <div class="splash-loader"></div>
+                  <div
+                    style="
+                      margin-top: 16px;
+                      font-size: 11px;
+                      font-weight: 600;
+                      letter-spacing: 2px;
+                      color: rgba(255, 255, 255, 0.15);
+                      text-transform: uppercase;
+                    "
+                  >
+                    <span
+                      style="
+                        font-family:
+                          &quot;Times New Roman&quot;, Georgia, serif;
+                        font-size: 16px;
+                        font-weight: 400;
+                        letter-spacing: 5px;
+                        background: linear-gradient(
+                          45deg,
+                          #8a9aaa 5%,
+                          #ffffff 10%,
+                          #b8c4d0 30%,
+                          #e8eef4 50%,
+                          #b8c4d0 70%,
+                          #ffffff 80%,
+                          #8a9aaa 95%
+                        );
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                        filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                      "
+                      >KAUFMANN</span
+                    >
+                  </div>
+                </div>
+                <div class="splash-footer">
+                  <button class="btn-prim" onclick="goFinal('s-login')">
+                    Ingresar a mi cuenta
+                  </button>
+                  <button class="btn-outline" onclick="goFinal('s-registro')">
+                    Crear cuenta nueva
+                  </button>
+                  <div class="splash-version">Grupo Kaufmann · v2.0.0</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. LOGIN RUT -->
+            <div class="screen" id="s-login">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="login-hero">
+                <div style="margin-bottom: 10px">
+                  <span
+                    style="
+                      font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                      font-size: 16px;
+                      font-weight: 400;
+                      letter-spacing: 5px;
+                      background: linear-gradient(
+                        45deg,
+                        #8a9aaa 5%,
+                        #ffffff 10%,
+                        #b8c4d0 30%,
+                        #e8eef4 50%,
+                        #b8c4d0 70%,
+                        #ffffff 80%,
+                        #8a9aaa 95%
+                      );
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;
+                      background-clip: text;
+                      filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                    "
+                    >KAUFMANN</span
+                  >
+                </div>
+                <div class="login-hero-eyebrow">Bienvenido de vuelta</div>
+                <div class="login-hero-title">Iniciar sesión</div>
+              </div>
+              <div class="login-sheet">
+                <div class="lsheet-inner">
+                  <div class="inp-label">RUT</div>
+                  <div class="inp-wrap">
+                    <input
+                      class="inp"
+                      type="text"
+                      value="12.345.678-9"
+                      placeholder="12.345.678-9"
+                    />
+                  </div>
+                  <div class="inp-label">Contraseña</div>
+                  <div class="inp-wrap">
+                    <input
+                      class="inp"
+                      type="password"
+                      value="contraseña"
+                      style="padding-right: 10px"
+                    /><button class="inp-toggle">Mostrar</button>
+                  </div>
+                  <div style="text-align: right; margin: -6px 0 18px">
+                    <button class="btn-link" onclick="goFinal('s-recuperar')">
+                      Olvide mi contraseña
+                    </button>
+                  </div>
+                  <button
+                    class="btn-prim mb12"
+                    onclick="goFinal('s-biometría')"
+                  >
+                    Ingresar
+                  </button>
+                  <div class="div-row">
+                    <div class="div-line"></div>
+                    <div class="div-text">o accede con</div>
+                    <div class="div-line"></div>
+                  </div>
+                  <button class="btn-ghost mb16">
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                      "
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect
+                          x="3"
+                          y="11"
+                          width="18"
+                          height="11"
+                          rx="2"
+                          ry="2"
+                        />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+                      >Face ID / Touch ID</span
+                    >
+                  </button>
+                  <div style="text-align: center; margin-bottom: 8px">
+                    <button class="btn-link" onclick="goFinal('s-ob1')">
+                      <span style="color: var(--text-tertiary)"
+                        >¿Primera vez? </span
+                      >Escanear QR de activación
+                    </button>
+                  </div>
+                  <div style="text-align: center">
+                    <span style="font-size: 14px; color: var(--text-secondary)"
+                      >¿No tienes cuenta? </span
+                    ><button class="btn-link" onclick="goFinal('s-registro')">
+                      Crear cuenta
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. LOGIN ERROR CONTRASEÑA -->
+            <div class="screen" id="s-login-err-pass">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="login-hero">
+                <div style="margin-bottom: 10px">
+                  <span
+                    style="
+                      font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                      font-size: 16px;
+                      font-weight: 400;
+                      letter-spacing: 5px;
+                      background: linear-gradient(
+                        45deg,
+                        #8a9aaa 5%,
+                        #ffffff 10%,
+                        #b8c4d0 30%,
+                        #e8eef4 50%,
+                        #b8c4d0 70%,
+                        #ffffff 80%,
+                        #8a9aaa 95%
+                      );
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;
+                      background-clip: text;
+                      filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                    "
+                    >KAUFMANN</span
+                  >
+                </div>
+                <div class="login-hero-eyebrow">Bienvenido de vuelta</div>
+                <div class="login-hero-title">Iniciar sesión</div>
+              </div>
+              <div class="login-sheet">
+                <div class="lsheet-inner">
+                  <div class="inp-label">RUT</div>
+                  <div class="inp-wrap ok">
+                    <input class="inp" type="text" value="12.345.678-9" />
+                  </div>
+                  <div class="inp-label">Contraseña</div>
+                  <div class="inp-wrap err">
+                    <input
+                      class="inp"
+                      type="password"
+                      value="incorrecta"
+                      style="padding-right: 10px"
+                    /><button class="inp-toggle">Mostrar</button>
+                  </div>
+                  <div class="inp-err">
+                    <svg
+                      width="13"
+                      height="13"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                    Contraseña incorrecta. Intentos restantes: 2
+                  </div>
+                  <div style="text-align: right; margin: -2px 0 18px">
+                    <button
+                      class="btn-link"
+                      style="color: var(--danger)"
+                      onclick="goFinal('s-recuperar')"
+                    >
+                      Recuperar contraseña
+                    </button>
+                  </div>
+                  <button class="btn-prim mb12" onclick="goFinal('s-login')">
+                    Intentar de nuevo
+                  </button>
+                  <div class="div-row">
+                    <div class="div-line"></div>
+                    <div class="div-text">o accede con</div>
+                    <div class="div-line"></div>
+                  </div>
+                  <button class="btn-ghost mb16">
+                    <span
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                      "
+                      ><svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+                      >Face ID / Touch ID</span
+                    >
+                  </button>
+                  <div style="text-align: center">
+                    <span style="font-size: 14px; color: var(--text-secondary)"
+                      >¿No tienes cuenta? </span
+                    ><button class="btn-link" onclick="goFinal('s-registro')">
+                      Crear cuenta
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. REGISTRO -->
+            <div class="screen" id="s-registro">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  padding: 0 16px;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <button
+                  style="
+                    border: none;
+                    background: none;
+                    color: #fff;
+                    cursor: pointer;
+                    padding: 4px;
+                    display: flex;
+                    align-items: center;
+                  "
+                  onclick="goFinal('s-splash')"
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <span
+                  style="
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                  "
+                  ><span
+                    style="
+                      font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                      font-size: 16px;
+                      font-weight: 400;
+                      letter-spacing: 5px;
+                      background: linear-gradient(
+                        45deg,
+                        #8a9aaa 5%,
+                        #ffffff 10%,
+                        #b8c4d0 30%,
+                        #e8eef4 50%,
+                        #b8c4d0 70%,
+                        #ffffff 80%,
+                        #8a9aaa 95%
+                      );
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;
+                      background-clip: text;
+                      filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                    "
+                    >KAUFMANN</span
+                  ></span
+                >
+              </div>
+              <div class="scr-body">
+                <div style="padding: 20px 16px 8px">
+                  <div
+                    style="
+                      font-size: 13px;
+                      color: var(--text-secondary);
+                      line-height: 1.5;
+                    "
+                  >
+                    Completa tus datos para acceder a todos los servicios
+                    Kaufmann.
+                  </div>
+                </div>
+                <div
+                  style="
+                    margin: 0 16px 10px;
+                    background: var(--surface);
+                    border-radius: 14px;
+                    overflow: hidden;
+                    box-shadow: var(--card-shadow);
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      padding: 12px 16px 10px;
+                      border-bottom: 1px solid var(--border-light);
+                    "
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--text-tertiary)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" /></svg
+                    ><span
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        text-transform: uppercase;
+                        letter-spacing: 0.8px;
+                      "
+                      >Datos personales</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      padding: 12px 16px;
+                      border-bottom: 1px solid var(--border-light);
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                      "
+                    >
+                      RUT
+                    </div>
+                    <input
+                      style="
+                        width: 100%;
+                        border: none;
+                        outline: none;
+                        font-size: 15px;
+                        color: var(--text-primary);
+                        background: transparent;
+                        font-family: inherit;
+                      "
+                      value="12.345.678-9"
+                      type="text"
+                    />
+                  </div>
+                  <div
+                    style="
+                      padding: 12px 16px;
+                      border-bottom: 1px solid var(--border-light);
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                      "
+                    >
+                      Nombre completo
+                    </div>
+                    <input
+                      style="
+                        width: 100%;
+                        border: none;
+                        outline: none;
+                        font-size: 15px;
+                        color: var(--text-primary);
+                        background: transparent;
+                        font-family: inherit;
+                      "
+                      value="Pedro González"
+                      type="text"
+                    />
+                  </div>
+                  <div
+                    style="
+                      padding: 12px 16px;
+                      border-bottom: 1px solid var(--border-light);
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                      "
+                    >
+                      Correo electrónico
+                    </div>
+                    <input
+                      style="
+                        width: 100%;
+                        border: none;
+                        outline: none;
+                        font-size: 15px;
+                        color: var(--text-primary);
+                        background: transparent;
+                        font-family: inherit;
+                      "
+                      value="pedro@email.com"
+                      type="email"
+                    />
+                  </div>
+                  <div style="padding: 12px 16px">
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                      "
+                    >
+                      Teléfono
+                    </div>
+                    <input
+                      style="
+                        width: 100%;
+                        border: none;
+                        outline: none;
+                        font-size: 15px;
+                        color: var(--text-primary);
+                        background: transparent;
+                        font-family: inherit;
+                      "
+                      value="+56 9 8765 4321"
+                      type="tel"
+                    />
+                  </div>
+                </div>
+                <div
+                  style="
+                    margin: 0 16px 10px;
+                    background: var(--surface);
+                    border-radius: 14px;
+                    overflow: hidden;
+                    box-shadow: var(--card-shadow);
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 8px;
+                      padding: 12px 16px 10px;
+                      border-bottom: 1px solid var(--border-light);
+                    "
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--text-tertiary)"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <rect x="3" y="11" width="18" height="11" rx="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+                    ><span
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        text-transform: uppercase;
+                        letter-spacing: 0.8px;
+                      "
+                      >Seguridad</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      padding: 12px 16px;
+                      border-bottom: 1px solid var(--border-light);
+                    "
+                  >
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                      "
+                    >
+                      Contraseña
+                    </div>
+                    <div style="display: flex; align-items: center">
+                      <input
+                        style="
+                          flex: 1;
+                          border: none;
+                          outline: none;
+                          font-size: 15px;
+                          color: var(--text-primary);
+                          background: transparent;
+                          font-family: inherit;
+                        "
+                        value="Kfm@2026"
+                        type="password"
+                      /><button
+                        style="
+                          border: none;
+                          background: none;
+                          color: var(--primary);
+                          font-size: 12px;
+                          font-weight: 600;
+                          cursor: pointer;
+                          font-family: inherit;
+                        "
+                      >
+                        Mostrar
+                      </button>
+                    </div>
+                  </div>
+                  <div style="padding: 12px 16px">
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        margin-bottom: 5px;
+                      "
+                    >
+                      Confirmar contraseña
+                    </div>
+                    <input
+                      style="
+                        width: 100%;
+                        border: none;
+                        outline: none;
+                        font-size: 15px;
+                        color: var(--text-primary);
+                        background: transparent;
+                        font-family: inherit;
+                      "
+                      value="Kfm@2026"
+                      type="password"
+                    />
+                  </div>
+                </div>
+                <div style="display: flex; gap: 4px; margin: 0 16px 6px">
+                  <div
+                    style="
+                      flex: 1;
+                      height: 4px;
+                      border-radius: 2px;
+                      background: var(--success);
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      height: 4px;
+                      border-radius: 2px;
+                      background: var(--success);
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      height: 4px;
+                      border-radius: 2px;
+                      background: var(--success);
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      height: 4px;
+                      border-radius: 2px;
+                      background: var(--strength-bar-empty, #d8dee5);
+                    "
+                  ></div>
+                </div>
+                <div
+                  style="
+                    margin: 0 16px 16px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: var(--success);
+                  "
+                >
+                  Contraseña fuerte
+                </div>
+                <div
+                  style="
+                    margin: 0 16px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    margin-bottom: 12px;
+                  "
+                >
+                  <label
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 10px;
+                      cursor: pointer;
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      checked
+                      style="
+                        width: 18px;
+                        height: 18px;
+                        accent-color: #00adef;
+                        flex-shrink: 0;
+                        margin-top: 1px;
+                      "
+                    />
+                    <span
+                      style="
+                        font-size: 12px;
+                        color: var(--text-secondary);
+                        line-height: 1.5;
+                      "
+                      >Acepto los
+                      <span
+                        style="
+                          color: var(--primary);
+                          font-weight: 600;
+                          text-decoration: underline;
+                        "
+                        >Terminos y Condiciones</span
+                      >
+                      del servicio</span
+                    >
+                  </label>
+                  <label
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 10px;
+                      cursor: pointer;
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      checked
+                      style="
+                        width: 18px;
+                        height: 18px;
+                        accent-color: #00adef;
+                        flex-shrink: 0;
+                        margin-top: 1px;
+                      "
+                    />
+                    <span
+                      style="
+                        font-size: 12px;
+                        color: var(--text-secondary);
+                        line-height: 1.5;
+                      "
+                      >Acepto la
+                      <span
+                        style="
+                          color: var(--primary);
+                          font-weight: 600;
+                          text-decoration: underline;
+                        "
+                        >Politica de Privacidad</span
+                      ></span
+                    >
+                  </label>
+                  <label
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 10px;
+                      cursor: pointer;
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      style="
+                        width: 18px;
+                        height: 18px;
+                        accent-color: #00adef;
+                        flex-shrink: 0;
+                        margin-top: 1px;
+                      "
+                    />
+                    <span
+                      style="
+                        font-size: 12px;
+                        color: var(--text-secondary);
+                        line-height: 1.5;
+                      "
+                      >Acepto el tratamiento de datos con fines comerciales y de
+                      <span
+                        style="
+                          color: var(--primary);
+                          font-weight: 600;
+                          text-decoration: underline;
+                        "
+                        >marketing</span
+                      ></span
+                    >
+                  </label>
+                </div>
+                <div style="padding: 12px 16px 10px">
+                  <button class="btn-prim" onclick="goFinal('s-biometría')">
+                    Crear cuenta
+                  </button>
+                </div>
+                <div style="text-align: center; padding-bottom: 24px">
+                  <button
+                    class="btn-link"
+                    style="color: var(--text-secondary)"
+                    onclick="goFinal('s-login')"
+                  >
+                    Ya tengo cuenta
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. RECUPERAR CONTRASEÑA -->
+            <div class="screen" id="s-recuperar">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  padding: 0 16px;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <button
+                  style="
+                    border: none;
+                    background: none;
+                    color: #fff;
+                    cursor: pointer;
+                    padding: 4px;
+                    display: flex;
+                    align-items: center;
+                  "
+                  onclick="goFinal('s-login')"
+                >
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <span
+                  style="
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                  "
+                  ><span
+                    style="
+                      font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                      font-size: 16px;
+                      font-weight: 400;
+                      letter-spacing: 5px;
+                      background: linear-gradient(
+                        45deg,
+                        #8a9aaa 5%,
+                        #ffffff 10%,
+                        #b8c4d0 30%,
+                        #e8eef4 50%,
+                        #b8c4d0 70%,
+                        #ffffff 80%,
+                        #8a9aaa 95%
+                      );
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;
+                      background-clip: text;
+                      filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                    "
+                    >KAUFMANN</span
+                  ></span
+                >
+              </div>
+              <div class="centered-body">
+                <div class="big-icon" style="background: #eef5fc">
+                  <svg
+                    width="36"
+                    height="36"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0071BB"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                </div>
+                <div
+                  style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    text-align: center;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Olvide mi contraseña
+                </div>
+                <div
+                  style="
+                    font-size: 13px;
+                    color: var(--text-secondary);
+                    text-align: center;
+                    line-height: 1.55;
+                    margin-bottom: 28px;
+                  "
+                >
+                  Ingresa el correo electrónico asociado a tu cuenta y te
+                  enviaremos instrucciones para restablecer tu contraseña.
+                </div>
+                <div style="width: 100%">
+                  <div class="inp-label">Correo electrónico</div>
+                  <div class="inp-wrap">
+                    <input
+                      class="inp"
+                      type="email"
+                      value="pedro@email.com"
+                      placeholder="tu@correo.com"
+                    />
+                  </div>
+                  <button
+                    class="btn-prim mb12"
+                    style="margin-top: 8px"
+                    onclick="goFinal('s-recuperar-ok')"
+                  >
+                    Enviar instrucciones
+                  </button>
+                  <button class="btn-back" onclick="goFinal('s-login')">
+                    Volver al login
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. RECUPERAR OK -->
+            <div class="screen" id="s-recuperar-ok">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="centered-body">
+                <div class="big-icon" style="background: #ecfdf5">
+                  <svg
+                    width="36"
+                    height="36"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#2AB733"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <div
+                  style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    text-align: center;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Correo enviado
+                </div>
+                <div
+                  style="
+                    font-size: 13px;
+                    color: var(--text-secondary);
+                    text-align: center;
+                    line-height: 1.55;
+                    margin-bottom: 6px;
+                  "
+                >
+                  Enviamos las instrucciones a:
+                </div>
+                <div
+                  style="
+                    font-size: 15px;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    text-align: center;
+                    margin-bottom: 28px;
+                  "
+                >
+                  p***@email.com
+                </div>
+                <div
+                  style="
+                    width: 100%;
+                    background: var(--surface);
+                    border-radius: 14px;
+                    padding: 16px;
+                    box-shadow: var(--card-shadow);
+                    margin-bottom: 20px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 13px;
+                      font-weight: 700;
+                      color: var(--text-primary);
+                      margin-bottom: 6px;
+                    "
+                  >
+                    Que hacer ahora:
+                  </div>
+                  <div
+                    style="
+                      font-size: 13px;
+                      color: var(--text-secondary);
+                      line-height: 1.6;
+                    "
+                  >
+                    1. Revisa tu bandeja de entrada<br />2. Abre el correo de
+                    Kaufmann<br />3. Sigue el enlace para restablecer tu
+                    contraseña<br />4. El enlace expira en 30 minutos
+                  </div>
+                </div>
+                <button class="btn-prim mb12" onclick="goFinal('s-login')">
+                  Volver al login
+                </button>
+                <button class="btn-back" onclick="goFinal('s-recuperar')">
+                  Reenviar correo
+                </button>
+              </div>
+            </div>
+
+            <!-- 7. BIOMETRÍA -->
+            <div class="screen" id="s-biometría">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="bio-layout">
+                <div
+                  style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: #eef5fc;
+                    border: 1px solid rgba(0, 113, 187, 0.2);
+                    border-radius: 20px;
+                    padding: 5px 12px;
+                    margin-bottom: 24px;
+                  "
+                >
+                  <div
+                    style="
+                      width: 6px;
+                      height: 6px;
+                      border-radius: 50%;
+                      background: var(--primary);
+                    "
+                  ></div>
+                  <span
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: var(--primary);
+                      letter-spacing: 0.5px;
+                      text-transform: uppercase;
+                    "
+                    >Acceso seguro</span
+                  >
+                </div>
+                <div
+                  style="
+                    width: 96px;
+                    height: 96px;
+                    border-radius: 28px;
+                    background: #eef5fc;
+                    border: 1.5px solid rgba(0, 113, 187, 0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 24px;
+                    box-shadow: 0 0 40px rgba(0, 113, 187, 0.1);
+                  "
+                >
+                  <svg
+                    width="44"
+                    height="44"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0071BB"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                </div>
+                <div
+                  style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                    text-align: center;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Activa Face ID
+                </div>
+                <div
+                  style="
+                    font-size: 13px;
+                    color: var(--text-secondary);
+                    text-align: center;
+                    line-height: 1.55;
+                    margin-bottom: 36px;
+                    padding: 0 8px;
+                  "
+                >
+                  Ingresa mas rápido sin escribir tu contraseña cada vez. Puedes
+                  desactivarlo desde tu perfil en cualquier momento.
+                </div>
+                <div
+                  style="
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                  "
+                >
+                  <button class="btn-prim" onclick="goFinal('s-ob1')">
+                    Activar Face ID / Touch ID
+                  </button>
+                  <button class="btn-ghost" onclick="goFinal('s-ob1')">
+                    Ahora no
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8. ONBOARDING 1 — BIENVENIDA -->
+            <div class="screen" id="s-ob1">
+              <div
+                class="sbar"
+                style="
+                  background: var(--hero-bg, #000000);
+                  color: #fff;
+                  flex-shrink: 0;
+                "
+              >
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--hero-bg, #000000);
+                  padding: 8px 24px 24px;
+                  flex-shrink: 0;
+                  position: relative;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    position: absolute;
+                    top: -60px;
+                    right: -40px;
+                    width: 220px;
+                    height: 220px;
+                    border-radius: 50%;
+                    background: radial-gradient(
+                      circle,
+                      rgba(0, 113, 187, 0.12) 0%,
+                      transparent 70%
+                    );
+                    pointer-events: none;
+                  "
+                ></div>
+                <div
+                  style="
+                    font-size: 10px;
+                    font-weight: 800;
+                    color: rgba(255, 255, 255, 0.25);
+                    letter-spacing: 3px;
+                    text-transform: uppercase;
+                    margin-bottom: 16px;
+                  "
+                >
+                  <span
+                    style="
+                      font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                      font-size: 13px;
+                      font-weight: 400;
+                      letter-spacing: 4px;
+                      background: linear-gradient(
+                        45deg,
+                        #8a9aaa 5%,
+                        #ffffff 10%,
+                        #b8c4d0 30%,
+                        #e8eef4 50%,
+                        #b8c4d0 70%,
+                        #ffffff 80%,
+                        #8a9aaa 95%
+                      );
+                      -webkit-background-clip: text;
+                      -webkit-text-fill-color: transparent;
+                      background-clip: text;
+                    "
+                    >KAUFMANN</span
+                  >
+                </div>
+                <div
+                  style="
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.5);
+                    margin-bottom: 3px;
+                  "
+                >
+                  Hola, Pedro
+                </div>
+                <div
+                  style="
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: #fff;
+                    line-height: 1.25;
+                    margin-bottom: 6px;
+                  "
+                >
+                  Bienvenido a<br />Kaufmann App
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: rgba(255, 255, 255, 0.45);
+                    line-height: 1.5;
+                    margin-bottom: 16px;
+                  "
+                >
+                  Personaliza tu experiencia en solo unos pasos.
+                </div>
+                <div
+                  style="
+                    background: rgba(255, 255, 255, 0.07);
+                    border: 1px solid rgba(255, 255, 255, 0.13);
+                    border-radius: 14px;
+                    padding: 14px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    position: relative;
+                    overflow: hidden;
+                  "
+                >
+                  <img
+                    class="ob1-vehicle-img"
+                    src="../../../Visual aprobada por kaufmann/Automoviles/MBC20041.jpg"
+                    alt="GLC 300"
+                  />
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="position: relative; z-index: 1; flex-shrink: 0"
+                  >
+                    <path
+                      d="M5 17h14M5 17a2 2 0 0 1-2-2v-4h1l2-4h12l2 4h1v4a2 2 0 0 1-2 2M5 17a2 2 0 1 0 4 0m6 0a2 2 0 1 0 4 0"
+                    />
+                  </svg>
+                  <div style="flex: 1; position: relative; z-index: 1">
+                    <div style="font-size: 14px; font-weight: 800; color: #fff">
+                      Mercedes-Benz GLC 300
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: rgba(255, 255, 255, 0.45);
+                        margin-top: 1px;
+                      "
+                    >
+                      Azul Brillante · Sucursal Las Condes
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: var(--primary);
+                      color: #fff;
+                      font-size: 10px;
+                      font-weight: 800;
+                      padding: 3px 9px;
+                      border-radius: 8px;
+                      letter-spacing: 0.8px;
+                      flex-shrink: 0;
+                      position: relative;
+                      z-index: 1;
+                    "
+                  >
+                    KWRS-21
+                  </div>
+                </div>
+              </div>
+              <div class="stepper-wrap">
+                <div class="stepper">
+                  <div class="step-item">
+                    <div class="step-c active">1</div>
+                    <div class="step-lbl active">Inicio</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">2</div>
+                    <div class="step-lbl inactive">Contraseña</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">3</div>
+                    <div class="step-lbl inactive">Canal</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">4</div>
+                    <div class="step-lbl inactive">Intereses</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">5</div>
+                    <div class="step-lbl inactive">Listo</div>
+                  </div>
+                </div>
+              </div>
+              <div class="scr-body">
+                <div style="padding: 18px 16px 10px">
+                  <div
+                    style="
+                      font-size: 16px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                      margin-bottom: 3px;
+                    "
+                  >
+                    Que haremos juntos
+                  </div>
+                  <div style="font-size: 13px; color: var(--text-secondary)">
+                    3 pasos rápidos para personalizar tu cuenta.
+                  </div>
+                </div>
+                <div
+                  style="
+                    margin: 0 16px 16px;
+                    background: var(--surface);
+                    border-radius: 14px;
+                    overflow: hidden;
+                    box-shadow: var(--card-shadow);
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      padding: 13px 16px;
+                      border-bottom: 1px solid var(--border-light, #e8ecf0);
+                    "
+                  >
+                    <div
+                      style="
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 10px;
+                        background: #eef5fc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                      "
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#0071BB"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    </div>
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 13px;
+                          font-weight: 700;
+                          color: var(--text-primary);
+                        "
+                      >
+                        Crea tu contraseña
+                      </div>
+                      <div
+                        style="font-size: 11px; color: var(--text-secondary)"
+                      >
+                        Acceso seguro a tu cuenta
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                      "
+                    >
+                      Paso 2
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      padding: 13px 16px;
+                      border-bottom: 1px solid var(--border-light, #e8ecf0);
+                    "
+                  >
+                    <div
+                      style="
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 10px;
+                        background: #eef5fc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                      "
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#0071BB"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <path
+                          d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                        />
+                      </svg>
+                    </div>
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 13px;
+                          font-weight: 700;
+                          color: var(--text-primary);
+                        "
+                      >
+                        Canal de contacto
+                      </div>
+                      <div
+                        style="font-size: 11px; color: var(--text-secondary)"
+                      >
+                        Como prefieres que te contactemos
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                      "
+                    >
+                      Paso 3
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 12px;
+                      padding: 13px 16px;
+                    "
+                  >
+                    <div
+                      style="
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 10px;
+                        background: #eef5fc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                      "
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#0071BB"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <polygon
+                          points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                        />
+                      </svg>
+                    </div>
+                    <div style="flex: 1">
+                      <div
+                        style="
+                          font-size: 13px;
+                          font-weight: 700;
+                          color: var(--text-primary);
+                        "
+                      >
+                        Tus intereses
+                      </div>
+                      <div
+                        style="font-size: 11px; color: var(--text-secondary)"
+                      >
+                        Personaliza tu experiencia
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-tertiary);
+                      "
+                    >
+                      Paso 4
+                    </div>
+                  </div>
+                </div>
+                <div style="padding: 0 16px 10px">
+                  <button class="btn-prim" onclick="goFinal('s-ob2')">
+                    Comenzar
+                  </button>
+                </div>
+                <div style="height: 20px"></div>
+              </div>
+            </div>
+
+            <!-- 9. ONBOARDING 2 — CONTRASEÑA -->
+            <div class="screen" id="s-ob2">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="stepper-wrap">
+                <div class="stepper">
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Inicio</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c active">2</div>
+                    <div class="step-lbl active">Contraseña</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">3</div>
+                    <div class="step-lbl inactive">Canal</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">4</div>
+                    <div class="step-lbl inactive">Intereses</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">5</div>
+                    <div class="step-lbl inactive">Listo</div>
+                  </div>
+                </div>
+              </div>
+              <div class="scr-body">
+                <div style="padding: 22px 16px 16px">
+                  <div
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: var(--primary);
+                      letter-spacing: 1px;
+                      text-transform: uppercase;
+                      margin-bottom: 5px;
+                    "
+                  >
+                    Paso 2 de 5
+                  </div>
+                  <div
+                    style="
+                      font-size: 21px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                      margin-bottom: 5px;
+                    "
+                  >
+                    Crea tu contraseña
+                  </div>
+                  <div
+                    style="
+                      font-size: 13px;
+                      color: var(--text-secondary);
+                      line-height: 1.5;
+                    "
+                  >
+                    Acceso seguro a tu cuenta Kaufmann.
+                  </div>
+                </div>
+                <div class="pw-wrap">
+                  <div class="pw-label">Contraseña</div>
+                  <div class="pw-row">
+                    <input
+                      class="pw-inp"
+                      type="password"
+                      value="Kfm@2026"
+                    /><button class="pw-eye">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      >
+                        <path
+                          d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                        />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="pw-str-bars">
+                  <div class="pw-bar" style="background: var(--success)"></div>
+                  <div class="pw-bar" style="background: var(--success)"></div>
+                  <div class="pw-bar" style="background: var(--success)"></div>
+                  <div
+                    class="pw-bar"
+                    style="background: var(--strength-bar-empty, #d8dee5)"
+                  ></div>
+                </div>
+                <div
+                  style="
+                    padding: 0 16px 12px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: var(--success);
+                  "
+                >
+                  Fuerte
+                </div>
+                <div class="pw-req-list">
+                  <div class="pw-req met">
+                    <div class="pw-req-dot">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <span>Mínimo 8 caracteres</span>
+                  </div>
+                  <div class="pw-req met">
+                    <div class="pw-req-dot">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <span>Una mayúscula</span>
+                  </div>
+                  <div class="pw-req met">
+                    <div class="pw-req-dot">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <span>Un numero</span>
+                  </div>
+                  <div class="pw-req met">
+                    <div class="pw-req-dot">
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <span>Un carácter especial (!@#$%)</span>
+                  </div>
+                </div>
+                <div class="pw-wrap" style="margin-top: 4px">
+                  <div class="pw-label">Confirmar contraseña</div>
+                  <div class="pw-row">
+                    <input class="pw-inp" type="password" value="Kfm@2026" />
+                  </div>
+                </div>
+                <div
+                  style="
+                    padding: 4px 16px 4px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: var(--success);
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                  "
+                >
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  Las contraseñas coinciden
+                </div>
+                <div style="padding: 16px 16px 10px">
+                  <button class="btn-prim" onclick="goFinal('s-ob3')">
+                    Continuar
+                  </button>
+                </div>
+                <button class="btn-back" onclick="goFinal('s-ob1')">
+                  Volver
+                </button>
+                <div style="height: 16px"></div>
+              </div>
+            </div>
+
+            <!-- 10. ONBOARDING 3 — CANAL -->
+            <div class="screen" id="s-ob3">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="stepper-wrap">
+                <div class="stepper">
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Inicio</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Contraseña</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c active">3</div>
+                    <div class="step-lbl active">Canal</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">4</div>
+                    <div class="step-lbl inactive">Intereses</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">5</div>
+                    <div class="step-lbl inactive">Listo</div>
+                  </div>
+                </div>
+              </div>
+              <div class="scr-body">
+                <div style="padding: 22px 16px 16px">
+                  <div
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: var(--primary);
+                      letter-spacing: 1px;
+                      text-transform: uppercase;
+                      margin-bottom: 5px;
+                    "
+                  >
+                    Paso 3 de 5
+                  </div>
+                  <div
+                    style="
+                      font-size: 21px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                      margin-bottom: 5px;
+                      line-height: 1.25;
+                    "
+                  >
+                    ¿Cómo prefieres que te contactemos?
+                  </div>
+                  <div
+                    style="
+                      font-size: 13px;
+                      color: var(--text-secondary);
+                      line-height: 1.5;
+                    "
+                  >
+                    Canal principal. Puedes cambiarlo desde tu perfil.
+                  </div>
+                </div>
+                <div class="ch-card sel">
+                  <div class="ch-icon">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#0071BB"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <path
+                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                      />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
+                  <div style="flex: 1">
+                    <div class="ch-label">Email</div>
+                    <div class="ch-desc">Notificaciónes a tu correo</div>
+                  </div>
+                  <div class="ch-radio"><div class="ch-radio-dot"></div></div>
+                </div>
+                <div class="ch-card">
+                  <div class="ch-icon">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#8A96A3"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <path
+                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <div style="flex: 1">
+                    <div class="ch-label" style="color: var(--text-secondary)">
+                      SMS
+                    </div>
+                    <div class="ch-desc">Mensajes de texto</div>
+                  </div>
+                  <div class="ch-radio"></div>
+                </div>
+                <div class="ch-card">
+                  <div class="ch-icon">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#8A96A3"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <path
+                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <div style="flex: 1">
+                    <div
+                      class="ch-label"
+                      style="
+                        color: var(--text-secondary);
+                        display: flex;
+                        align-items: center;
+                        gap: 7px;
+                      "
+                    >
+                      WhatsApp
+                      <span
+                        style="
+                          background: #25d366;
+                          color: #fff;
+                          font-size: 9px;
+                          font-weight: 800;
+                          padding: 2px 7px;
+                          border-radius: 10px;
+                        "
+                        >RECOMENDADO</span
+                      >
+                    </div>
+                    <div class="ch-desc">Mensajes con tu ejecutivo</div>
+                  </div>
+                  <div class="ch-radio"></div>
+                </div>
+                <div class="ch-card">
+                  <div class="ch-icon">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#8A96A3"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    >
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                  </div>
+                  <div style="flex: 1">
+                    <div class="ch-label" style="color: var(--text-secondary)">
+                      Push
+                    </div>
+                    <div class="ch-desc">Alertas en tiempo real</div>
+                  </div>
+                  <div class="ch-radio"></div>
+                </div>
+                <div style="padding: 16px 16px 10px">
+                  <button class="btn-prim" onclick="goFinal('s-ob4')">
+                    Continuar
+                  </button>
+                </div>
+                <button class="btn-back" onclick="goFinal('s-ob2')">
+                  Volver
+                </button>
+                <div style="height: 16px"></div>
+              </div>
+            </div>
+
+            <!-- 11. ONBOARDING 4 — INTERESES -->
+            <div class="screen" id="s-ob4">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="stepper-wrap">
+                <div class="stepper">
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Inicio</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Contraseña</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Canal</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c active">4</div>
+                    <div class="step-lbl active">Intereses</div>
+                  </div>
+                  <div class="step-line inactive"></div>
+                  <div class="step-item">
+                    <div class="step-c inactive">5</div>
+                    <div class="step-lbl inactive">Listo</div>
+                  </div>
+                </div>
+              </div>
+              <div class="scr-body">
+                <div style="padding: 22px 16px 14px">
+                  <div
+                    style="
+                      font-size: 11px;
+                      font-weight: 700;
+                      color: var(--primary);
+                      letter-spacing: 1px;
+                      text-transform: uppercase;
+                      margin-bottom: 5px;
+                    "
+                  >
+                    Paso 4 de 5
+                  </div>
+                  <div
+                    style="
+                      font-size: 21px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                      margin-bottom: 5px;
+                    "
+                  >
+                    ¿Qué te interesa?
+                  </div>
+                  <div
+                    style="
+                      font-size: 13px;
+                      color: var(--text-secondary);
+                      line-height: 1.5;
+                    "
+                  >
+                    Selecciona al menos uno para personalizar tu experiencia.
+                  </div>
+                </div>
+                <div class="int-grid">
+                  <div class="int-card sel">
+                    <div class="int-icon">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                        />
+                      </svg>
+                    </div>
+                    <div class="int-label">Mantenciónes</div>
+                    <div class="int-sub">Servicios periodicos</div>
+                  </div>
+                  <div class="int-card sel">
+                    <div class="int-icon">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M5 17h14M5 17a2 2 0 0 1-2-2v-4h1l2-4h12l2 4h1v4a2 2 0 0 1-2 2M5 17a2 2 0 1 0 4 0m6 0a2 2 0 1 0 4 0"
+                        />
+                      </svg>
+                    </div>
+                    <div class="int-label">Vehículos</div>
+                    <div class="int-sub">Novedades y modelos</div>
+                  </div>
+                  <div class="int-card">
+                    <div class="int-icon">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
+                        />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                      </svg>
+                    </div>
+                    <div class="int-label">Accesorios</div>
+                    <div class="int-sub">Productos y repuestos</div>
+                  </div>
+                  <div class="int-card">
+                    <div class="int-icon">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"
+                        />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
+                      </svg>
+                    </div>
+                    <div class="int-label">Ofertas</div>
+                    <div class="int-sub">Promociones exclusivas</div>
+                  </div>
+                  <div class="int-card">
+                    <div class="int-icon">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                    </div>
+                    <div class="int-label">Seguros</div>
+                    <div class="int-sub">Coberturas y renovación</div>
+                  </div>
+                  <div class="int-card">
+                    <div class="int-icon">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                        />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                    </div>
+                    <div class="int-label">Sucursales</div>
+                    <div class="int-sub">Atenciónes y horarios</div>
+                  </div>
+                </div>
+                <div style="padding: 4px 16px 10px">
+                  <button class="btn-prim" onclick="goFinal('s-ob5')">
+                    Continuar
+                  </button>
+                </div>
+                <button class="btn-back" onclick="goFinal('s-ob3')">
+                  Volver
+                </button>
+                <div style="height: 16px"></div>
+              </div>
+            </div>
+
+            <!-- 12. ONBOARDING 5 — LISTO -->
+            <div class="screen" id="s-ob5">
+              <div class="sbar sbar-d">
+                <span class="sbar-time" style="color: #fff">9:41</span>
+                <div class="sbar-icons" style="color: #fff">
+                  <div class="bars">
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                    <div class="bar" style="background: #fff"></div>
+                  </div>
+                  <div class="batt" style="color: #fff">
+                    <div class="batt-f"></div>
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  height: 44px;
+                  background: #000000;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-shrink: 0;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;Times New Roman&quot;, Georgia, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="stepper-wrap">
+                <div class="stepper">
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Inicio</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Contraseña</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Canal</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c done">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="step-lbl done">Intereses</div>
+                  </div>
+                  <div class="step-line done"></div>
+                  <div class="step-item">
+                    <div class="step-c active">5</div>
+                    <div class="step-lbl active">Listo</div>
+                  </div>
+                </div>
+              </div>
+              <div class="scr-body">
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 32px 24px 20px;
+                  "
+                >
+                  <div
+                    style="
+                      width: 80px;
+                      height: 80px;
+                      border-radius: 24px;
+                      background: #ecfdf5;
+                      border: 1.5px solid rgba(42, 183, 51, 0.2);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      margin-bottom: 20px;
+                    "
+                  >
+                    <svg
+                      width="38"
+                      height="38"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#2AB733"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                  <div
+                    style="
+                      font-size: 24px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                      text-align: center;
+                      margin-bottom: 8px;
+                    "
+                  >
+                    Todo listo, Pedro
+                  </div>
+                  <div
+                    style="
+                      font-size: 13px;
+                      color: var(--text-secondary);
+                      text-align: center;
+                      line-height: 1.55;
+                      margin-bottom: 24px;
+                    "
+                  >
+                    Tu cuenta Kaufmann está configurada. Disfruta de todos tus
+                    beneficios y servicios.
+                  </div>
+                </div>
+                <div
+                  style="
+                    margin: 0 16px 12px;
+                    background: var(--surface);
+                    border-radius: 14px;
+                    padding: 16px;
+                    box-shadow: var(--card-shadow);
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 12px;
+                      font-weight: 700;
+                      color: var(--text-tertiary);
+                      text-transform: uppercase;
+                      letter-spacing: 0.8px;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    Resumen de tu configuración
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    <span style="font-size: 13px; color: var(--text-secondary)"
+                      >Canal preferido</span
+                    ><span
+                      style="
+                        font-size: 13px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                      >Email</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    <span style="font-size: 13px; color: var(--text-secondary)"
+                      >Intereses</span
+                    ><span
+                      style="
+                        font-size: 13px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                      >2 seleccionados</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <span style="font-size: 13px; color: var(--text-secondary)"
+                      >Vehículo vinculado</span
+                    ><span
+                      style="
+                        font-size: 13px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                      >KWRS-21</span
+                    >
+                  </div>
+                </div>
+                <div style="padding: 8px 16px 10px">
+                  <button
+                    class="btn-prim"
+                    onclick="
+                      if (window.parent !== window) {
+                        window.parent.postMessage(
+                          { action: 'navigate', module: 'home' },
+                          '*',
+                        );
+                      } else {
+                        goFinal('s-splash');
+                      }
+                    "
+                  >
+                    Ir al inicio
+                  </button>
+                </div>
+                <div
+                  style="
+                    text-align: center;
+                    padding-bottom: 24px;
+                    font-size: 12px;
+                    color: var(--text-tertiary);
+                  "
+                >
+                  Puedes editar estas preferencias desde tu perfil
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /layer-final -->
+        </div>
+        <!-- /device-scr -->
+      </div>
+      <!-- /device -->
+    </div>
+    <!-- /main -->
+
+    <script>
+      // ── navTo: cross-module navigation ──
+      function navTo(module) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(
+            { action: "navigate", module: module },
+            "*",
+          );
+        }
+      }
+
+      // ── Mode toggle (light/dark) ──
+      function setMode(m) {
+        if (m === "dark") {
+          document.body.setAttribute("data-mode", "dark");
+        } else {
+          document.body.setAttribute("data-mode", "light");
+        }
+        document
+          .getElementById("btn-dark")
+          .classList.toggle("on", m === "dark");
+        document
+          .getElementById("btn-light")
+          .classList.toggle("on", m === "light");
+      }
+
+      // ── Navigation: Versión Final screens ──
+      function goFinal(id) {
+        var layer = document.getElementById("layer-final");
+        layer.querySelectorAll(".screen").forEach(function (s) {
+          s.classList.remove("active");
+        });
+        var el = document.getElementById(id);
+        if (el) el.classList.add("active");
+        // Sync sidebar
+        var nav = document.getElementById("nav-final");
+        nav.querySelectorAll(".sb-btn").forEach(function (b) {
+          var onclick = b.getAttribute("onclick") || "";
+          b.classList.toggle("on", onclick.indexOf("'" + id + "'") !== -1);
+        });
+      }
+    </script>
+  </body>
+</html>

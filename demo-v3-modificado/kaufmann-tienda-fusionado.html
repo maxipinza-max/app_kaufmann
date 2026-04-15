@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaufmann App — Tienda · Versión Final</title>
+<style>
+/* ══════════════════════════════════════════════════════════════
+   RESET & BASE — Dark default
+══════════════════════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#0A0E14;display:flex;min-height:100vh;
+  color:var(--text-primary);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DARK MODE (default)
+══════════════════════════════════════════════════════════════ */
+:root{
+  --primary:#0071BB;
+  --primary-dark:#003252;
+  --primary-light:#00BAE0;
+  --primary-tint:rgba(0,113,187,0.14);
+  --primary-shade:#005F99;
+  --accent:#0071BB;
+  --background:#0B1018;
+  --surface:#131A24;
+  --text-primary:#EDF2F7;
+  --text-secondary:#8A96A6;
+  --text-tertiary:#50606E;
+  --border:rgba(255,255,255,0.07);
+  --border-light:rgba(255,255,255,0.04);
+  --nav-bg:#000000;
+  --nav-text:#FFFFFF;
+  --nav-border:rgba(255,255,255,0.06);
+  --hero-bg:#0B1018;
+  --hero-gradient:linear-gradient(160deg,#051020 0%,#0A2040 50%,#0F3060 100%);
+  --btn-primary-bg:#00ADEF;
+  --btn-primary-text:#FFFFFF;
+  --btn-secondary-bg:transparent;
+  --btn-secondary-text:#0071BB;
+  --btn-secondary-border:#0071BB;
+  --badge-prepago-bg:rgba(0,113,187,0.18);
+  --badge-prepago-text:#4DB8FF;
+  --badge-gps-bg:rgba(63,199,106,0.18);
+  --badge-gps-text:#3FC76A;
+  --badge-oferta-bg:rgba(240,184,64,0.18);
+  --badge-oferta-text:#F0B840;
+  --badge-asistencia-bg:rgba(180,120,240,0.18);
+  --badge-asistencia-text:#C084FC;
+  --badge-popular-bg:rgba(0,113,187,0.18);
+  --badge-popular-text:#4DB8FF;
+  --badge-nuevo-bg:rgba(63,199,106,0.18);
+  --badge-nuevo-text:#3FC76A;
+  --price-color:#EDF2F7;
+  --price-old:#50606E;
+  --savings-bg:rgba(63,199,106,0.15);
+  --savings-text:#3FC76A;
+  --progress-empty:rgba(255,255,255,0.07);
+  --progress-fill:#0071BB;
+  --progress-used-bg:#3FC76A;
+  --chip-active-bg:#0071BB;
+  --chip-active-text:#FFFFFF;
+  --chip-inactive-bg:#131A24;
+  --chip-inactive-text:#8A96A6;
+  --chip-inactive-border:rgba(255,255,255,0.07);
+  --sidebar-accent:#0071BB;
+  --warning-bg:rgba(240,184,64,0.12);
+  --warning-border:#F0B840;
+  --warning-text:#F0B840;
+  --stepper-active-bg:#0071BB;
+  --stepper-active-text:#FFFFFF;
+  --stepper-done-bg:#3FC76A;
+  --stepper-done-text:#FFFFFF;
+  --stepper-inactive-bg:rgba(255,255,255,0.07);
+  --stepper-inactive-text:#50606E;
+  --stepper-line:rgba(255,255,255,0.07);
+  --card-shadow:0 1px 3px rgba(0,0,0,0.45),0 4px 14px rgba(0,0,0,0.3),0 0 1px rgba(0,113,187,0.12);
+  --card-shadow-strong:0 4px 20px rgba(0,0,0,0.5),0 0 24px rgba(0,113,187,0.07);
+  --prod-img-bg:linear-gradient(135deg,#0E1827 0%,#162035 100%);
+  --featured-gradient:linear-gradient(160deg,#051020 0%,#0A2040 50%,#0F3060 100%);
+  --vehicle-banner-bg:rgba(0,113,187,0.08);
+  --vehicle-banner-border:rgba(0,113,187,0.15);
+  --checkbox-active:#0071BB;
+  --radio-active:#0071BB;
+  --bnav-bg:#0B1018;
+  --bnav-border:rgba(255,255,255,0.07);
+  --bnav-inactive:rgba(255,255,255,0.3);
+  --bnav-active:#0071BB;
+  --bnav-active-text:#0071BB;
+  --success:#3FC76A;
+  --warning:#F0B840;
+  --danger:#F05454;
+  --webpay-bg:#050A13;
+  --empty-bg:#131A24;
+  --skeleton-base:rgba(255,255,255,0.05);
+  --skeleton-shine:rgba(255,255,255,0.08);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT MODE
+══════════════════════════════════════════════════════════════ */
+body[data-mode="light"]{
+  --primary:#0071BB;
+  --primary-dark:#003252;
+  --primary-light:#00BAE0;
+  --primary-tint:#E7F0F8;
+  --primary-shade:#005F99;
+  --accent:#0071BB;
+  --background:#F0F3F8;
+  --surface:#FFFFFF;
+  --text-primary:#1A2633;
+  --text-secondary:#52657A;
+  --text-tertiary:#8096AA;
+  --border:#D4DCE6;
+  --border-light:#E4EAF0;
+  --nav-bg:#000000;
+  --nav-text:#FFFFFF;
+  --nav-border:rgba(255,255,255,0.10);
+  --hero-bg:#003252;
+  --hero-gradient:linear-gradient(160deg,#003252 0%,#004A78 55%,#006099 100%);
+  --btn-primary-bg:#00ADEF;
+  --btn-primary-text:#FFFFFF;
+  --btn-secondary-bg:transparent;
+  --btn-secondary-text:#0071BB;
+  --btn-secondary-border:#0071BB;
+  --badge-prepago-bg:#E7F0F8;
+  --badge-prepago-text:#0071BB;
+  --badge-gps-bg:#E5F4E9;
+  --badge-gps-text:#1A7A30;
+  --badge-oferta-bg:#FFF5DC;
+  --badge-oferta-text:#B07000;
+  --badge-asistencia-bg:#F0E8FA;
+  --badge-asistencia-text:#6A1B9A;
+  --badge-popular-bg:#E7F0F8;
+  --badge-popular-text:#0071BB;
+  --badge-nuevo-bg:#E5F4E9;
+  --badge-nuevo-text:#1A7A30;
+  --price-color:#1A2633;
+  --price-old:#8096AA;
+  --savings-bg:#E5F4E9;
+  --savings-text:#1A7A30;
+  --progress-empty:#D4DCE6;
+  --progress-fill:#0071BB;
+  --progress-used-bg:#2AB733;
+  --chip-active-bg:#0071BB;
+  --chip-active-text:#FFFFFF;
+  --chip-inactive-bg:#FFFFFF;
+  --chip-inactive-text:#52657A;
+  --chip-inactive-border:#D4DCE6;
+  --sidebar-accent:#0071BB;
+  --warning-bg:#FFF8E1;
+  --warning-border:#FCA402;
+  --warning-text:#B07000;
+  --stepper-active-bg:#0071BB;
+  --stepper-active-text:#FFFFFF;
+  --stepper-done-bg:#2AB733;
+  --stepper-done-text:#FFFFFF;
+  --stepper-inactive-bg:#D4DCE6;
+  --stepper-inactive-text:#8096AA;
+  --stepper-line:#D4DCE6;
+  --card-shadow:0 1px 3px rgba(0,20,50,0.07),0 4px 14px rgba(0,20,50,0.05),0 0 1px rgba(0,113,187,0.06);
+  --card-shadow-strong:0 4px 20px rgba(0,50,82,0.13);
+  --prod-img-bg:linear-gradient(135deg,#E4EAF0 0%,#D4DCE6 100%);
+  --featured-gradient:linear-gradient(160deg,#003252 0%,#004A78 55%,#006099 100%);
+  --vehicle-banner-bg:#EBF2F9;
+  --vehicle-banner-border:#C8D8E8;
+  --checkbox-active:#0071BB;
+  --radio-active:#0071BB;
+  --bnav-bg:#000000;
+  --bnav-border:rgba(0,113,187,0.20);
+  --bnav-inactive:#4A5A6A;
+  --bnav-active:#0071BB;
+  --bnav-active-text:#0071BB;
+  --success:#2AB733;
+  --warning:#FCA402;
+  --danger:#F02100;
+  --webpay-bg:#003252;
+  --empty-bg:#E4EAF0;
+  --skeleton-base:#DDE4EC;
+  --skeleton-shine:#EEF2F6;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════════════════ */
+.sidebar{width:260px;background:#0C1420;padding:0;overflow-y:auto;position:fixed;top:0;left:0;bottom:0;z-index:10;display:flex;flex-direction:column;border-right:1px solid #1A2A3A}
+.sb-header{padding:22px 20px 18px;border-bottom:1px solid #1A2A3A}
+.sb-brand-text{font-size:13px;font-weight:800;color:#fff;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px}
+.sb-sub{font-size:9px;color:#3A4A5A;letter-spacing:0.8px;text-transform:uppercase;font-weight:600}
+.sb-title-area{padding:18px 20px 6px}
+.sb-title{color:#fff;font-size:15px;font-weight:700;line-height:1.3;margin-bottom:5px}
+.sb-subtitle{color:#3A4A5A;font-size:10px;line-height:1.5;font-weight:500}
+.sb-version{display:inline-block;background:#1A2A3A;color:#0071BB;font-size:9px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:6px}
+
+/* Mode toggler */
+.mode-toggler{padding:10px 20px;border-bottom:1px solid #1A2A3A}
+.mode-tog-label{color:#1E2E40;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
+.mode-tog-wrap{display:flex;background:#111820;border-radius:9px;padding:3px;gap:2px}
+.mode-tog-btn{flex:1;padding:6px 4px;border:none;border-radius:7px;font-size:9.5px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;background:transparent;color:#2E3F52;line-height:1.3}
+.mode-tog-btn.on{background:#1A2A3A;color:#E6EDF3;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+
+.sb-nav{padding:10px 10px 6px;flex:1;overflow-y:auto}
+.sb-nav-label{color:#1E2E3E;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;padding:0 8px;margin:10px 0 5px}
+.sb-nav-label:first-child{margin-top:2px}
+.sb-btn{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:8px 10px;border:none;border-radius:7px;background:transparent;color:#4A5A6A;font-size:11.5px;cursor:pointer;transition:all 0.15s;line-height:1.3;margin-bottom:1px}
+.sb-btn:hover{background:#1A2A3A;color:#9AAABB}
+.sb-btn.on{background:#1A2A3A;color:#fff}
+.sb-btn-num{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;background:#141E2A;color:#2A3A4A}
+.sb-btn.on .sb-btn-num{background:var(--sidebar-accent);color:#fff}
+.sb-btn-info{flex:1;min-width:0}
+.sb-btn-title{font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-btn-desc{font-size:9.5px;color:#2A3A4A;margin-top:1px;line-height:1.3}
+.sb-btn.on .sb-btn-desc{color:#5A7A9A}
+.sb-notes{padding:12px 20px;border-top:1px solid #1A2A3A}
+.sb-notes-title{color:#2A3A4A;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
+.sb-note{display:flex;gap:8px;margin-bottom:9px;align-items:flex-start}
+.sb-note-num{width:17px;height:17px;border-radius:50%;background:#1A2A3A;color:var(--sidebar-accent);font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.sb-note-text{color:#3A4A5A;font-size:9.5px;line-height:1.55}
+.sb-footer{padding:12px 20px;border-top:1px solid #1A2A3A}
+.sb-footer-text{color:#1E2E3E;font-size:8.5px;text-align:center;line-height:1.6}
+
+/* ══════════════════════════════════════════════════════════════
+   LAYOUT + DEVICE FRAME
+══════════════════════════════════════════════════════════════ */
+.main{margin-left:260px;flex:1;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px 40px}
+.device{width:390px;height:844px;background:#080C10;border-radius:48px;padding:10px;box-shadow:0 0 0 1px #2a3040,0 0 0 3px #080C10,0 0 0 4.5px #1A2030,0 50px 120px rgba(0,0,0,0.98),inset 0 1px 1px rgba(255,255,255,0.03);position:relative;flex-shrink:0}
+.notch{width:120px;height:30px;background:#080C10;border-radius:0 0 16px 16px;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;justify-content:center}
+.notch-pill{width:72px;height:6px;background:#181E28;border-radius:3px}
+.device-scr{width:100%;height:100%;background:var(--background);border-radius:40px;overflow:hidden;position:relative}
+
+/* ══════════════════════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════════════════════ */
+.screen{display:none;flex-direction:column;position:absolute;inset:0;overflow:hidden}
+.screen.active{display:flex}
+
+
+/* ══════════════════════════════════════════════════════════════
+   STATUS BAR + NAV BAR (V2 header style)
+══════════════════════════════════════════════════════════════ */
+.sbar{height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 8px;flex-shrink:0;background:var(--nav-bg)}
+.sbar.dark{background:#000000}
+.s-time{font-size:15px;font-weight:700;color:#fff}
+.s-icons{display:flex;gap:5px;align-items:center}
+.bars{display:flex;align-items:flex-end;gap:1px}
+.bar{width:3px;border-radius:1px;background:#fff}
+.bar:nth-child(1){height:4px}.bar:nth-child(2){height:7px}.bar:nth-child(3){height:10px}.bar:nth-child(4){height:13px}
+.batt-ic{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative;padding:1.5px}
+.batt-ic::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:2px;height:5px;background:#fff;border-radius:0 1px 1px 0}
+.batt-fill{height:100%;border-radius:1px;width:75%;background:#fff}
+/* V3 battery alias */
+.batt{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative;padding:1.5px}
+.batt::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:2px;height:5px;background:#fff;border-radius:0 1px 1px 0}
+
+.nbar{height:44px;display:flex;align-items:center;padding:0 16px;flex-shrink:0;position:relative;gap:8px;background:var(--nav-bg);border-bottom:1px solid var(--nav-border)}
+.nbar.dark{background:#000000;border-bottom-color:rgba(255,255,255,0.07)}
+.ntitle{position:absolute;left:50%;transform:translateX(-50%);font-size:17px;font-weight:700;white-space:nowrap;color:#fff}
+.back{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:24px;background:none;border:none;flex-shrink:0;color:#fff;line-height:1}
+.nav-right{margin-left:auto;display:flex;gap:6px;align-items:center}
+.nav-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:#fff;position:relative;background:none;border:none}
+.logo-chrome{font-family:'Times New Roman',Georgia,serif;font-size:16px;font-weight:400;letter-spacing:5px;background:linear-gradient(45deg,#8A9AAA 5%,#FFFFFF 10%,#B8C4D0 30%,#E8EEF4 50%,#B8C4D0 70%,#FFFFFF 80%,#8A9AAA 95%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 3px rgba(200,215,240,0.3))}
+
+/* App header (alternate style) */
+.aheader{height:56px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#000000;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.header-logo-wrap{flex:1;display:flex;align-items:center}
+.header-logo-svg{height:20px;width:auto}
+.ah-btn{width:36px;height:36px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:10px;position:relative}
+.ah-btn svg{width:20px;height:20px;stroke:#ffffff;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ah-badge{position:absolute;top:0;right:0;width:16px;height:16px;background:#DC2626;border-radius:50%;font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;border:2px solid #000000}
+.ah-av{width:32px;height:32px;border-radius:50%;background:#0071BB;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
+/* V3 back header */
+.back-header{height:56px;display:flex;align-items:center;padding:0 16px;gap:12px;background:#000000;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.back-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:rgba(255,255,255,0.08);border-radius:10px;cursor:pointer;flex-shrink:0}
+.back-btn svg{width:18px;height:18px;stroke:#ffffff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.back-header-logo{flex:1;display:flex;align-items:center;justify-content:center}
+.back-header-logo svg{height:18px;width:auto}
+.back-header-action{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer}
+.back-header-action svg{width:20px;height:20px;stroke:#ffffff;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+/* ══════════════════════════════════════════════════════════════
+   SCROLL BODY
+══════════════════════════════════════════════════════════════ */
+.body{flex:1;overflow-y:auto;background:var(--background)}
+.body::-webkit-scrollbar{display:none}
+
+/* ══════════════════════════════════════════════════════════════
+   BOTTOM NAV — 5 tabs
+══════════════════════════════════════════════════════════════ */
+.bnav{height:82px;background:var(--bnav-bg);border-top:1px solid var(--bnav-border);display:flex;padding:8px 0 0;flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:none;padding:0 2px}
+.tab svg{width:20px;height:20px;stroke:var(--bnav-inactive);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
+.tab-label{font-size:9.5px;text-align:center;line-height:1.2;color:var(--bnav-inactive);transition:all 0.2s}
+.tab.on svg{stroke:var(--bnav-active)}
+.tab.on .tab-label{color:var(--bnav-active);font-weight:700}
+/* V3 bnav alias */
+.tab-lbl{font-size:9px;text-align:center;line-height:1.2;color:var(--bnav-inactive);transition:color 0.18s;font-weight:500}
+.tab.on .tab-lbl{color:var(--bnav-active);font-weight:700}
+
+/* ══════════════════════════════════════════════════════════════
+   V2 COMPONENT STYLES (from Propuesta F)
+══════════════════════════════════════════════════════════════ */
+.veh-banner{display:flex;align-items:center;gap:12px;padding:12px 14px;margin:10px 16px 6px;background:var(--vehicle-banner-bg);border-radius:14px;border:1px solid var(--vehicle-banner-border);cursor:pointer}
+.veh-banner-info{flex:1;min-width:0}
+.veh-banner-name{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:3px}
+.veh-banner-icon{flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--primary)}
+.veh-banner-plate{display:inline-block;background:var(--primary-dark,#003252);color:#fff;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:1.5px}
+.veh-banner-link{font-size:12px;color:var(--primary);font-weight:600;flex-shrink:0}
+.chip-row{display:flex;overflow-x:auto;gap:7px;padding:8px 16px 10px}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1.5px solid var(--chip-inactive-border);background:var(--chip-inactive-bg);color:var(--chip-inactive-text);transition:all 0.18s;display:flex;align-items:center;gap:5px}
+.chip svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chip.on{background:var(--chip-active-bg);color:var(--chip-active-text);border-color:var(--chip-active-bg)}
+.featured{margin:4px 16px 12px;border-radius:22px;padding:20px 20px 22px;background:var(--featured-gradient);position:relative;overflow:hidden;min-height:116px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;box-shadow:0 8px 40px rgba(0,0,0,0.6),0 0 60px rgba(0,113,187,0.05)}
+.featured .deco-circle{position:absolute;border-radius:50%;background:rgba(255,255,255,0.06)}
+.featured-eyebrow{font-size:10px;font-weight:700;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;position:relative;z-index:1}
+.featured-title{color:#fff;font-size:20px;font-weight:800;margin-bottom:4px;position:relative;z-index:1;line-height:1.2}
+.featured-sub{color:rgba(255,255,255,0.7);font-size:12px;margin-bottom:14px;position:relative;z-index:1;line-height:1.4}
+.featured-cta{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.25);padding:7px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;position:relative;z-index:1;width:fit-content;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.featured-savings{position:absolute;top:16px;right:16px;z-index:2;background:#3FC76A;color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:10px}
+.sec-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 8px}
+.sec-title{font-size:17px;font-weight:800;color:var(--text-primary);letter-spacing:-.4px}
+.sec-link{font-size:13px;color:var(--primary);font-weight:600;cursor:pointer}
+.prod-card{background:var(--surface);border-radius:22px;margin:0 16px 14px;overflow:hidden;box-shadow:var(--card-shadow);cursor:pointer;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s ease;border:1px solid rgba(0,113,187,0.07)}
+.prod-card:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 6px 24px rgba(0,0,0,0.55),0 0 20px rgba(0,113,187,0.1)}
+.prod-img{width:100%;height:132px;background:var(--prod-img-bg);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.prod-img-inner{display:flex;flex-direction:column;align-items:center;gap:5px;opacity:0.45}
+.prod-img-emoji{font-size:38px;display:flex;align-items:center;justify-content:center}
+.prod-img-lbl{font-size:9px;color:var(--text-tertiary);font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
+.prod-img-badge{position:absolute;top:10px;left:10px;background:var(--danger);color:#fff;font-size:10px;font-weight:800;padding:3px 9px;border-radius:8px}
+.prod-img-badge.savings{background:#3FC76A}
+.prod-body{padding:14px 16px 16px}
+.prod-tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:800;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.tag-prepago{background:var(--badge-prepago-bg);color:var(--badge-prepago-text)}
+.tag-gps{background:var(--badge-gps-bg);color:var(--badge-gps-text)}
+.tag-oferta{background:var(--badge-oferta-bg);color:var(--badge-oferta-text)}
+.tag-asistencia{background:var(--badge-asistencia-bg);color:var(--badge-asistencia-text)}
+.prod-name{font-size:16px;font-weight:800;color:var(--text-primary);line-height:1.2;margin-bottom:5px}
+.prod-desc{font-size:12px;color:var(--text-secondary);line-height:1.5;margin-bottom:12px}
+.prod-footer{display:flex;align-items:flex-end;justify-content:space-between}
+.prod-price{font-size:21px;font-weight:900;color:var(--price-color);line-height:1}
+.prod-price-old{font-size:12px;color:var(--price-old);text-decoration:line-through;display:block;margin-top:1px}
+.prod-price-sub{font-size:11px;color:var(--text-tertiary);display:block;margin-top:2px}
+.btn-outline{display:inline-block;padding:8px 16px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid var(--btn-secondary-border,var(--primary));background:transparent;color:var(--primary);flex-shrink:0}
+.card{background:var(--surface);border-radius:22px;padding:16px;margin:0 16px 10px;box-shadow:var(--card-shadow);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,113,187,0.08)}
+.card-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
+.detail-hero{background:var(--hero-bg,var(--background));padding:0 16px 24px;position:relative;flex-shrink:0}
+.detail-hero-img{width:100%;height:148px;background:rgba(255,255,255,0.07);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative;overflow:hidden}
+.detail-hero-emoji{opacity:0.75;display:flex;align-items:center;justify-content:center}
+.detail-hero-name{font-size:22px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:5px}
+.detail-hero-sub{font-size:12px;color:rgba(255,255,255,0.6)}
+.price-card{background:var(--surface);border-radius:22px;padding:16px;margin:-18px 16px 12px;position:relative;z-index:2;box-shadow:var(--card-shadow-strong,var(--card-shadow));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,113,187,0.12)}
+.price-main{font-size:30px;font-weight:900;color:var(--price-color);line-height:1;letter-spacing:-.5px}
+.price-iva{font-size:12px;color:var(--text-tertiary);margin-left:5px}
+.price-old{font-size:14px;color:var(--price-old);text-decoration:line-through;margin-top:3px}
+.price-savings{display:inline-flex;align-items:center;gap:4px;background:var(--savings-bg);color:var(--savings-text);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-top:7px}
+.price-note{font-size:11px;color:var(--text-tertiary);margin-top:9px;line-height:1.4}
+.benefit{display:flex;gap:10px;align-items:flex-start;margin-bottom:9px}
+.benefit:last-child{margin-bottom:0}
+.benefit-icon{width:18px;height:18px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;color:var(--success)}
+.benefit-text{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.veh-info-card{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:14px;padding:13px 16px;margin:0 16px 10px;box-shadow:var(--card-shadow)}
+.veh-info-label{font-size:11px;color:var(--text-tertiary)}
+.veh-info-name{font-size:13px;font-weight:700;color:var(--text-primary)}
+.veh-info-detail{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.accordion-wrap{margin:0 16px 10px;border-radius:14px;overflow:hidden;box-shadow:var(--card-shadow)}
+.accordion-item{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--surface);border-bottom:1px solid var(--border-light);cursor:pointer}
+.accordion-item:last-child{border-bottom:none}
+.accordion-text{font-size:13px;color:var(--text-primary);font-weight:500}
+.accordion-arrow{font-size:16px;color:var(--text-tertiary)}
+.sticky-bottom{padding:12px 16px 20px;background:var(--surface);border-top:1px solid var(--border-light);flex-shrink:0}
+.btn-prim{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;background:var(--btn-primary-bg,var(--primary));color:var(--btn-primary-text,#fff);border:none;border-radius:13px;font-size:16px;font-weight:700;cursor:pointer;transition:opacity 0.15s;box-shadow:0 4px 20px rgba(0,113,187,0.3)}
+.btn-prim:active{opacity:0.85}
+.sticky-note{font-size:11px;color:var(--text-tertiary);text-align:center;margin-top:8px;line-height:1.4}
+.stepper{display:flex;align-items:center;justify-content:center;padding:13px 16px;background:var(--surface);border-bottom:1px solid var(--border-light);gap:0;flex-shrink:0}
+.step{display:flex;align-items:center}
+.step-circle{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:var(--stepper-inactive-bg);color:var(--stepper-inactive-text)}
+.step-circle.on{background:var(--stepper-active-bg);color:var(--stepper-active-text);box-shadow:0 0 14px rgba(0,113,187,0.5)}
+.step-circle.done{background:var(--stepper-done-bg);color:var(--stepper-done-text)}
+.step-label{font-size:10px;margin-left:5px;font-weight:600;color:var(--stepper-inactive-text);white-space:nowrap}
+.step-label.on{color:var(--stepper-active-bg)}
+.step-label.done{color:var(--stepper-done-bg)}
+.step-line{width:24px;height:2px;background:var(--stepper-line);margin:0 4px}
+.step-line.done{background:var(--stepper-done-bg)}
+.order-mini{display:flex;gap:12px;align-items:center;padding:4px 0 12px}
+.order-mini-img{width:52px;height:52px;background:var(--prod-img-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--primary)}
+.order-mini-name{font-size:14px;font-weight:700;color:var(--text-primary)}
+.order-mini-sub{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.price-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid var(--border-light)}
+.price-row:last-child{border-bottom:none}
+.price-row-label{color:var(--text-secondary)}
+.price-row-value{font-weight:600;color:var(--text-primary)}
+.price-row.total .price-row-label{font-weight:700;font-size:15px;color:var(--text-primary)}
+.price-row.total .price-row-value{font-size:19px;font-weight:900;color:var(--price-color)}
+.seg{display:flex;background:var(--border-light);border-radius:10px;padding:3px;gap:2px}
+.seg-btn{flex:1;padding:8px 4px;border-radius:8px;font-size:13px;font-weight:500;border:none;text-align:center;cursor:pointer;background:transparent;color:var(--text-secondary)}
+.seg-btn.on{background:var(--surface);color:var(--text-primary);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.form-content{display:none}
+.seg-content{display:none}
+.seg-content.active{display:block}
+.form-content.active{display:block}
+.field-row{margin-bottom:10px}
+.field-label{font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.field-input{width:100%;background:var(--border-light);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text-primary);font-family:inherit;outline:none}
+.field-input:focus{border-color:var(--primary)}
+.check-row{display:flex;gap:10px;align-items:flex-start}
+.check-box{width:20px;height:20px;border-radius:5px;background:var(--checkbox-active);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;cursor:pointer}
+.check-mark{color:#fff;font-size:12px;font-weight:800}
+.check-text{font-size:12px;color:var(--text-secondary);line-height:1.55}
+.check-link{color:var(--primary);text-decoration:underline;cursor:pointer}
+.pay-method{border-radius:13px;padding:14px 15px;margin-bottom:9px;display:flex;align-items:center;gap:12px;cursor:pointer;border:2px solid var(--border);background:var(--surface);transition:border-color 0.18s;box-shadow:var(--card-shadow)}
+.pay-method.on{border-color:var(--primary);box-shadow:0 0 16px rgba(0,113,187,0.18)}
+.pay-icon{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--primary)}
+.pay-info{flex:1}
+.pay-title{font-size:14px;font-weight:600;color:var(--text-primary)}
+.pay-sub{font-size:11px;color:var(--text-secondary);margin-top:2px;line-height:1.4}
+.pay-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pay-radio.on{border-color:var(--radio-active)}
+.pay-radio.on::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--radio-active)}
+.webpay-notice{display:flex;gap:12px;align-items:flex-start;padding:14px;margin:0 16px 10px;background:var(--webpay-bg);border-radius:14px;border:1px solid rgba(255,255,255,0.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.webpay-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
+.webpay-sub{font-size:11px;color:rgba(255,255,255,0.6);line-height:1.4}
+.security-row{display:flex;justify-content:center;gap:16px;padding:8px 0}
+.sec-badge{display:flex;flex-direction:column;align-items:center;gap:3px}
+.sec-badge-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--text-secondary)}
+.sec-badge-text{font-size:9px;color:var(--text-tertiary);font-weight:600}
+.success-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 24px;gap:12px;text-align:center}
+.success-circle{width:80px;height:80px;border-radius:50%;background:var(--savings-bg);display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:var(--success);box-shadow:0 0 30px rgba(63,199,106,0.25)}
+.success-title{font-size:22px;font-weight:800;color:var(--text-primary)}
+.success-sub{font-size:14px;color:var(--text-secondary);line-height:1.5;max-width:260px}
+.order-number{background:var(--background);border-radius:12px;padding:12px 20px;font-size:13px;font-weight:700;color:var(--text-primary);border:1px solid var(--border);width:100%;text-align:center}
+.order-number span{color:var(--primary)}
+.error-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 24px;gap:10px;text-align:center}
+.error-circle{width:80px;height:80px;border-radius:50%;background:rgba(240,84,84,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:var(--danger)}
+.error-title{font-size:22px;font-weight:800;color:var(--danger)}
+.error-sub{font-size:13px;color:var(--text-secondary);line-height:1.55;max-width:260px}
+.error-code{font-size:11px;color:var(--text-tertiary);margin-top:4px}
+.mp-filter-row{display:flex;overflow-x:auto;gap:6px;padding:10px 16px 8px}
+.mp-filter-row::-webkit-scrollbar{display:none}
+.mp-card{background:var(--surface);border-radius:16px;margin:0 16px 10px;overflow:hidden;box-shadow:var(--card-shadow)}
+.mp-card-header{padding:14px 16px;border-bottom:1px solid var(--border-light);display:flex;align-items:flex-start;gap:12px}
+.mp-card-icon{width:44px;height:44px;border-radius:12px;background:var(--prod-img-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--primary)}
+.mp-card-info{flex:1;min-width:0}
+.mp-card-name{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.mp-card-sub{font-size:11px;color:var(--text-secondary)}
+.mp-card-body{padding:12px 16px}
+.mp-progress-bar{height:6px;background:var(--progress-empty);border-radius:3px;overflow:hidden;margin-bottom:5px}
+.mp-progress-fill{height:100%;background:var(--progress-fill);border-radius:3px}
+.mp-progress-text{font-size:11px;color:var(--text-secondary);display:flex;justify-content:space-between}
+.mp-card-footer{padding:10px 16px 14px;border-top:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between}
+.mp-cta{font-size:13px;font-weight:700;color:var(--primary);cursor:pointer}
+.mp-expiry{font-size:11px;color:var(--text-tertiary)}
+.btn-ghost{display:block;width:calc(100% - 32px);margin:4px 16px 14px;padding:14px;text-align:center;border:1.5px solid var(--border);border-radius:13px;font-size:14px;font-weight:600;color:var(--text-secondary);background:transparent;cursor:pointer}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 32px;text-align:center}
+.empty-icon{margin-bottom:16px;opacity:0.4;display:flex;align-items:center;justify-content:center;color:var(--text-secondary)}
+.empty-title{font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+.empty-sub{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:20px}
+.skeleton-line{height:14px;background:var(--skeleton-base);border-radius:7px;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{opacity:1}50%{opacity:0.5}100%{opacity:1}}
+.skeleton-block{background:var(--skeleton-base);border-radius:12px;animation:shimmer 1.5s infinite}
+.av-pill{height:28px;border-radius:14px;border:1px solid rgba(255,255,255,0.2);padding:0 10px 0 8px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);transition:background 0.2s;cursor:pointer;flex-shrink:0}
+.av-pill:hover{background:rgba(255,255,255,0.12)}
+.av-pill svg{stroke:rgba(255,255,255,0.7);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.av-pill-name{font-size:11px;font-weight:600;color:rgba(255,255,255,0.8);letter-spacing:0.3px}
+
+/* ══════════════════════════════════════════════
+   MIS PRODUCTOS CARDS (circular SVG progress)
+══════════════════════════════════════════════ */
+.mpc-card{background:var(--surface);border-radius:22px;margin:0 14px 12px;overflow:hidden;box-shadow:var(--card-shadow-strong,var(--card-shadow));cursor:pointer;transition:box-shadow 0.2s;border:1px solid var(--border-light)}
+.mpc-card:hover{box-shadow:0 6px 24px rgba(0,0,0,0.55),0 0 20px rgba(0,113,187,0.1)}
+.mpc-card-gradient{height:72px;display:flex;align-items:center;padding:0 16px;gap:14px;position:relative;overflow:hidden}
+.mpc-grad-mantención{background:linear-gradient(135deg,#003252 0%,#005F99 60%,#0071BB 100%)}
+.mpc-grad-seguro{background:linear-gradient(135deg,#1A2633 0%,#2A4A6A 60%,#3A6A96 100%)}
+.mpc-grad-dimo{background:linear-gradient(135deg,#0D1A0D 0%,#1A3A1A 60%,#1E7A30 100%)}
+.mpc-grad-vencido{background:linear-gradient(135deg,#330A0A 0%,#5A1010 60%,#7A1818 100%)}
+.mpc-card-gradient::after{content:'';position:absolute;right:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.05)}
+.mpc-icon-wrap{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mpc-icon-wrap svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.mpc-header-info{flex:1;min-width:0}
+.mpc-header-name{font-size:14px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mpc-header-sub{font-size:10.5px;color:rgba(255,255,255,0.6);margin-top:2px}
+.mpc-status-badge{font-size:9.5px;font-weight:800;padding:4px 9px;border-radius:8px;flex-shrink:0}
+.mpc-status-active{background:rgba(42,183,51,0.25);color:#5EFF72;border:1px solid rgba(42,183,51,0.4)}
+.mpc-status-vencido{background:rgba(240,33,0,0.25);color:#FF6B5E;border:1px solid rgba(240,33,0,0.4)}
+.mpc-body{padding:14px 16px 10px;display:flex;align-items:center;gap:16px}
+.mpc-ring-wrap{flex-shrink:0;position:relative;width:64px;height:64px}
+.mpc-ring-wrap svg{transform:rotate(-90deg)}
+.mpc-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.mpc-ring-pct{font-size:14px;font-weight:800;color:var(--text-primary)}
+.mpc-ring-lbl{font-size:8px;color:var(--text-tertiary);font-weight:600;margin-top:-1px}
+.mpc-body-info{flex:1;min-width:0}
+.mpc-body-title{font-size:12px;color:var(--text-secondary);margin-bottom:5px}
+.mpc-body-counts{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.mpc-count-used{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--progress-used-bg)}
+.mpc-count-used svg{width:11px;height:11px;stroke:var(--progress-used-bg);fill:none;stroke-width:2.5;stroke-linecap:round}
+.mpc-count-remaining{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--primary)}
+.mpc-count-remaining svg{width:11px;height:11px;stroke:var(--primary);fill:none;stroke-width:2.5;stroke-linecap:round}
+.mpc-expiry{font-size:10.5px;color:var(--text-tertiary)}
+.mpc-footer{padding:0 16px 13px;display:flex;justify-content:flex-end}
+.mpc-cta{font-size:13px;font-weight:700;color:var(--primary);cursor:pointer;display:flex;align-items:center;gap:4px}
+.mpc-cta svg{width:14px;height:14px;stroke:var(--primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ══════════════════════════════════════════════
+   PRODUCTO ACTIVO DETALLE (large conic gauge)
+══════════════════════════════════════════════ */
+.csg-hero{background:var(--hero-gradient);padding:20px 16px 32px;flex-shrink:0}
+.csg-gauge-wrap{display:flex;flex-direction:column;align-items:center;margin:0 auto;width:140px;position:relative}
+.csg-steps{display:flex;justify-content:center;gap:6px;padding:16px 12px 12px}
+.csg-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative}
+.csg-step:not(:first-child)::before{content:'';position:absolute;top:16px;right:calc(50% + 16px);left:calc(-50% + 16px);height:2px;background:var(--border-light);z-index:0}
+.csg-step.done::before{background:var(--success)}
+.csg-step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1;position:relative;flex-shrink:0}
+.csg-step.done .csg-step-dot{background:var(--success);border:none}
+.csg-step.done .csg-step-dot svg{stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.csg-step.next .csg-step-dot{background:var(--primary);border:none}
+.csg-step.next .csg-step-dot svg{stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.csg-step.pending .csg-step-dot{background:var(--surface);border:2px dashed var(--border)}
+.csg-step.pending .csg-step-dot span{font-size:13px;font-weight:700;color:var(--text-tertiary)}
+.csg-step-lbl{font-size:9px;color:var(--text-tertiary);text-align:center;font-weight:500;line-height:1.3}
+.csg-step.done .csg-step-lbl{color:var(--success);font-weight:700}
+.csg-step.next .csg-step-lbl{color:var(--primary);font-weight:700}
+.csg-history-item{background:var(--surface);border-radius:12px;margin:0 14px 8px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--card-shadow);border-left:3px solid var(--success)}
+.csg-history-item:last-child{margin-bottom:12px}
+.csg-history-icon{width:34px;height:34px;border-radius:9px;background:rgba(63,199,106,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.csg-history-icon svg{width:16px;height:16px;stroke:var(--success);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.csg-history-info{flex:1}
+.csg-history-name{font-size:13px;font-weight:700;color:var(--text-primary)}
+.csg-history-meta{font-size:11px;color:var(--text-secondary);margin-top:2px;line-height:1.4}
+.csg-history-badge{font-size:10px;font-weight:700;background:rgba(63,199,106,0.1);color:var(--success);padding:3px 9px;border-radius:8px;flex-shrink:0;align-self:flex-start;margin-top:2px}
+.csg-details-table{margin:0 14px 10px;background:var(--surface);border-radius:14px;overflow:hidden;box-shadow:var(--card-shadow)}
+.csg-details-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border-light)}
+.csg-details-row:last-child{border-bottom:none}
+.csg-details-key{font-size:12px;color:var(--text-secondary)}
+.csg-details-val{font-size:12px;font-weight:600;color:var(--text-primary);text-align:right}
+
+/* ══════════════════════════════════════════════════════════════
+   ADDITIONAL COMPONENT STYLES
+══════════════════════════════════════════════════════════════ */
+.search-wrap{padding:12px 16px 8px;background:var(--background);position:sticky;top:0;z-index:5}
+.search-inner{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:13px;padding:0 14px;height:42px;box-shadow:var(--card-shadow);border:1px solid var(--border-light)}
+.search-inner svg{width:17px;height:17px;stroke:var(--text-tertiary);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.search-inner input{flex:1;border:none;background:transparent;outline:none;font-size:14px;color:var(--text-primary);font-family:inherit}
+.search-inner input::placeholder{color:var(--text-tertiary)}
+.veh-filter{display:flex;align-items:center;gap:11px;padding:11px 14px;margin:4px 16px 4px;background:var(--surface);border-radius:13px;border:1px solid var(--border-light);box-shadow:var(--card-shadow);cursor:pointer}
+.veh-filter svg{width:17px;height:17px;stroke:var(--primary);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.vf-info{flex:1;min-width:0}
+.vf-label{font-size:10px;color:var(--text-tertiary);margin-bottom:1px;font-weight:500}
+.vf-name{font-size:13px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vf-plate{display:inline-block;background:var(--primary);color:#fff;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:1.5px;font-family:'Courier New',monospace}
+.vf-arrow{flex-shrink:0}
+.vf-arrow svg{width:14px;height:14px;stroke:var(--text-tertiary);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.hero-banner{margin:4px 16px 12px;border-radius:22px;background:var(--featured-grad,var(--featured-gradient));padding:18px 20px 20px;position:relative;overflow:hidden;cursor:pointer;min-height:116px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 4px 20px rgba(0,50,82,0.22)}
+.hb-d1{position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.05);pointer-events:none}
+.hb-d2{position:absolute;right:40px;bottom:-30px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.03);pointer-events:none}
+.hb-eyebrow{font-size:10px;font-weight:700;color:rgba(255,255,255,0.52);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;position:relative;z-index:1}
+.hb-title{color:#fff;font-size:19px;font-weight:800;margin-bottom:5px;position:relative;z-index:1;line-height:1.2;letter-spacing:-.3px}
+.hb-sub{color:rgba(255,255,255,0.68);font-size:12px;margin-bottom:14px;position:relative;z-index:1;line-height:1.4}
+.hb-cta{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.16);color:#fff;border:1px solid rgba(255,255,255,0.24);padding:7px 16px;border-radius:20px;font-size:12px;font-weight:700;position:relative;z-index:1;width:fit-content}
+.hb-cta svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.hb-savings{position:absolute;top:16px;right:16px;z-index:2;background:#18963A;color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:10px}
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 12px}
+.prod-grid .prod-card{margin:0;border-radius:16px}
+.prod-grid .prod-img{height:96px}
+.prod-grid .prod-img-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.prod-grid .prod-img-icon svg{width:32px;height:32px;stroke:var(--text-tertiary);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:0.5}
+.prod-badge{display:inline-block;padding:2px 7px;border-radius:14px;font-size:8.5px;font-weight:800;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px}
+.pb-popular{background:var(--badge-popular-bg);color:var(--badge-popular-text)}
+.pb-nuevo{background:var(--badge-nuevo-bg);color:var(--badge-nuevo-text)}
+.pb-oferta{background:var(--badge-oferta-bg);color:var(--badge-oferta-text)}
+.pb-prepago{background:var(--badge-prepago-bg);color:var(--badge-prepago-text)}
+.prod-grid .prod-name{font-size:12.5px;font-weight:700;color:var(--text-primary);line-height:1.25;margin-bottom:4px}
+.prod-grid .prod-price{font-size:14px;font-weight:900;color:var(--price-color);line-height:1}
+.prod-grid .prod-price-sub{font-size:9.5px;color:var(--text-tertiary);margin-top:2px}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 8px}
+.sec-t{font-size:16px;font-weight:800;color:var(--text-primary);letter-spacing:-.4px}
+.sec-l{font-size:13px;color:var(--primary);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:2px}
+.sec-l svg{width:14px;height:14px;stroke:var(--primary);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+/* V3 detail components */
+.detail-img-wrap{background:var(--prod-img-bg);height:200px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.detail-img-wrap svg{width:72px;height:72px;stroke:var(--text-tertiary);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;opacity:0.35}
+.detail-img-badge{position:absolute;top:14px;right:14px;background:var(--badge-prepago-bg);color:var(--badge-prepago-text);font-size:10px;font-weight:800;padding:4px 11px;border-radius:10px}
+.detail-body-wrap{flex:1;overflow-y:auto}
+.detail-body-wrap::-webkit-scrollbar{display:none}
+.price-tag-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.price-badge{display:inline-block;padding:3px 9px;border-radius:14px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px}
+.stock-badge{display:inline-flex;align-items:center;gap:4px;background:var(--savings-bg);color:var(--success);padding:3px 9px;border-radius:14px;font-size:9.5px;font-weight:700}
+.stock-badge svg{width:10px;height:10px;stroke:var(--success);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.price-old-row{display:flex;align-items:center;gap:10px;margin-top:5px}
+.detail-section{padding:14px 16px 0}
+.detail-sec-t{font-size:13px;font-weight:800;color:var(--text-primary);margin-bottom:8px;letter-spacing:-.1px}
+.detail-desc{font-size:13px;color:var(--text-secondary);line-height:1.6}
+.benefit-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.benefit-ic{width:32px;height:32px;border-radius:9px;background:var(--primary-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.benefit-ic svg{width:15px;height:15px;stroke:var(--primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.benefit-info{flex:1}
+.benefit-t{font-size:12.5px;font-weight:700;color:var(--text-primary);margin-bottom:1px}
+.benefit-s{font-size:11px;color:var(--text-tertiary);line-height:1.4}
+.veh-compat{display:flex;align-items:center;gap:10px;background:var(--surface);border-radius:12px;padding:11px 13px;border:1px solid var(--border-light);box-shadow:var(--card-shadow)}
+.veh-compat svg{width:18px;height:18px;stroke:var(--primary);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.vc-info{flex:1}
+.vc-label{font-size:10px;color:var(--text-tertiary)}
+.vc-name{font-size:12.5px;font-weight:700;color:var(--text-primary)}
+.compat-ok{display:inline-flex;align-items:center;gap:3px;background:var(--savings-bg);color:var(--success);font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;flex-shrink:0}
+.compat-ok svg{width:10px;height:10px;stroke:var(--success);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+/* V3 checkout components */
+.order-item{display:flex;gap:12px;align-items:center;padding:14px 16px;background:var(--surface);border-radius:14px;margin:12px 16px 0;box-shadow:var(--card-shadow);border:1px solid rgba(0,113,187,0.08)}
+.order-img{width:56px;height:56px;background:var(--prod-img-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.order-img svg{width:24px;height:24px;stroke:var(--text-tertiary);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;opacity:0.5}
+.order-info{flex:1;min-width:0}
+.order-name{font-size:13.5px;font-weight:700;color:var(--text-primary);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.order-sub{font-size:11px;color:var(--text-tertiary);line-height:1.3}
+.order-price{font-size:15px;font-weight:900;color:var(--price-color);flex-shrink:0}
+.price-breakdown{background:var(--surface);border-radius:14px;margin:10px 16px 0;padding:14px 16px;box-shadow:var(--card-shadow);border:1px solid rgba(0,113,187,0.08)}
+.pb-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px}
+.pb-row:not(:last-child){border-bottom:1px solid var(--border-light)}
+.pb-label{color:var(--text-secondary)}
+.pb-value{font-weight:600;color:var(--text-primary)}
+.pb-row.total{padding-top:10px}
+.pb-row.total .pb-label{font-weight:800;font-size:14px;color:var(--text-primary)}
+.pb-row.total .pb-value{font-size:18px;font-weight:900;color:var(--price-color)}
+.delivery-card{background:var(--surface);border-radius:14px;margin:10px 16px 0;padding:14px 16px;box-shadow:var(--card-shadow);border:1px solid rgba(0,113,187,0.08)}
+.dc-t{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+.dc-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.dc-row:last-child{margin-bottom:0}
+.dc-row svg{width:15px;height:15px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.dc-text{font-size:12px;color:var(--text-secondary);line-height:1.4}
+/* V3 confirmation */
+.confirm-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:32px 24px 0;overflow-y:auto}
+.confirm-wrap::-webkit-scrollbar{display:none}
+.confirm-ic{width:72px;height:72px;border-radius:24px;background:var(--savings-bg);display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 0 30px rgba(63,199,106,0.25)}
+.confirm-ic svg{width:34px;height:34px;stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.confirm-title{font-size:22px;font-weight:800;color:var(--text-primary);margin-bottom:8px;letter-spacing:-.4px;text-align:center;line-height:1.25}
+.confirm-sub{font-size:14px;color:var(--text-secondary);line-height:1.6;text-align:center;margin-bottom:24px}
+.order-num-card{width:100%;background:var(--surface);border-radius:16px;padding:16px 18px;box-shadow:var(--card-shadow-strong,var(--card-shadow));border:1px solid rgba(0,113,187,0.12);margin-bottom:16px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.on-label{font-size:11px;color:var(--text-tertiary);margin-bottom:4px;font-weight:500}
+.on-value{font-size:20px;font-weight:900;color:var(--primary);letter-spacing:.5px;font-family:'Courier New',monospace}
+.on-date{font-size:12px;color:var(--text-tertiary);margin-top:4px}
+.confirm-info-card{width:100%;background:var(--surface);border-radius:14px;padding:14px 16px;box-shadow:var(--card-shadow);border:1px solid rgba(0,113,187,0.08);margin-bottom:12px}
+.ci-row{display:flex;align-items:center;gap:10px;padding:6px 0}
+.ci-row:not(:last-child){border-bottom:1px solid var(--border-light)}
+.ci-row svg{width:16px;height:16px;stroke:var(--primary);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.ci-t{font-size:12.5px;font-weight:600;color:var(--text-primary)}
+.ci-s{font-size:11px;color:var(--text-tertiary)}
+
+/* Spacers */
+.sp8{height:8px;flex-shrink:0}
+.sp12{height:12px;flex-shrink:0}
+.sp16{height:16px;flex-shrink:0}
+
+/* V3 max icons */
+.webpay-text{font-size:11px;color:rgba(255,255,255,0.6);line-height:1.5}
+.webpay-text strong{color:rgba(255,255,255,0.85);font-weight:700}
+.terms-row{display:flex;gap:10px;align-items:flex-start;padding:12px 16px 0}
+.check-box svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<!-- SVG ICON DEFS (Feather-style) -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+<symbol id="ic-car" viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l2-4h10l2 4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/></symbol>
+<symbol id="ic-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+<symbol id="ic-bag" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+<symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+<symbol id="ic-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+<symbol id="ic-chevr" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="ic-chevl" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
+<symbol id="ic-arrl" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="ic-pkg" viewBox="0 0 24 24"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+<symbol id="ic-droplet" viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></symbol>
+<symbol id="ic-truck" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+<symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="ic-checkcircle" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+<symbol id="ic-credit" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></symbol>
+<symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+<symbol id="ic-tag" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+<symbol id="ic-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol>
+<symbol id="ic-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+<symbol id="ic-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="ic-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="ic-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="ic-alert-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+</defs>
+</svg>
+
+<!-- ════════════════ SIDEBAR ════════════════ -->
+<aside class="sidebar">
+  <div class="sb-header"><div class="sb-brand-text">Kaufmann</div><div class="sb-sub">Tienda · Versión Final</div></div>
+  <div class="sb-title-area">
+    <div class="sb-title" id="sb-title">Tienda Postventa</div>
+    <div class="sb-subtitle" id="sb-subtitle">Kaufmann App — Versión Final</div>
+    <span class="sb-version">FINAL · 31 Mar 2026</span>
+  </div>
+
+  <!-- Mode toggler -->
+  <div class="mode-toggler" id="mode-toggler">
+    <div class="mode-tog-label">Modo</div>
+    <div class="mode-tog-wrap">
+      <button class="mode-tog-btn" id="mode-light" onclick="setMode('light')">Claro</button>
+      <button class="mode-tog-btn on" id="mode-dark" onclick="setMode('dark')">Oscuro</button>
+    </div>
+  </div>
+
+  <nav class="sb-nav" id="sb-nav">
+    <div class="sb-nav-label">Catalogo</div>
+    <button class="sb-btn on" id="nav-1" onclick="go('s-home')"><span class="sb-btn-num">1</span><span class="sb-btn-info"><span class="sb-btn-title">Tienda Home</span><span class="sb-btn-desc">Banner vehículo, chips, productos</span></span></button>
+    <button class="sb-btn" id="nav-2" onclick="go('s-detalle')"><span class="sb-btn-num">2</span><span class="sb-btn-info"><span class="sb-btn-title">Detalle de Producto</span><span class="sb-btn-desc">Hero, precio, beneficios, CTA</span></span></button>
+    <div class="sb-nav-label">Flujo de Compra</div>
+    <button class="sb-btn" id="nav-3" onclick="go('s-checkout-1')"><span class="sb-btn-num">3</span><span class="sb-btn-info"><span class="sb-btn-title">Checkout -- Resumen</span><span class="sb-btn-desc">Paso 1: orden, IVA, boleta/factura</span></span></button>
+    <button class="sb-btn" id="nav-4" onclick="go('s-checkout-2')"><span class="sb-btn-num">4</span><span class="sb-btn-info"><span class="sb-btn-title">Checkout -- Pago</span><span class="sb-btn-desc">Paso 2: WebPay, metodo, seguridad</span></span></button>
+    <button class="sb-btn" id="nav-5" onclick="go('s-confirmacion')"><span class="sb-btn-num">5</span><span class="sb-btn-info"><span class="sb-btn-title">Confirmacion de Compra</span><span class="sb-btn-desc">Exito, N orden, próximos pasos</span></span></button>
+    <button class="sb-btn" id="nav-6" onclick="go('s-error')"><span class="sb-btn-num">6</span><span class="sb-btn-info"><span class="sb-btn-title">Pago Fallido</span><span class="sb-btn-desc">Error WebPay, reintentar, soporte</span></span></button>
+    <button class="sb-btn" id="nav-6b" onclick="go('s-pending')"><span class="sb-btn-num">6b</span><span class="sb-btn-info"><span class="sb-btn-title">Pago en Verificacion</span><span class="sb-btn-desc">Estado incierto, sin retry</span></span></button>
+    <div class="sb-nav-label">Post-Compra</div>
+    <button class="sb-btn" id="nav-7" onclick="go('s-mis-productos')"><span class="sb-btn-num">7</span><span class="sb-btn-info"><span class="sb-btn-title">Mis Productos</span><span class="sb-btn-desc">Lista con progreso, filtros activo</span></span></button>
+    <button class="sb-btn" id="nav-8" onclick="go('s-producto-activo')"><span class="sb-btn-num">8</span><span class="sb-btn-info"><span class="sb-btn-title">Producto Activo -- Detalle</span><span class="sb-btn-desc">Progreso visual, historial, descarga</span></span></button>
+    <div class="sb-nav-label">Estados Extra</div>
+    <button class="sb-btn" id="nav-9" onclick="go('s-empty')"><span class="sb-btn-num">9</span><span class="sb-btn-info"><span class="sb-btn-title">Sin Productos (Empty)</span><span class="sb-btn-desc">Sin oferta para el vehículo</span></span></button>
+    <button class="sb-btn" id="nav-10" onclick="go('s-skeleton')"><span class="sb-btn-num">10</span><span class="sb-btn-info"><span class="sb-btn-title">Cargando (Skeleton)</span><span class="sb-btn-desc">Estado de carga mientras Eleva responde</span></span></button>
+  </nav>
+
+  <div class="sb-notes">
+    <div class="sb-notes-title">Notas de Diseño</div>
+    <div class="sb-note"><span class="sb-note-num">1</span><span class="sb-note-text">10 screens. Dark default #0B1018, light mode available.</span></div>
+    <div class="sb-note"><span class="sb-note-num">2</span><span class="sb-note-text">Blue glow shadows, cards border-radius:22px, glassmorphism backdrop-filter:blur(12px).</span></div>
+    <div class="sb-note"><span class="sb-note-num">3</span><span class="sb-note-text">Semantic colors: success #3FC76A, warning #F0B840, danger #F05454.</span></div>
+    <div class="sb-note"><span class="sb-note-num">4</span><span class="sb-note-text">Header chrome KAUFMANN logo + bell + Name Pill. Bottom nav: Inicio | Mis Autos | Tienda | Servicios | Contactar.</span></div>
+  </div>
+  <div class="sb-footer"><div class="sb-footer-text">Tienda — Versión Final<br>Kaufmann Chile · 31/03/2026</div></div>
+</aside>
+
+<!-- ════════════════ DEVICE ════════════════ -->
+<div class="main">
+<div class="device">
+  <div class="notch"><div class="notch-pill"></div></div>
+  <div class="device-scr">
+
+<!-- S1: TIENDA HOME -->
+<div class="screen active" id="s-home">
+  <div class="sbar dark"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar dark" style="justify-content:center"><span class="logo-chrome">KAUFMANN</span><div class="nav-right"><button class="nav-icon" onclick="go('s-mis-productos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bag"/></svg></button><button class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bell"/></svg></button><div class="av-pill" onclick="navTo('perfil')"><svg width="14" height="14" viewBox="0 0 24 24"><use href="#ic-user"/></svg><span class="av-pill-name">Pedro</span></div></div></div>
+  <div class="body">
+    <div class="veh-banner"><span class="veh-banner-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg></span><div class="veh-banner-info"><div class="veh-banner-name">Mercedes-Benz GLC 300</div><span class="veh-banner-plate">KWRS-21</span></div><span class="veh-banner-link">Cambiar &#8250;</span></div>
+    <div class="chip-row"><span class="chip on">Todo</span><span class="chip">Prepagos</span><span class="chip">Ofertas</span><span class="chip">GPS</span><span class="chip">Asistencia</span></div>
+    <div class="featured" onclick="go('s-detalle')"><div class="deco-circle" style="width:130px;height:130px;right:-30px;top:-30px"></div><div class="deco-circle" style="width:80px;height:80px;left:-20px;bottom:-20px"></div><span class="featured-savings">-20%</span><div class="featured-eyebrow">Tienda Kaufmann</div><div class="featured-title">Prepago Mantención</div><div class="featured-sub">Ahorra hasta 20% en tus próximas mantenciónes programadas</div><div class="featured-cta">Ver oferta <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevr"/></svg></div></div>
+    <div class="sec-header"><span class="sec-title">Productos para tu GLC</span><span class="sec-link">Ver todo &#8250;</span></div>
+    <div class="prod-card" onclick="go('s-detalle')"><div class="prod-img"><div class="prod-img-inner"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-droplet"/></svg><span class="prod-img-lbl">Aceite Motor</span></div><span class="prod-img-badge">Popular</span></div><div class="prod-body"><span class="prod-tag tag-prepago">Prepago</span><div class="prod-name">Aceite Motor Original 5W-30</div><div class="prod-desc">Aceite sintetico Mercedes-Benz. Incluye 5 litros + filtro de aceite original.</div><div class="prod-footer"><div><div class="prod-price">$38.990</div><span class="prod-price-old">$44.990</span><span class="prod-price-sub">IVA incluido</span></div><span class="btn-outline">Ver detalle</span></div></div></div>
+    <div class="prod-card" onclick="go('s-detalle')"><div class="prod-img" style="background:var(--featured-gradient)"><div class="prod-img-inner" style="opacity:0.7"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg><span class="prod-img-lbl" style="color:rgba(255,255,255,0.6)">Mantención</span></div><span class="prod-img-badge savings">-20%</span></div><div class="prod-body"><span class="prod-tag tag-prepago">Prepago</span><div class="prod-name">Prepago 4 Mantenciónes</div><div class="prod-desc">Contrata hoy y ahorra 20% en tus próximas 4 mantenciónes programadas.</div><div class="prod-footer"><div><div class="prod-price">$589.990</div><span class="prod-price-old">$739.960</span><span class="prod-price-sub">IVA incluido</span></div><span class="btn-outline">Ver detalle</span></div></div></div>
+    <div class="prod-card" onclick="go('s-detalle')"><div class="prod-img"><div class="prod-img-inner"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-map-pin"/></svg><span class="prod-img-lbl">GPS</span></div></div><div class="prod-body"><span class="prod-tag tag-gps">GPS</span><div class="prod-name">DIMO Basico -- Telemetría</div><div class="prod-desc">Seguimiento GPS en tiempo real, alertas de velocidad y geocercas.</div><div class="prod-footer"><div><div class="prod-price">$12.990<span style="font-size:12px;font-weight:500;color:var(--text-tertiary)">/mes</span></div><span class="prod-price-sub">IVA incluido</span></div><span class="btn-outline">Ver detalle</span></div></div></div>
+    <div style="height:12px"></div>
+  </div>
+  <div class="bnav">
+        <button class="tab" onclick="navTo('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-home"/></svg><span class="tab-label">Inicio</span></button>
+        <button class="tab" onclick="navTo('vehículos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg><span class="tab-label">Mis Autos</span></button>
+        <button class="tab on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-cart"/></svg><span class="tab-label">Tienda</span></button>
+        <button class="tab" onclick="navTo('servicios')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg><span class="tab-label">Servicios</span></button>
+        <button class="tab" onclick="navTo('contactar')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg><span class="tab-label">Contactar</span></button>
+      </div>
+</div>
+
+<!-- S2: DETALLE PRODUCTO -->
+<div class="screen" id="s-detalle">
+  <div class="sbar"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar" style="justify-content:space-between"><button class="back" onclick="go('s-home')"><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 1 1 7 7 13"/></svg></button><span class="logo-chrome">KAUFMANN</span><div style="width:32px"></div></div>
+  <div class="detail-hero" style="background:var(--hero-gradient)">
+    <div class="detail-hero-img"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-droplet"/></svg><span class="prod-img-badge" style="position:absolute;top:12px;left:12px">Popular</span></div>
+    <div class="detail-hero-name">Aceite Motor Original 5W-30</div>
+    <div class="detail-hero-sub">Mercedes-Benz · 5 litros + filtro original</div>
+  </div>
+  <div class="body">
+    <div class="price-card"><div class="price-main">$38.990 <span class="price-iva">IVA inc.</span></div><div class="price-old">$44.990</div><div class="price-savings"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-tag"/></svg> Ahorras $6.000</div><div class="price-note">Precio valido para GLC 300 2023. Incluye 5 litros.</div></div>
+    <div class="card"><div class="card-title">Beneficios incluidos</div><div class="benefit"><span class="benefit-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-check"/></svg></span><span class="benefit-text">5 litros de aceite original Mercedes-Benz 5W-30 (MB 229.5)</span></div><div class="benefit"><span class="benefit-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-check"/></svg></span><span class="benefit-text">Filtro de aceite original incluido</span></div><div class="benefit"><span class="benefit-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-check"/></svg></span><span class="benefit-text">Despacho a domicilio en 2-3 días habiles</span></div><div class="benefit"><span class="benefit-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-check"/></svg></span><span class="benefit-text">Garantía de autenticidad Mercedes-Benz</span></div></div>
+    <div class="veh-info-card"><span style="color:var(--primary);flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg></span><div><div class="veh-info-name">Mercedes-Benz GLC 300 2023</div><div class="veh-info-detail">Compatible con tu vehículo KWRS-21</div></div></div>
+    <div style="height:16px"></div>
+  </div>
+  <div class="sticky-bottom"><button class="btn-prim" onclick="go('s-checkout-1')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bag"/></svg> Comprar ahora -- $38.990</button><div class="sticky-note">Pago seguro con WebPay. Despacho gratis sobre $50.000</div></div>
+</div>
+
+<!-- S3: CHECKOUT PASO 1 (Resumen) -->
+<div class="screen" id="s-checkout-1">
+  <div class="sbar"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar" style="justify-content:space-between"><button class="back" onclick="go('s-detalle')"><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 1 1 7 7 13"/></svg></button><span class="logo-chrome">KAUFMANN</span><div style="width:32px"></div></div>
+  <div class="stepper"><div class="step"><div class="step-circle on">1</div><span class="step-label on">Resumen</span></div><div class="step-line"></div><div class="step"><div class="step-circle">2</div><span class="step-label">Pago</span></div><div class="step-line"></div><div class="step"><div class="step-circle">3</div><span class="step-label">Confirmar</span></div></div>
+  <div class="body">
+    <div class="card" style="margin-top:12px"><div class="card-title">Resumen del pedido</div><div class="order-mini"><div class="order-mini-img"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-droplet"/></svg></div><div><div class="order-mini-name">Aceite Motor 5W-30</div><div class="order-mini-sub">Original MB - 5 litros - GLC 300</div></div></div><div class="price-row"><span class="price-row-label">Subtotal</span><span class="price-row-value">$38.990</span></div><div class="price-row"><span class="price-row-label">Despacho</span><span class="price-row-value" style="color:var(--success)">Gratis</span></div><div class="price-row"><span class="price-row-label">IVA (incluido)</span><span class="price-row-value">$6.238</span></div><div class="price-row total"><span class="price-row-label">Total</span><span class="price-row-value">$38.990</span></div></div>
+    <div class="card"><div class="card-title">Tipo de documento</div><div class="seg" id="seg-doc"><button class="seg-btn on" onclick="toggleDoc('form-boleta','form-factura',this)">Boleta</button><button class="seg-btn" onclick="toggleDoc('form-factura','form-boleta',this)">Factura</button></div><div id="form-boleta" class="form-content active" style="margin-top:10px"><div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Se emitira boleta electronica a nombre de <strong style="color:var(--text-primary)">Pedro González</strong>.</div></div><div id="form-factura" class="form-content" style="margin-top:10px"><div class="field-row"><div class="field-label">RUT Empresa</div><input class="field-input" placeholder="76.XXX.XXX-X" readonly></div><div class="field-row"><div class="field-label">Razón Social</div><input class="field-input" placeholder="Nombre de la empresa" readonly></div><div class="field-row"><div class="field-label">Giro</div><input class="field-input" placeholder="Actividad comercial" readonly></div></div></div>
+    <div style="height:16px"></div>
+  </div>
+  <div class="sticky-bottom"><button class="btn-prim" onclick="go('s-checkout-2')">Continuar al pago</button></div>
+</div>
+
+<!-- S4: CHECKOUT PASO 2 (Pago) -->
+<div class="screen" id="s-checkout-2">
+  <div class="sbar"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar" style="justify-content:space-between"><button class="back" onclick="go('s-checkout-1')"><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 1 1 7 7 13"/></svg></button><span class="logo-chrome">KAUFMANN</span><div style="width:32px"></div></div>
+  <div class="stepper"><div class="step"><div class="step-circle done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><use href="#ic-check"/></svg></div><span class="step-label done">Resumen</span></div><div class="step-line done"></div><div class="step"><div class="step-circle on">2</div><span class="step-label on">Pago</span></div><div class="step-line"></div><div class="step"><div class="step-circle">3</div><span class="step-label">Confirmar</span></div></div>
+  <div class="body">
+    <div class="card" style="margin-top:12px"><div class="card-title">Metodo de pago</div><div class="pay-method on"><span class="pay-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-credit"/></svg></span><div class="pay-info"><div class="pay-title">WebPay Plus</div><div class="pay-sub">Tarjeta debito o credito - Transbank</div></div><div class="pay-radio on"></div></div></div>
+    <div class="webpay-notice"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-shield"/></svg><div><div class="webpay-title">Pago seguro WebPay</div><div class="webpay-sub">Seras redirigido a Transbank para completar el pago. Aceptamos Visa, Mastercard, Redcompra y debito.</div></div></div>
+    <div style="padding:10px 16px 0"><div class="check-row"><div class="check-box"><span class="check-mark">&#10003;</span></div><div class="check-text">Acepto los <span class="check-link">Términos y Condiciones</span> y la <span class="check-link">Política de Privacidad</span>.</div></div></div>
+    <div class="security-row"><div class="sec-badge"><span class="sec-badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-shield"/></svg></span><span class="sec-badge-text">SSL</span></div><div class="sec-badge"><span class="sec-badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-credit"/></svg></span><span class="sec-badge-text">WebPay</span></div><div class="sec-badge"><span class="sec-badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span><span class="sec-badge-text">PCI DSS</span></div></div>
+    <div style="height:16px"></div>
+  </div>
+  <div class="sticky-bottom"><button class="btn-prim" onclick="go('s-confirmacion')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-credit"/></svg> Pagar con WebPay -- $38.990</button><div class="sticky-note">Redirección segura a Transbank</div></div>
+</div>
+
+<!-- S5: CONFIRMACION -->
+<div class="screen" id="s-confirmacion">
+  <div class="sbar"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar" style="justify-content:center"><span class="logo-chrome">KAUFMANN</span></div>
+  <div class="success-wrap">
+    <div class="success-circle"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-checkcircle"/></svg></div>
+    <div class="success-title">Compra confirmada</div>
+    <div class="success-sub">Tu pago fue procesado exitosamente. Recibiras un correo con los detalles de tu pedido.</div>
+    <div class="order-number">Pedido N: <span>KFM-2026-08841</span></div>
+    <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">28 marzo 2026 - 09:41</div>
+    <button class="btn-prim" onclick="go('s-mis-productos')" style="max-width:280px;margin-top:16px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bag"/></svg> Ver mis productos</button>
+    <div style="margin-top:10px;font-size:13px;color:var(--primary);cursor:pointer;font-weight:600" onclick="go('s-home')">Seguir comprando</div>
+  </div>
+</div>
+
+<!-- S6: PAGO FALLIDO -->
+<div class="screen" id="s-error">
+  <div class="sbar"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar" style="justify-content:center"><span class="logo-chrome">KAUFMANN</span></div>
+  <div class="error-wrap">
+    <div class="error-circle"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-alert-circle"/></svg></div>
+    <div class="error-title">Pago no procesado</div>
+    <div class="error-sub">La transaccion fue rechazada por WebPay. No se realizo ningun cobro a tu tarjeta.</div>
+    <div class="error-code">Código: TBK-4012 | Motivo: Fondos insuficientes</div>
+    <button class="btn-prim" onclick="go('s-checkout-2')" style="max-width:280px;margin-top:16px">Reintentar pago</button>
+    <div style="margin-top:12px;font-size:13px;color:var(--primary);cursor:pointer;font-weight:600" onclick="go('s-home')">Volver a la tienda</div>
+    <button style="margin-top:16px;display:flex;align-items:center;gap:8px;background:#25D366;color:#fff;border:none;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg> Contactar soporte</button>
+  </div>
+</div>
+
+<!-- S6b: PAGO EN VERIFICACION -->
+<div class="screen" id="s-pending">
+  <div class="sbar"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar" style="justify-content:center"><span class="logo-chrome">KAUFMANN</span></div>
+  <div class="success-wrap">
+    <div class="success-circle" style="background:var(--warning-bg)"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" stroke-linecap="round"><use href="#ic-alert-circle"/></svg></div>
+    <div class="success-title" style="color:var(--warning)">Pago en verificacion</div>
+    <div class="success-sub">Tu pago esta siendo verificado por WebPay. Esto puede tomar unos minutos. Te notificaremos cuando se confirme.</div>
+    <div class="order-number">Referencia: <span>TBK-REF-99827</span></div>
+    <button class="btn-prim" onclick="go('s-home')" style="max-width:280px;margin-top:16px">Volver a la tienda</button>
+    <button style="margin-top:12px;display:flex;align-items:center;gap:8px;background:#25D366;color:#fff;border:none;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg> Contactar soporte</button>
+  </div>
+</div>
+
+<!-- S7: MIS PRODUCTOS -->
+<div class="screen" id="s-mis-productos">
+  <div class="sbar dark"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar dark" style="justify-content:space-between"><button class="back" onclick="go('s-home')"><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 1 1 7 7 13"/></svg></button><span class="logo-chrome">KAUFMANN</span><div style="width:32px"></div></div>
+  <div class="body">
+    <div style="padding:16px 16px 4px"><div class="seg" id="seg-productos"><button class="seg-btn on" onclick="switchMisProductos('activos',this)">Activos (3)</button><button class="seg-btn" onclick="switchMisProductos('vencidos',this)">Vencidos (1)</button></div></div>
+    <!-- ACTIVOS -->
+    <div id="seg-activos" class="seg-content active">
+      <div style="height:10px"></div>
+      <div class="mpc-card" onclick="go('s-producto-activo')"><div class="mpc-card-gradient mpc-grad-mantención"><div class="mpc-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg></div><div class="mpc-header-info"><div class="mpc-header-name">Plan 4 Mantenciónes</div><div class="mpc-header-sub">GLC 300 - KWRS-21</div></div><span class="mpc-status-badge mpc-status-active">Activo</span></div><div class="mpc-body"><div class="mpc-ring-wrap"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="var(--progress-empty)" stroke-width="7"/><circle cx="32" cy="32" r="26" fill="none" stroke="#0071BB" stroke-width="7" stroke-dasharray="81.69 81.69" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 32 32)"/></svg><div class="mpc-ring-center"><div class="mpc-ring-pct">50%</div><div class="mpc-ring-lbl">usado</div></div></div><div class="mpc-body-info"><div class="mpc-body-title">Progreso de uso</div><div class="mpc-body-counts"><span class="mpc-count-used"><svg viewBox="0 0 24 24"><use href="#ic-check"/></svg> 2 usadas</span><span class="mpc-count-remaining"><svg viewBox="0 0 24 24"><use href="#ic-chevr"/></svg> 2 restantes</span></div><div class="mpc-expiry">Vigente hasta 03/2028 - Pagado $589.990</div></div></div><div class="mpc-footer"><span class="mpc-cta">Ver detalle <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div></div>
+      <div class="mpc-card"><div class="mpc-card-gradient mpc-grad-seguro"><div class="mpc-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-shield"/></svg></div><div class="mpc-header-info"><div class="mpc-header-name">Extension Garantía 2 anos</div><div class="mpc-header-sub">GLC 300 - KWRS-21</div></div><span class="mpc-status-badge mpc-status-active">Activo</span></div><div class="mpc-body"><div class="mpc-ring-wrap"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="var(--progress-empty)" stroke-width="7"/><circle cx="32" cy="32" r="26" fill="none" stroke="#0071BB" stroke-width="7" stroke-dasharray="48.8 114.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 32 32)"/></svg><div class="mpc-ring-center"><div class="mpc-ring-pct">30%</div><div class="mpc-ring-lbl">transcurrido</div></div></div><div class="mpc-body-info"><div class="mpc-body-title">Cobertura vigente</div><div class="mpc-body-counts"><span style="font-size:11px;color:var(--success);font-weight:700">Cobertura total activa</span></div><div class="mpc-expiry">Vigente hasta 12/2026 - Pagado $149.990</div></div></div><div class="mpc-footer"><span class="mpc-cta">Ver detalle <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div></div>
+      <div class="mpc-card"><div class="mpc-card-gradient mpc-grad-dimo"><div class="mpc-icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-map-pin"/></svg></div><div class="mpc-header-info"><div class="mpc-header-name">DIMO Basico -- Telemetría</div><div class="mpc-header-sub">Sprinter - ABCD-12</div></div><span class="mpc-status-badge mpc-status-active">Activo</span></div><div class="mpc-body"><div class="mpc-ring-wrap"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="var(--progress-empty)" stroke-width="7"/><circle cx="32" cy="32" r="26" fill="none" stroke="#1E7A30" stroke-width="7" stroke-dasharray="163 0" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 32 32)"/></svg><div class="mpc-ring-center"><div class="mpc-ring-pct" style="font-size:10px;line-height:1.1">12.990</div><div class="mpc-ring-lbl">/mes</div></div></div><div class="mpc-body-info"><div class="mpc-body-title">Suscripcion mensual activa</div><div class="mpc-body-counts"><span style="font-size:11px;color:var(--success);font-weight:700">GPS + alertas activas</span></div><div class="mpc-expiry">Próximo cobro: 01/04/2026</div></div></div><div class="mpc-footer"><span class="mpc-cta">Ver telemetría <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div></div>
+      <button class="btn-ghost" onclick="go('s-home')" style="display:flex;align-items:center;justify-content:center;gap:6px;margin:0 14px 14px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bag"/></svg> Explorar mas productos</button>
+    </div>
+    <!-- VENCIDOS -->
+    <div id="seg-vencidos" class="seg-content">
+      <div style="height:10px"></div>
+      <div class="mpc-card" style="border-color:rgba(240,84,84,0.2)"><div class="mpc-card-gradient mpc-grad-vencido"><div class="mpc-icon-wrap" style="background:rgba(240,33,0,0.25)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg></div><div class="mpc-header-info"><div class="mpc-header-name">Plan 2 Mantenciónes</div><div class="mpc-header-sub">GLC 300 - KWRS-21</div></div><span class="mpc-status-badge mpc-status-vencido">Vencido</span></div><div class="mpc-body"><div class="mpc-ring-wrap"><svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(240,33,0,0.2)" stroke-width="7"/><circle cx="32" cy="32" r="26" fill="none" stroke="var(--danger)" stroke-width="7" stroke-dasharray="163 0" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 32 32)"/></svg><div class="mpc-ring-center"><div class="mpc-ring-pct" style="color:var(--danger)">100%</div><div class="mpc-ring-lbl">agotado</div></div></div><div class="mpc-body-info"><div class="mpc-body-title">Plan completamente usado</div><div class="mpc-body-counts"><span style="font-size:11px;color:var(--danger);font-weight:700">Venció 15/01/2026</span></div><div class="mpc-expiry">0 mantenciónes restantes - Pagado $289.990</div></div></div><div class="mpc-footer"><button style="background:var(--primary);color:#fff;font-size:13px;font-weight:700;border:none;border-radius:10px;padding:8px 18px;cursor:pointer" onclick="go('s-detalle')">Renovar plan</button></div></div>
+    </div>
+    <div style="height:12px"></div>
+  </div>
+  <div class="bnav">
+        <button class="tab" onclick="navTo('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-home"/></svg><span class="tab-label">Inicio</span></button>
+        <button class="tab" onclick="navTo('vehículos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg><span class="tab-label">Mis Autos</span></button>
+        <button class="tab on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-cart"/></svg><span class="tab-label">Tienda</span></button>
+        <button class="tab" onclick="navTo('servicios')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg><span class="tab-label">Servicios</span></button>
+        <button class="tab" onclick="navTo('contactar')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg><span class="tab-label">Contactar</span></button>
+      </div>
+</div>
+
+<!-- S8: PRODUCTO ACTIVO DETALLE -->
+<div class="screen" id="s-producto-activo">
+  <div class="sbar"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar" style="justify-content:space-between"><button class="back" onclick="go('s-mis-productos')"><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 1 1 7 7 13"/></svg></button><span class="logo-chrome">KAUFMANN</span><div style="width:32px"></div></div>
+  <div class="csg-hero">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><span style="background:rgba(42,183,51,0.25);color:#5EFF72;font-size:9.5px;font-weight:800;padding:4px 10px;border-radius:8px;border:1px solid rgba(42,183,51,0.4);display:inline-block;margin-bottom:6px">ACTIVO</span><div style="font-size:17px;font-weight:800;color:#fff;line-height:1.2">Plan 4 Mantenciónes</div><div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px">GLC 300 - KWRS-21</div></div><div style="position:relative;width:90px;height:90px;flex-shrink:0"><svg width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="9"/><circle cx="45" cy="45" r="38" fill="none" stroke="#0071BB" stroke-width="9" stroke-dasharray="119.38 119.38" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 45 45)"/></svg><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center"><div style="font-size:22px;font-weight:900;color:#fff;line-height:1">50%</div><div style="font-size:9px;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:0.3px">USADO</div></div></div></div>
+    <div class="csg-steps"><div class="csg-step done"><div class="csg-step-dot"><svg width="14" height="14" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="csg-step-lbl">30.000 km<br>Sep 2025</div></div><div class="csg-step done"><div class="csg-step-dot"><svg width="14" height="14" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div class="csg-step-lbl">40.000 km<br>Ene 2026</div></div><div class="csg-step next"><div class="csg-step-dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="#fff" stroke="none"/></svg></div><div class="csg-step-lbl">3.a Mant.<br>Disponible</div></div><div class="csg-step pending"><div class="csg-step-dot"><span>4</span></div><div class="csg-step-lbl">4.a Mant.<br>Disponible</div></div></div>
+  </div>
+  <div class="body">
+    <div style="font-size:12px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.7px;padding:14px 14px 8px">Historial de uso</div>
+    <div class="csg-history-item"><div class="csg-history-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg></div><div class="csg-history-info"><div class="csg-history-name">Mantención 30.000 km</div><div class="csg-history-meta">15/09/2025 - Sucursal Las Condes<br>Asesor: Carlos Munoz</div></div><span class="csg-history-badge">Usado</span></div>
+    <div class="csg-history-item"><div class="csg-history-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg></div><div class="csg-history-info"><div class="csg-history-name">Mantención 40.000 km</div><div class="csg-history-meta">15/01/2026 - Sucursal Las Condes<br>Asesor: Carlos Munoz</div></div><span class="csg-history-badge">Usado</span></div>
+    <div style="font-size:12px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.7px;padding:14px 14px 8px">Detalles del contrato</div>
+    <div class="csg-details-table"><div class="csg-details-row"><span class="csg-details-key">Fecha de contratacion</span><span class="csg-details-val">15/03/2024</span></div><div class="csg-details-row"><span class="csg-details-key">Vencimiento</span><span class="csg-details-val">15/03/2028</span></div><div class="csg-details-row"><span class="csg-details-key">Limite de kilometraje</span><span class="csg-details-val">60.000 km</span></div><div class="csg-details-row"><span class="csg-details-key">Valor contratado</span><span class="csg-details-val">$589.990</span></div><div class="csg-details-row"><span class="csg-details-key">Metodo de pago</span><span class="csg-details-val">WebPay Visa ****4532</span></div></div>
+    <div style="height:90px"></div>
+  </div>
+  <div class="sticky-bottom"><button class="btn-prim" style="gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-calendar"/></svg> Usar plan -- Agendar mantención</button><div class="sticky-note">Quedan 2 mantenciónes disponibles</div></div>
+</div>
+
+<!-- S9: EMPTY STATE -->
+<div class="screen" id="s-empty">
+  <div class="sbar dark"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar dark"><button class="back" onclick="go('s-home')"><svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 1 1 7 7 13"/></svg></button><span class="ntitle"><span class="logo-chrome">KAUFMANN</span></span><div class="nav-right"><button class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-search"/></svg></button></div></div>
+  <div class="body">
+    <div class="veh-banner" style="border-color:var(--warning-border);background:var(--warning-bg)"><span class="veh-banner-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><use href="#ic-alert-circle"/></svg></span><div class="veh-banner-info"><div class="veh-banner-name" style="color:var(--warning-text)">Sin vehículo seleccionado</div><div style="font-size:11px;color:var(--warning-text);margin-top:2px;opacity:0.7">Selecciona un vehículo para ver los productos disponibles</div></div><span class="veh-banner-link">Elegir &#8250;</span></div>
+    <div class="chip-row"><span class="chip on">Todo</span><span class="chip">Prepagos</span><span class="chip">Ofertas</span><span class="chip">GPS</span><span class="chip">Asistencia</span></div>
+    <div class="empty-state"><div class="empty-icon"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bag"/></svg></div><div class="empty-title">Sin productos disponibles</div><div class="empty-sub">No encontramos productos compatibles con tu vehículo o seleccion actual.</div><button class="btn-prim" style="max-width:260px" onclick="go('s-home')">Seleccionar vehículo</button></div>
+  </div>
+  <div class="bnav">
+        <button class="tab" onclick="navTo('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-home"/></svg><span class="tab-label">Inicio</span></button>
+        <button class="tab" onclick="navTo('vehículos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg><span class="tab-label">Mis Autos</span></button>
+        <button class="tab on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-cart"/></svg><span class="tab-label">Tienda</span></button>
+        <button class="tab" onclick="navTo('servicios')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg><span class="tab-label">Servicios</span></button>
+        <button class="tab" onclick="navTo('contactar')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg><span class="tab-label">Contactar</span></button>
+      </div>
+</div>
+
+<!-- S10: SKELETON -->
+<div class="screen" id="s-skeleton">
+  <div class="sbar dark"><div class="s-time">9:41</div><div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt-ic"><div class="batt-fill"></div></div></div></div>
+  <div class="nbar dark" style="justify-content:center"><span class="logo-chrome">KAUFMANN</span></div>
+  <div class="body">
+    <div style="margin:10px 16px 6px;padding:12px 14px;border-radius:14px;background:var(--skeleton-base);height:58px;animation:shimmer 1.5s infinite"></div>
+    <div style="display:flex;gap:7px;padding:8px 16px 10px;overflow:hidden"><div class="skeleton-block" style="width:50px;height:30px;border-radius:20px"></div><div class="skeleton-block" style="width:70px;height:30px;border-radius:20px"></div><div class="skeleton-block" style="width:60px;height:30px;border-radius:20px"></div></div>
+    <div class="skeleton-block" style="margin:4px 16px 12px;height:116px;border-radius:22px"></div>
+    <div style="padding:14px 16px 8px;display:flex;justify-content:space-between"><div class="skeleton-line" style="width:120px;height:18px"></div><div class="skeleton-line" style="width:60px;height:14px"></div></div>
+    <div style="background:var(--surface);border-radius:22px;margin:0 16px 14px;overflow:hidden;box-shadow:var(--card-shadow)"><div class="skeleton-block" style="width:100%;height:132px;border-radius:0"></div><div style="padding:14px 16px 16px"><div class="skeleton-line" style="width:60px;height:12px;margin-bottom:10px"></div><div class="skeleton-line" style="width:160px;height:18px;margin-bottom:8px"></div><div class="skeleton-line" style="width:100%;height:12px;margin-bottom:14px"></div><div style="display:flex;justify-content:space-between"><div class="skeleton-line" style="width:90px;height:22px"></div><div class="skeleton-block" style="width:80px;height:34px;border-radius:10px"></div></div></div></div>
+    <div style="background:var(--surface);border-radius:22px;margin:0 16px 14px;overflow:hidden;box-shadow:var(--card-shadow)"><div class="skeleton-block" style="width:100%;height:132px;border-radius:0"></div><div style="padding:14px 16px 16px"><div class="skeleton-line" style="width:50px;height:12px;margin-bottom:10px"></div><div class="skeleton-line" style="width:140px;height:18px;margin-bottom:14px"></div><div style="display:flex;justify-content:space-between"><div class="skeleton-line" style="width:100px;height:22px"></div><div class="skeleton-block" style="width:80px;height:34px;border-radius:10px"></div></div></div></div>
+  </div>
+  <div class="bnav">
+        <button class="tab" onclick="navTo('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-home"/></svg><span class="tab-label">Inicio</span></button>
+        <button class="tab" onclick="navTo('vehículos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg><span class="tab-label">Mis Autos</span></button>
+        <button class="tab on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-cart"/></svg><span class="tab-label">Tienda</span></button>
+        <button class="tab" onclick="navTo('servicios')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg><span class="tab-label">Servicios</span></button>
+        <button class="tab" onclick="navTo('contactar')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg><span class="tab-label">Contactar</span></button>
+      </div>
+</div>
+
+  </div><!-- /device-scr -->
+</div><!-- /device -->
+</div><!-- /main -->
+
+<!-- ════════════════ JAVASCRIPT ════════════════ -->
+<script>
+var currentMode = 'dark';
+
+/* ── Screen map ── */
+var SM = {'s-home':1,'s-detalle':2,'s-checkout-1':3,'s-checkout-2':4,'s-confirmacion':5,'s-error':6,'s-pending':'6b','s-mis-productos':7,'s-producto-activo':8,'s-empty':9,'s-skeleton':10};
+
+function go(id) {
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  var el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('#sb-nav .sb-btn').forEach(function(b){b.classList.remove('on')});
+  var n = SM[id];
+  if(n){ var btn = document.getElementById('nav-'+n); if(btn) btn.classList.add('on'); }
+}
+
+/* ── MODE TOGGLER ── */
+function setMode(mode) {
+  currentMode = mode;
+  document.body.setAttribute('data-mode', mode);
+  document.getElementById('mode-light').classList.toggle('on', mode === 'light');
+  document.getElementById('mode-dark').classList.toggle('on', mode === 'dark');
+}
+
+/* ── CHIP CLICKS ── */
+document.querySelectorAll('.chip-row .chip').forEach(function(c){
+  c.addEventListener('click', function(){
+    this.closest('.chip-row').querySelectorAll('.chip').forEach(function(x){x.classList.remove('on')});
+    this.classList.add('on');
+  });
+});
+
+/* ── SEG BUTTONS ── */
+document.querySelectorAll('.seg').forEach(function(seg){
+  seg.querySelectorAll('.seg-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      this.closest('.seg').querySelectorAll('.seg-btn').forEach(function(x){x.classList.remove('on')});
+      this.classList.add('on');
+    });
+  });
+});
+
+/* ── MIS PRODUCTOS TAB SWITCH ── */
+function switchMisProductos(tab, btn) {
+  document.querySelectorAll('#seg-productos .seg-btn').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  document.getElementById('seg-activos').classList.remove('active');
+  document.getElementById('seg-vencidos').classList.remove('active');
+  if(tab === 'activos') { document.getElementById('seg-activos').classList.add('active'); }
+  else { document.getElementById('seg-vencidos').classList.add('active'); }
+}
+
+/* ── BOLETA/FACTURA TOGGLE ── */
+function toggleDoc(showId, hideId, btn) {
+  document.getElementById('seg-doc').querySelectorAll('.seg-btn').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  var showEl = document.getElementById(showId);
+  var hideEl = document.getElementById(hideId);
+  if(hideEl) hideEl.classList.remove('active');
+  if(showEl) showEl.classList.add('active');
+}
+
+/* ── PAY METHOD CLICK ── */
+document.querySelectorAll('.pay-method').forEach(function(pm){
+  pm.addEventListener('click', function(){
+    var parent = this.closest('.card') || this.parentElement;
+    parent.querySelectorAll('.pay-method').forEach(function(x){x.classList.remove('on'); var r=x.querySelector('.pay-radio'); if(r) r.classList.remove('on');});
+    this.classList.add('on');
+    var radio = this.querySelector('.pay-radio');
+    if(radio) radio.classList.add('on');
+  });
+});
+
+/* ── CROSS-FILE NAVIGATION ── */
+function navTo(module) {
+  if(window.parent && window.parent !== window) {
+    window.parent.postMessage({action:'navigate', module:module}, '*');
+  }
+}
+</script>
+</body>
+</html>

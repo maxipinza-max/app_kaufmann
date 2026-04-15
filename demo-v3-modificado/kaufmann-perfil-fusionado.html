@@ -1,0 +1,3923 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaufmann App — Perfil Fusionado</title>
+    <style>
+      /* ══════════════════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════════════════ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #0a0e14;
+        display: flex;
+        min-height: 100vh;
+        color: var(--text-primary);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   VERSION FINAL TAB — V3 Best Of dark default
+══════════════════════════════════════════════════════════════ */
+      :root {
+        --primary: #3b9eff;
+        --primary-dark: #0055aa;
+        --primary-mid: #1e7ee0;
+        --primary-tint: rgba(59, 158, 255, 0.16);
+        --primary-tint-2: rgba(59, 158, 255, 0.09);
+        --background: #0b1018;
+        --surface: #131a24;
+        --surface-2: #161d28;
+        --surface-3: #1c2535;
+        --text-primary: #f2f6fc;
+        --text-secondary: #8b96a8;
+        --text-tertiary: #50607a;
+        --border: rgba(255, 255, 255, 0.07);
+        --border-light: rgba(255, 255, 255, 0.04);
+        --border-accent: rgba(59, 158, 255, 0.22);
+        --hero-grad: linear-gradient(
+          160deg,
+          #040810 0%,
+          #071428 35%,
+          #0c2545 65%,
+          #153860 100%
+        );
+        --card-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.45), 0 0 1px rgba(59, 158, 255, 0.12);
+        --card-shadow-md:
+          0 4px 20px rgba(0, 0, 0, 0.55), 0 0 30px rgba(59, 158, 255, 0.07);
+        --card-shadow-strong:
+          0 4px 20px rgba(0, 0, 0, 0.55), 0 0 30px rgba(59, 158, 255, 0.07);
+        --success: #4ade80;
+        --success-bg: rgba(74, 222, 128, 0.12);
+        --warning: #fbbf24;
+        --warning-bg: rgba(251, 191, 36, 0.12);
+        --danger: #ff6b6b;
+        --danger-bg: rgba(255, 107, 107, 0.13);
+        --header-bg: #000000;
+        --bnav-bg: #0b1018;
+        --bnav-border: rgba(255, 255, 255, 0.06);
+        --bnav-active: #3b9eff;
+        --bnav-inactive: #50607a;
+        --bnav-active-glow: drop-shadow(0 0 6px rgba(59, 158, 255, 0.6));
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --pill-bg: rgba(59, 158, 255, 0.18);
+        --pill-border: rgba(59, 158, 255, 0.35);
+        --pill-text: #7ec8ff;
+        --nav-bg: #000000;
+        --nav-text: #e6edf3;
+        --nav-border: rgba(255, 255, 255, 0.06);
+        --wa-bg: #25d366;
+        --sidebar-accent: #3b9eff;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   LIGHT MODE
+══════════════════════════════════════════════════════════════ */
+      body[data-mode="light"] {
+        --primary: #005bb5;
+        --primary-dark: #00408a;
+        --primary-mid: #0070cc;
+        --primary-tint: #e8f1fc;
+        --primary-tint-2: #cce0f5;
+        --background: #f3f6fb;
+        --surface: #ffffff;
+        --surface-2: #eef3fa;
+        --surface-3: #e5edf8;
+        --text-primary: #0c1929;
+        --text-secondary: #3d5068;
+        --text-tertiary: #7a8fa8;
+        --border: #c8d5e8;
+        --border-light: #dde7f4;
+        --border-accent: rgba(0, 91, 181, 0.18);
+        --hero-grad: linear-gradient(
+          160deg,
+          #01142b 0%,
+          #022550 40%,
+          #034580 70%,
+          #0f6aad 100%
+        );
+        --card-shadow:
+          0 2px 8px rgba(0, 20, 50, 0.08), 0 0 1px rgba(0, 91, 181, 0.1);
+        --card-shadow-md:
+          0 4px 20px rgba(0, 20, 50, 0.11), 0 0 1px rgba(0, 91, 181, 0.14);
+        --card-shadow-strong:
+          0 4px 20px rgba(0, 20, 50, 0.11), 0 0 1px rgba(0, 91, 181, 0.14);
+        --success: #16a34a;
+        --success-bg: #dcfce7;
+        --warning: #ca8a04;
+        --warning-bg: #fef9c3;
+        --danger: #dc2626;
+        --danger-bg: #fee2e2;
+        --header-bg: #000000;
+        --bnav-bg: #ffffff;
+        --bnav-border: #c8d5e8;
+        --bnav-active: #005bb5;
+        --bnav-inactive: #7a8fa8;
+        --bnav-active-glow: drop-shadow(0 0 5px rgba(0, 91, 181, 0.4));
+        --glass-bg: rgba(0, 0, 0, 0.03);
+        --glass-border: rgba(0, 91, 181, 0.12);
+        --pill-bg: rgba(0, 91, 181, 0.1);
+        --pill-border: rgba(0, 91, 181, 0.28);
+        --pill-text: #005bb5;
+        --nav-bg: #000000;
+        --nav-text: #e6edf3;
+        --nav-border: rgba(255, 255, 255, 0.06);
+        --wa-bg: #25d366;
+        --sidebar-accent: #005bb5;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════════════════ */
+      .sidebar {
+        width: 268px;
+        background: #06090f;
+        padding: 0;
+        overflow-y: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #111820;
+      }
+      .sb-hdr {
+        padding: 22px 20px 16px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-brand {
+        font-family: "Times New Roman", Georgia, serif;
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: 5px;
+        background: linear-gradient(
+          45deg,
+          #8a9aaa 5%,
+          #ffffff 10%,
+          #b8c4d0 30%,
+          #e8eef4 50%,
+          #b8c4d0 70%,
+          #ffffff 80%,
+          #8a9aaa 95%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3))
+          drop-shadow(0 0 8px rgba(180, 200, 230, 0.12));
+      }
+      .sb-sub {
+        font-size: 9px;
+        color: #1e2e40;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-top: 6px;
+      }
+      .sb-info {
+        padding: 14px 20px 10px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-sname {
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 3px;
+      }
+      .sb-sdesc {
+        font-size: 10px;
+        color: #2e3f52;
+        line-height: 1.5;
+      }
+      .sb-ver {
+        display: inline-block;
+        background: #111820;
+        color: #3b9eff;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 5px;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+      }
+      .mode-toggler {
+        padding: 10px 20px;
+        border-bottom: 1px solid #111820;
+        display: none;
+      }
+      .mode-toggler.visible {
+        display: block;
+      }
+      .mode-tog-label {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .mode-tog-wrap {
+        display: flex;
+        background: #111820;
+        border-radius: 9px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .mode-tog-btn {
+        flex: 1;
+        padding: 6px 4px;
+        border: none;
+        border-radius: 7px;
+        font-size: 9.5px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: #2e3f52;
+        line-height: 1.3;
+      }
+      .mode-tog-btn.on {
+        background: #1a2a3a;
+        color: #e6edf3;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      .sb-nav {
+        padding: 8px 10px 4px;
+        flex: 1;
+      }
+      .sb-nav-lbl {
+        color: #192430;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        padding: 0 8px;
+        margin: 8px 0 4px;
+      }
+      .sb-btn {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: 100%;
+        text-align: left;
+        padding: 7px 10px;
+        border: none;
+        border-radius: 7px;
+        background: transparent;
+        color: #3a4a5a;
+        font-size: 11.5px;
+        cursor: pointer;
+        transition: all 0.15s;
+        line-height: 1.3;
+        margin-bottom: 1px;
+      }
+      .sb-btn:hover {
+        background: #111820;
+        color: #8aaabb;
+      }
+      .sb-btn.on {
+        background: #111820;
+        color: #fff;
+      }
+      .sb-btn-n {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 800;
+        flex-shrink: 0;
+        background: #0a1018;
+        color: #1e2e40;
+      }
+      .sb-btn.on .sb-btn-n {
+        background: #0071bb;
+        color: #fff;
+      }
+      .sb-btn-i {
+        flex: 1;
+        min-width: 0;
+      }
+      .sb-btn-t {
+        font-weight: 600;
+        font-size: 11.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sb-btn-d {
+        font-size: 9.5px;
+        color: #1e2e40;
+        margin-top: 1px;
+        line-height: 1.3;
+      }
+      .sb-btn.on .sb-btn-d {
+        color: #3a5a7a;
+      }
+      .sb-notes {
+        padding: 12px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-notes-t {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .sb-note {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: flex-start;
+      }
+      .sb-nn {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #111820;
+        color: #3b9eff;
+        font-size: 8px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .sb-nt {
+        color: #2e4055;
+        font-size: 9.5px;
+        line-height: 1.55;
+      }
+      .sb-foot {
+        padding: 10px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-foot-t {
+        color: #192430;
+        font-size: 8.5px;
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 1.6;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   LAYOUT MAIN + DEVICE
+══════════════════════════════════════════════════════════════ */
+      .main {
+        margin-left: 268px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 32px 40px;
+      }
+      .device {
+        width: 390px;
+        height: 844px;
+        background: #060a0e;
+        border-radius: 48px;
+        padding: 10px;
+        box-shadow:
+          0 0 0 1px #2a3040,
+          0 0 0 3px #060a0e,
+          0 0 0 4.5px #181e28,
+          0 50px 120px rgba(0, 0, 0, 0.98);
+        position: relative;
+        flex-shrink: 0;
+      }
+      .notch {
+        width: 120px;
+        height: 30px;
+        background: #060a0e;
+        border-radius: 0 0 16px 16px;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .notch-pill {
+        width: 72px;
+        height: 6px;
+        background: #141c28;
+        border-radius: 3px;
+      }
+      .device-scr {
+        width: 100%;
+        height: 100%;
+        background: var(--background);
+        border-radius: 40px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════════════════════ */
+      .screen {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   STATUS BAR
+══════════════════════════════════════════════════════════════ */
+      .sbar {
+        height: 50px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 0 24px 8px;
+        flex-shrink: 0;
+        background: #000000;
+      }
+      .s-time {
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+      .s-icons {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 1px;
+      }
+      .bar {
+        width: 3px;
+        border-radius: 1px;
+        background: #ffffff;
+      }
+      .bar:nth-child(1) {
+        height: 4px;
+      }
+      .bar:nth-child(2) {
+        height: 7px;
+      }
+      .bar:nth-child(3) {
+        height: 10px;
+      }
+      .bar:nth-child(4) {
+        height: 13px;
+      }
+      .batt-ic {
+        width: 22px;
+        height: 11px;
+        border: 1.5px solid #fff;
+        border-radius: 3px;
+        position: relative;
+        padding: 1.5px;
+      }
+      .batt-ic::after {
+        content: "";
+        position: absolute;
+        right: -4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 5px;
+        background: #fff;
+        border-radius: 0 1px 1px 0;
+      }
+      .batt-fill {
+        height: 100%;
+        border-radius: 1px;
+        width: 75%;
+        background: #fff;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   HEADER — V2 Chrome KAUFMANN + bell + Name Pill
+══════════════════════════════════════════════════════════════ */
+      .nbar {
+        height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        flex-shrink: 0;
+        gap: 10px;
+        background: var(--nav-bg);
+        border-bottom: 1px solid var(--nav-border);
+      }
+      .nbar-back {
+        font-size: 22px;
+        color: #fff;
+        cursor: pointer;
+        background: none;
+        border: none;
+        flex-shrink: 0;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+      }
+      .nbar-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: #fff;
+        flex: 1;
+      }
+      .nbar-action {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--primary);
+        cursor: pointer;
+        background: none;
+        border: none;
+        margin-left: auto;
+      }
+      .chrome-logo {
+        font-family: "Times New Roman", Georgia, serif;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 5px;
+        background: linear-gradient(
+          45deg,
+          #8a9aaa 5%,
+          #ffffff 10%,
+          #b8c4d0 30%,
+          #e8eef4 50%,
+          #b8c4d0 70%,
+          #ffffff 80%,
+          #8a9aaa 95%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3));
+      }
+
+      /* Avatar Name Pill */
+      .av-pill {
+        height: 28px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0 10px 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        transition: background 0.2s;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .av-pill:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .av-pill svg {
+        stroke: rgba(255, 255, 255, 0.7);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .av-pill-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        letter-spacing: 0.3px;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SCROLL BODY
+══════════════════════════════════════════════════════════════ */
+      .body {
+        flex: 1;
+        overflow-y: auto;
+        background: var(--background);
+      }
+      .body::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BOTTOM NAV
+══════════════════════════════════════════════════════════════ */
+      .bnav {
+        height: 82px;
+        background: var(--bnav-bg);
+        border-top: 1px solid var(--bnav-border);
+        display: flex;
+        padding: 8px 0 0;
+        flex-shrink: 0;
+      }
+      .tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0 2px;
+      }
+      .tab-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 22px;
+        opacity: 0.85;
+        transition: all 0.2s;
+      }
+      .tab-label {
+        font-size: 9px;
+        text-align: center;
+        line-height: 1.2;
+        color: var(--bnav-inactive);
+        transition: all 0.2s;
+      }
+      .tab.on .tab-icon {
+        opacity: 1;
+        filter: var(--bnav-active-glow);
+      }
+      .tab.on .tab-label {
+        color: var(--bnav-active);
+        font-weight: 700;
+      }
+      .tab-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tab.on .tab-icon svg {
+        stroke: var(--bnav-active);
+      }
+      .tab:not(.on) .tab-icon svg {
+        stroke: var(--bnav-inactive);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SHARED COMPONENTS
+══════════════════════════════════════════════════════════════ */
+      .sec-label {
+        padding: 14px 16px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .card {
+        background: var(--surface);
+        border-radius: 22px;
+        padding: 18px;
+        margin: 0 16px 12px;
+        box-shadow: var(--card-shadow);
+      }
+      .info-wrap {
+        margin: 0 16px 10px;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+      }
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border-light);
+      }
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-key {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+      .info-val {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .btn-prim {
+        padding: 15px;
+        border-radius: 13px;
+        font-size: 16px;
+        font-weight: 700;
+        width: 100%;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn-danger {
+        padding: 14px;
+        border-radius: 13px;
+        font-size: 15px;
+        font-weight: 600;
+        width: 100%;
+        background: var(--danger);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-ghost-full {
+        padding: 14px;
+        border-radius: 13px;
+        font-size: 15px;
+        font-weight: 600;
+        width: 100%;
+        background: transparent;
+        color: var(--text-secondary);
+        border: 1.5px solid var(--border);
+        cursor: pointer;
+      }
+      .chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .chip {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        background: var(--background);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+      }
+      .chip.on {
+        background: var(--primary-tint);
+        color: var(--primary);
+        border-color: var(--border-accent);
+      }
+
+      /* TOGGLE SWITCH */
+      .toggle-sw {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+      }
+      .toggle-sw input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+      }
+      .toggle-track {
+        width: 44px;
+        height: 26px;
+        background: var(--border);
+        border-radius: 13px;
+        display: block;
+        transition: background 0.2s;
+        position: relative;
+      }
+      .toggle-track::after {
+        content: "";
+        position: absolute;
+        left: 3px;
+        top: 3px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+      .toggle-sw input:checked + .toggle-track {
+        background: var(--primary);
+        box-shadow: 0 0 10px rgba(59, 158, 255, 0.35);
+      }
+      .toggle-sw input:checked + .toggle-track::after {
+        transform: translateX(18px);
+      }
+
+      /* SETTINGS */
+      .set-wrap {
+        margin: 0 16px 10px;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-accent);
+      }
+      .set-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 16px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border-light);
+      }
+      .set-row:last-child {
+        border-bottom: none;
+      }
+      .set-row-info {
+        flex: 1;
+      }
+      .set-row-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+      .set-row-sub {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 2px;
+      }
+      .set-row-value {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin-right: 4px;
+      }
+      .set-row-chev {
+        color: var(--text-tertiary);
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .check-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        cursor: pointer;
+        padding: 14px;
+        background: rgba(255, 107, 107, 0.04);
+        border: 1px solid rgba(255, 107, 107, 0.12);
+        border-radius: 12px;
+      }
+      .check-box {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+        margin-top: 1px;
+      }
+      .check-box.checked {
+        border-color: var(--danger);
+        background: var(--danger);
+      }
+      .check-box.checked::after {
+        content: "";
+        width: 6px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        margin-bottom: 2px;
+      }
+      .check-label {
+        font-size: 13px;
+        color: var(--text-primary);
+        line-height: 1.5;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   PERFIL HUB — V2 2x3 grid
+══════════════════════════════════════════════════════════════ */
+      .hub-hero {
+        background: var(--hero-grad);
+        padding: 28px 20px 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        flex-shrink: 0;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+      .hub-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(59, 158, 255, 0.22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: 800;
+        color: #fff;
+        border: 2.5px solid rgba(59, 158, 255, 0.45);
+        margin-bottom: 12px;
+        box-shadow:
+          0 0 0 4px rgba(59, 158, 255, 0.08),
+          0 4px 16px rgba(0, 0, 0, 0.4);
+      }
+      .hub-name {
+        font-size: 20px;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 3px;
+        letter-spacing: -0.4px;
+      }
+      .hub-rut {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 10px;
+      }
+      .hub-stats-row {
+        display: flex;
+        align-items: center;
+        gap: 0;
+      }
+      .hub-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 14px;
+      }
+      .hub-stat-num {
+        font-size: 17px;
+        font-weight: 800;
+        color: #fff;
+      }
+      .hub-stat-lbl {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 1px;
+        font-weight: 500;
+      }
+      .hub-stat-div {
+        width: 1px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.18);
+      }
+      .hub-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 14px 14px 8px;
+      }
+      .hub-card {
+        background: var(--surface);
+        border-radius: 22px;
+        padding: 14px 14px 12px;
+        box-shadow: var(--card-shadow);
+        cursor: pointer;
+        transition: box-shadow 0.15s;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border: 1px solid var(--border-accent);
+      }
+      .hub-card:hover {
+        box-shadow: var(--card-shadow-md);
+      }
+      .hub-card-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hub-card-icon.blue {
+        background: rgba(59, 158, 255, 0.15);
+      }
+      .hub-card-icon.blue svg {
+        stroke: #3b9eff;
+      }
+      .hub-card-icon.lila {
+        background: rgba(167, 139, 250, 0.15);
+      }
+      .hub-card-icon.lila svg {
+        stroke: #a78bfa;
+      }
+      .hub-card-icon.green {
+        background: rgba(74, 222, 128, 0.14);
+      }
+      .hub-card-icon.green svg {
+        stroke: #4ade80;
+      }
+      .hub-card-icon.gray {
+        background: rgba(139, 150, 168, 0.14);
+      }
+      .hub-card-icon.gray svg {
+        stroke: #8b96a8;
+      }
+      .hub-card-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .hub-card-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+      .hub-card-sub {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 1px;
+      }
+      body[data-mode="light"] .hub-card-icon.blue {
+        background: #e8f1fc;
+      }
+      body[data-mode="light"] .hub-card-icon.blue svg {
+        stroke: #005bb5;
+      }
+      body[data-mode="light"] .hub-card-icon.lila {
+        background: #f0eafb;
+      }
+      body[data-mode="light"] .hub-card-icon.lila svg {
+        stroke: #7c3aed;
+      }
+      body[data-mode="light"] .hub-card-icon.green {
+        background: #dcfce7;
+      }
+      body[data-mode="light"] .hub-card-icon.green svg {
+        stroke: #16a34a;
+      }
+      body[data-mode="light"] .hub-card-icon.gray {
+        background: #eef3fa;
+      }
+      body[data-mode="light"] .hub-card-icon.gray svg {
+        stroke: #3d5068;
+      }
+      body[data-mode="light"] .hub-avatar {
+        background: rgba(0, 91, 181, 0.18);
+        border-color: rgba(0, 91, 181, 0.4);
+        box-shadow:
+          0 0 0 4px rgba(0, 91, 181, 0.08),
+          0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   PERFIL DETAIL — V3 hero card + settings groups
+══════════════════════════════════════════════════════════════ */
+      .prof-hero {
+        background: var(--hero-grad);
+        margin: 0;
+        padding: 24px 20px 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+      .prof-hero-d1 {
+        position: absolute;
+        right: -30px;
+        top: -30px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        pointer-events: none;
+      }
+      .prof-hero-d2 {
+        position: absolute;
+        left: -20px;
+        bottom: -40px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+        pointer-events: none;
+      }
+      .prof-av-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 16px;
+      }
+      .prof-av {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: rgba(59, 158, 255, 0.22);
+        border: 2.5px solid rgba(59, 158, 255, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        font-weight: 800;
+        color: #fff;
+        flex-shrink: 0;
+        letter-spacing: 1px;
+        box-shadow:
+          0 0 0 4px rgba(59, 158, 255, 0.08),
+          0 4px 16px rgba(0, 0, 0, 0.4);
+      }
+      body[data-mode="light"] .prof-av {
+        background: rgba(0, 91, 181, 0.18);
+        border-color: rgba(0, 91, 181, 0.4);
+        box-shadow:
+          0 0 0 4px rgba(0, 91, 181, 0.08),
+          0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+      .prof-av-info {
+        flex: 1;
+      }
+      .prof-name {
+        font-size: 20px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.2;
+        margin-bottom: 3px;
+        letter-spacing: -0.4px;
+      }
+      .prof-email {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 5px;
+      }
+      .prof-rut {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 20px;
+        padding: 3px 10px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 600;
+        font-family: "Courier New", monospace;
+      }
+      .prof-rut svg {
+        width: 11px;
+        height: 11px;
+        stroke: rgba(255, 255, 255, 0.6);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .prof-chips-row {
+        display: flex;
+        gap: 8px;
+        position: relative;
+        z-index: 1;
+      }
+      .prof-chip {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(255, 255, 255, 0.07);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .prof-chip svg {
+        width: 12px;
+        height: 12px;
+        stroke: rgba(255, 255, 255, 0.7);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      body[data-mode="light"] .prof-chip {
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* Settings groups */
+      .sg {
+        margin: 12px 16px 0;
+        background: var(--surface);
+        border-radius: 22px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        border: 1px solid var(--border-accent);
+      }
+      .sg-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 12px 16px 6px;
+      }
+      .sr {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 16px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+        transition: background 0.12s;
+      }
+      .sr:not(:last-child) {
+        border-bottom: 1px solid var(--border);
+      }
+      .sr:active {
+        background: var(--primary-tint);
+      }
+      .sr-ic {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .sr-ic svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .sr-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .sr-t {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+      .sr-sub {
+        font-size: 11px;
+        color: var(--text-tertiary);
+        margin-top: 2px;
+      }
+      .sr-chevron {
+        flex-shrink: 0;
+      }
+      .sr-chevron svg {
+        width: 15px;
+        height: 15px;
+        stroke: var(--text-tertiary);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .sr-ic.blue {
+        background: rgba(59, 158, 255, 0.15);
+      }
+      .sr-ic.blue svg {
+        stroke: #3b9eff;
+      }
+      .sr-ic.purple {
+        background: rgba(167, 139, 250, 0.15);
+      }
+      .sr-ic.purple svg {
+        stroke: #a78bfa;
+      }
+      .sr-ic.green {
+        background: rgba(74, 222, 128, 0.14);
+      }
+      .sr-ic.green svg {
+        stroke: #4ade80;
+      }
+      .sr-ic.orange {
+        background: rgba(251, 191, 36, 0.14);
+      }
+      .sr-ic.orange svg {
+        stroke: #fbbf24;
+      }
+      .sr-ic.gray {
+        background: rgba(139, 150, 168, 0.14);
+      }
+      .sr-ic.gray svg {
+        stroke: #8b96a8;
+      }
+      body[data-mode="light"] .sr-ic.blue {
+        background: #e8f1fc;
+      }
+      body[data-mode="light"] .sr-ic.blue svg {
+        stroke: #005bb5;
+      }
+      body[data-mode="light"] .sr-ic.purple {
+        background: #f0eafb;
+      }
+      body[data-mode="light"] .sr-ic.purple svg {
+        stroke: #7c3aed;
+      }
+      body[data-mode="light"] .sr-ic.green {
+        background: #dcfce7;
+      }
+      body[data-mode="light"] .sr-ic.green svg {
+        stroke: #16a34a;
+      }
+      body[data-mode="light"] .sr-ic.orange {
+        background: #fef9c3;
+      }
+      body[data-mode="light"] .sr-ic.orange svg {
+        stroke: #ca8a04;
+      }
+      body[data-mode="light"] .sr-ic.gray {
+        background: #eef3fa;
+      }
+      body[data-mode="light"] .sr-ic.gray svg {
+        stroke: #3d5068;
+      }
+
+      /* Danger zone */
+      .danger-zone {
+        margin: 4px 16px 0;
+        background: var(--danger-bg);
+        border-radius: 22px;
+        border: 1px solid rgba(255, 107, 107, 0.2);
+        overflow: hidden;
+      }
+      .dz-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--danger);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 12px 16px 4px;
+      }
+      body[data-mode="light"] .danger-zone {
+        border-color: rgba(220, 38, 38, 0.18);
+      }
+
+      /* Logout */
+      .btn-logout {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 14px;
+        border-radius: 14px;
+        border: 1.5px solid var(--danger);
+        background: transparent;
+        color: var(--danger);
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s;
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+      }
+      .btn-logout:hover {
+        background: var(--danger-bg);
+        box-shadow: 0 0 16px rgba(255, 107, 107, 0.18);
+      }
+      .btn-logout svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--danger);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .logout-wrap {
+        padding: 16px 16px 8px;
+      }
+
+      /* TOGGLE (settings) */
+      .tog-wrap {
+        width: 44px;
+        height: 26px;
+        border-radius: 13px;
+        background: var(--border);
+        position: relative;
+        cursor: pointer;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .tog-wrap.on {
+        background: var(--primary);
+        box-shadow: 0 0 10px rgba(59, 158, 255, 0.35);
+      }
+      body[data-mode="light"] .tog-wrap.on {
+        box-shadow: 0 0 8px rgba(0, 91, 181, 0.25);
+      }
+      .tog-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+      }
+      .tog-wrap.on .tog-dot {
+        transform: translateX(18px);
+      }
+      .sr-toggle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 16px;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+      }
+      .sr-toggle:not(:last-child) {
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      /* SELECT FIELD */
+      .field-select-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 16px;
+        cursor: pointer;
+      }
+      .field-select-row:not(:last-child) {
+        border-bottom: 1px solid var(--border-light);
+      }
+      .fsr-val {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: var(--text-secondary);
+      }
+      .fsr-val svg {
+        width: 14px;
+        height: 14px;
+        stroke: var(--text-tertiary);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* VERSION BADGE */
+      .version-badge {
+        margin: 0 16px;
+        padding: 10px 14px;
+        background: var(--surface);
+        border-radius: 10px;
+        border: 1px solid var(--border-light);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .vb-t {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+      .vb-v {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   EXECUTIVE CARDS — V2 B:Creativa
+══════════════════════════════════════════════════════════════ */
+      .exec-card {
+        margin: 0 14px 14px;
+        background: var(--surface);
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow-md);
+        border: 1px solid var(--border-accent);
+      }
+      .exec-card-header {
+        padding: 16px 16px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .exec-role-badge {
+        display: inline-block;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+      .exec-role-badge.comercial {
+        background: rgba(59, 158, 255, 0.12);
+        color: var(--primary);
+      }
+      .exec-role-badge.servicio {
+        background: rgba(167, 139, 250, 0.15);
+        color: #a78bfa;
+      }
+      .exec-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 800;
+        flex-shrink: 0;
+        border: 2.5px solid transparent;
+      }
+      .exec-avatar.comercial {
+        background: rgba(59, 158, 255, 0.15);
+        color: var(--primary);
+        border-color: rgba(59, 158, 255, 0.3);
+      }
+      .exec-avatar.servicio {
+        background: rgba(167, 139, 250, 0.12);
+        color: #a78bfa;
+        border-color: rgba(167, 139, 250, 0.25);
+      }
+      .exec-name {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+      }
+      .exec-branch {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+      .exec-branch svg {
+        width: 12px;
+        height: 12px;
+        stroke: var(--text-tertiary);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+      .exec-actions {
+        display: flex;
+        padding: 16px;
+        gap: 0;
+        justify-content: space-around;
+        border-top: 1px solid var(--border-light);
+        margin-top: 14px;
+      }
+      .exec-action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        flex: 1;
+      }
+      .exec-action-circle {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s;
+      }
+      .exec-action-circle:hover {
+        transform: scale(1.08);
+      }
+      .exec-action-circle.phone {
+        background: rgba(59, 158, 255, 0.15);
+      }
+      .exec-action-circle.phone svg {
+        stroke: var(--primary);
+      }
+      .exec-action-circle.wa {
+        background: #25d366;
+      }
+      .exec-action-circle.wa svg {
+        stroke: #fff;
+      }
+      .exec-action-circle.mail {
+        background: rgba(139, 150, 168, 0.14);
+      }
+      .exec-action-circle.mail svg {
+        stroke: var(--text-secondary);
+      }
+      .exec-action-circle svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .exec-action-lbl {
+        font-size: 10px;
+        color: var(--text-secondary);
+        font-weight: 600;
+      }
+      .exec-info-note {
+        margin: 0 14px 12px;
+        padding: 12px 14px;
+        background: rgba(59, 158, 255, 0.08);
+        border: 1px solid rgba(59, 158, 255, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .exec-info-note svg {
+        width: 15px;
+        height: 15px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .exec-info-note span {
+        font-size: 11.5px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   MI SUCURSAL
+══════════════════════════════════════════════════════════════ */
+      .suc-map {
+        height: 120px;
+        background: linear-gradient(
+          135deg,
+          #0a1929 0%,
+          #0d2e4e 35%,
+          #081e35 60%,
+          #04111f 100%
+        );
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+      body[data-mode="light"] .suc-map {
+        background: linear-gradient(
+          135deg,
+          #1a3a5c 0%,
+          #2a5a8c 35%,
+          #1a4a7a 60%,
+          #0d2e4e 100%
+        );
+      }
+      .suc-map::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 28px 28px;
+      }
+      .suc-map-pin {
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      .suc-map-pin-dot {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 12px rgba(59, 158, 255, 0.5);
+        position: relative;
+      }
+      .suc-map-pin-dot::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 8px solid var(--primary);
+      }
+      .suc-map-pin-dot svg {
+        width: 18px;
+        height: 18px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .suc-info-card {
+        margin: 0 14px;
+        background: var(--surface);
+        border-radius: 22px;
+        padding: 16px;
+        margin-top: -10px;
+        position: relative;
+        z-index: 2;
+        box-shadow: var(--card-shadow-md);
+        border: 1px solid var(--border-accent);
+      }
+      .suc-status-open {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--success);
+      }
+      .suc-status-open::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--success);
+        display: inline-block;
+      }
+      .suc-pill-row {
+        display: flex;
+        gap: 8px;
+        padding: 10px 14px 14px;
+        flex-wrap: wrap;
+      }
+      .suc-pill {
+        flex: 1;
+        min-width: 0;
+        padding: 10px 8px;
+        border-radius: 12px;
+        border: 1.5px solid var(--border);
+        background: var(--surface);
+        color: var(--text-primary);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: all 0.15s;
+      }
+      .suc-pill svg {
+        width: 14px;
+        height: 14px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .suc-pill:hover {
+        background: rgba(59, 158, 255, 0.06);
+        border-color: rgba(59, 158, 255, 0.3);
+      }
+      .suc-pill.nav {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+      .suc-pill.nav svg {
+        stroke: #fff;
+      }
+      .suc-hours-card {
+        margin: 0 14px 12px;
+        background: var(--surface);
+        border-radius: 22px;
+        padding: 14px;
+        box-shadow: var(--card-shadow);
+      }
+      .suc-hours-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .suc-hours-row:last-child {
+        border-bottom: none;
+      }
+      .suc-hours-day {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+      .suc-hours-time {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .suc-hours-closed {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-tertiary);
+      }
+      .suc-hours-today .suc-hours-day {
+        color: var(--primary);
+        font-weight: 700;
+      }
+      .suc-hours-today .suc-hours-time {
+        color: var(--primary);
+      }
+      .suc-svc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 4px 14px 16px;
+      }
+      .suc-svc-chip {
+        padding: 9px 10px;
+        border-radius: 10px;
+        background: var(--surface);
+        border: 1px solid var(--border-light);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .suc-svc-chip svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+      .suc-svc-chip span {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      /* SPACERS */
+      .sp8 {
+        height: 8px;
+        flex-shrink: 0;
+      }
+      .sp12 {
+        height: 12px;
+        flex-shrink: 0;
+      }
+      .sp16 {
+        height: 16px;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SVG icon defs -->
+    <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="ico-bell" viewBox="0 0 24 24">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </symbol>
+        <symbol id="ico-home" viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </symbol>
+        <symbol id="ico-car" viewBox="0 0 24 24">
+          <path
+            d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v9a2 2 0 0 1-2 2h-2"
+          />
+          <circle cx="7.5" cy="17.5" r="2.5" />
+          <circle cx="17.5" cy="17.5" r="2.5" />
+        </symbol>
+        <symbol id="ico-tool" viewBox="0 0 24 24">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+          />
+        </symbol>
+        <symbol id="ico-store" viewBox="0 0 24 24">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 0 1-8 0" />
+        </symbol>
+        <symbol id="ico-phone" viewBox="0 0 24 24">
+          <path
+            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+          />
+        </symbol>
+        <symbol id="ico-user" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </symbol>
+        <symbol id="ico-chevron-right" viewBox="0 0 24 24">
+          <polyline points="9 18 15 12 9 6" />
+        </symbol>
+        <symbol id="ico-chevron-left" viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6" />
+        </symbol>
+        <symbol id="ico-settings" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+          />
+        </symbol>
+        <symbol id="ico-pin" viewBox="0 0 24 24">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </symbol>
+        <symbol id="ico-mail" viewBox="0 0 24 24">
+          <path
+            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+          />
+          <polyline points="22,6 12,13 2,6" />
+        </symbol>
+        <symbol id="ico-message" viewBox="0 0 24 24">
+          <path
+            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+          />
+        </symbol>
+        <symbol id="ico-trash" viewBox="0 0 24 24">
+          <polyline points="3 6 5 6 21 6" />
+          <path
+            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+          />
+        </symbol>
+        <symbol id="ico-alert" viewBox="0 0 24 24">
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </symbol>
+        <symbol id="ico-shield" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </symbol>
+        <symbol id="ico-edit" viewBox="0 0 24 24">
+          <path
+            d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+          />
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+        </symbol>
+        <symbol id="ico-wrench" viewBox="0 0 24 24">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+          />
+        </symbol>
+        <symbol id="ico-tag" viewBox="0 0 24 24">
+          <path
+            d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"
+          />
+          <line x1="7" y1="7" x2="7.01" y2="7" />
+        </symbol>
+        <symbol id="ico-file" viewBox="0 0 24 24">
+          <path
+            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+          />
+          <polyline points="14 2 14 8 20 8" />
+        </symbol>
+        <symbol id="ico-logout" viewBox="0 0 24 24">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </symbol>
+        <symbol id="ico-moon" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </symbol>
+        <symbol id="ico-lang" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path
+            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+          />
+        </symbol>
+        <symbol id="ico-faceid" viewBox="0 0 24 24">
+          <path
+            d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"
+          />
+        </symbol>
+        <symbol id="ico-info" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="16" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12.01" y2="8" />
+        </symbol>
+        <symbol id="ico-help" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </symbol>
+        <symbol id="ico-check" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12" />
+        </symbol>
+        <symbol id="ico-checkcircle" viewBox="0 0 24 24">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </symbol>
+        <symbol id="ico-smartphone" viewBox="0 0 24 24">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+          <line x1="12" y1="18" x2="12.01" y2="18" />
+        </symbol>
+        <symbol id="ico-home-addr" viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- ════════════════════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sb-hdr">
+        <div class="sb-brand">KAUFMANN</div>
+        <div class="sb-sub">Perfil Fusionado</div>
+      </div>
+      <div class="sb-info">
+        <div class="sb-sname" id="sb-sname">Mi Perfil — Hub</div>
+        <div class="sb-sdesc" id="sb-sdesc">
+          Hub grid 2x3 con avatar, stats y accesos rápidos
+        </div>
+        <span class="sb-ver">FUSION · 30 Mar 2026</span>
+      </div>
+
+      <!-- Mode toggler (dark/light) -->
+      <div class="mode-toggler visible" id="mode-toggler">
+        <div class="mode-tog-label">Modo</div>
+        <div class="mode-tog-wrap">
+          <button
+            class="mode-tog-btn"
+            id="mode-light"
+            onclick="setMode('light')"
+          >
+            Claro
+          </button>
+          <button
+            class="mode-tog-btn on"
+            id="mode-dark"
+            onclick="setMode('dark')"
+          >
+            Oscuro
+          </button>
+        </div>
+      </div>
+
+      <nav class="sb-nav">
+        <div class="sb-nav-lbl">Pantallas (6)</div>
+        <button
+          class="sb-btn on"
+          id="nav-hub"
+          onclick="
+            go(
+              's-hub',
+              'Mi Perfil — Hub',
+              'Hub grid 2x3 con avatar, stats y accesos rápidos',
+            )
+          "
+        >
+          <div class="sb-btn-n">1</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Mi Perfil Hub</div>
+            <div class="sb-btn-d">V2 — grid 2x3 con stats</div>
+          </div>
+        </button>
+        <button
+          class="sb-btn"
+          id="nav-detail"
+          onclick="
+            go('s-detail', 'Perfil Detail', 'V3 hero card + settings agrupados')
+          "
+        >
+          <div class="sb-btn-n">2</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Perfil Detail</div>
+            <div class="sb-btn-d">V3 — hero + settings groups</div>
+          </div>
+        </button>
+        <button
+          class="sb-btn"
+          id="nav-datos"
+          onclick="
+            go(
+              's-datos',
+              'Mis Datos',
+              'Info personal, facturacion, preferencias',
+            )
+          "
+        >
+          <div class="sb-btn-n">3</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Mis Datos</div>
+            <div class="sb-btn-d">V2 — info personal</div>
+          </div>
+        </button>
+        <button
+          class="sb-btn"
+          id="nav-ejecutivos"
+          onclick="
+            go('s-ejecutivos', 'Mis Ejecutivos', 'Cards premium B:Creativa')
+          "
+        >
+          <div class="sb-btn-n">4</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Mis Ejecutivos</div>
+            <div class="sb-btn-d">V2 — cards premium</div>
+          </div>
+        </button>
+        <button
+          class="sb-btn"
+          id="nav-sucursal"
+          onclick="go('s-sucursal', 'Mi Sucursal', 'Mapa, horarios, servicios')"
+        >
+          <div class="sb-btn-n">5</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Mi Sucursal</div>
+            <div class="sb-btn-d">V2 — mapa + horarios</div>
+          </div>
+        </button>
+        <button
+          class="sb-btn"
+          id="nav-delete"
+          onclick="
+            go('s-delete', 'Eliminar Cuenta', 'Flujo App Store mandatorio')
+          "
+        >
+          <div class="sb-btn-n">6</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Eliminar Cuenta</div>
+            <div class="sb-btn-d">V2 — flujo mandatorio</div>
+          </div>
+        </button>
+      </nav>
+
+      <div class="sb-notes">
+        <div class="sb-notes-t">Notas de Diseño</div>
+        <div class="sb-note">
+          <div class="sb-nn">1</div>
+          <div class="sb-nt">
+            V3 Best Of dark default: #0B1018 bg, #131A24 surface, blue glow
+            shadows, 22px radius
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">2</div>
+          <div class="sb-nt">
+            V2 chrome KAUFMANN header + bell + Name Pill on all screens
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">3</div>
+          <div class="sb-nt">
+            Bottom nav: Inicio | Mis Autos | Tienda(featured) | Servicios |
+            Contactar
+          </div>
+        </div>
+      </div>
+      <div class="sb-foot">
+        <div class="sb-foot-t">
+          Propuesta diseñada por CEBA<br />Kaufmann App · Etapa 1 · 2026-03-30
+        </div>
+      </div>
+    </aside>
+
+    <!-- ════════════════════════════════════════════════════════════
+     MAIN DEVICE
+════════════════════════════════════════════════════════════ -->
+    <main class="main">
+      <div class="device">
+        <div class="notch"><div class="notch-pill"></div></div>
+        <div class="device-scr">
+          <!-- ═══════════════════════════════════════════════════════════
+     SCREEN 1: MI PERFIL HUB — V2 2x3 grid
+═══════════════════════════════════════════════════════════ -->
+          <div class="screen active" id="s-hub">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar" style="justify-content: space-between">
+              <div class="chrome-logo">KAUFMANN</div>
+              <div style="display: flex; align-items: center; gap: 8px">
+                <button
+                  class="nbar-back"
+                  style="position: relative"
+                  onclick="navTo('notificaciónes')"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#fff"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <use href="#ico-bell" />
+                  </svg>
+                  <span
+                    style="
+                      position: absolute;
+                      top: 0;
+                      right: 0;
+                      width: 8px;
+                      height: 8px;
+                      background: var(--danger);
+                      border-radius: 50%;
+                      border: 1.5px solid #000;
+                    "
+                  ></span>
+                </button>
+                <div class="av-pill" onclick="navTo('perfil')">
+                  <svg width="14" height="14" viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" /></svg
+                  ><span class="av-pill-name">Pedro</span>
+                </div>
+              </div>
+            </div>
+            <div class="hub-hero">
+              <div class="hub-avatar">PG</div>
+              <div class="hub-name">Pedro González</div>
+              <div class="hub-rut">12.345.678-9</div>
+              <div class="hub-stats-row">
+                <div class="hub-stat">
+                  <div class="hub-stat-num">3</div>
+                  <div class="hub-stat-lbl">Vehículos</div>
+                </div>
+                <div class="hub-stat-div"></div>
+                <div class="hub-stat">
+                  <div class="hub-stat-num">2</div>
+                  <div class="hub-stat-lbl">Ejecutivos</div>
+                </div>
+                <div class="hub-stat-div"></div>
+                <div class="hub-stat">
+                  <div class="hub-stat-num">1</div>
+                  <div class="hub-stat-lbl">Sucursal</div>
+                </div>
+              </div>
+            </div>
+            <div class="body">
+              <!-- Grid 2x3: Mi Cuenta -->
+              <div class="hub-grid">
+                <div
+                  class="hub-card"
+                  onclick="go('s-datos', 'Mis Datos', 'Info personal')"
+                >
+                  <div class="hub-card-icon blue">
+                    <svg viewBox="0 0 24 24"><use href="#ico-user" /></svg>
+                  </div>
+                  <div>
+                    <div class="hub-card-title">Mis Datos</div>
+                    <div class="hub-card-sub">Info personal</div>
+                  </div>
+                </div>
+                <div class="hub-card" onclick="navTo('vehículos')">
+                  <div class="hub-card-icon blue">
+                    <svg viewBox="0 0 24 24"><use href="#ico-car" /></svg>
+                  </div>
+                  <div>
+                    <div class="hub-card-title">Mis Vehiculos</div>
+                    <div class="hub-card-sub">3 registrados</div>
+                  </div>
+                </div>
+                <div
+                  class="hub-card"
+                  onclick="go('s-ejecutivos', 'Mis Ejecutivos', 'Cards')"
+                >
+                  <div class="hub-card-icon lila">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="hub-card-title">Ejecutivos</div>
+                    <div class="hub-card-sub">2 asignados</div>
+                  </div>
+                </div>
+                <div
+                  class="hub-card"
+                  onclick="go('s-sucursal', 'Mi Sucursal', 'Mapa')"
+                >
+                  <div class="hub-card-icon green">
+                    <svg viewBox="0 0 24 24"><use href="#ico-pin" /></svg>
+                  </div>
+                  <div>
+                    <div class="hub-card-title">Mi Sucursal</div>
+                    <div class="hub-card-sub">Las Condes</div>
+                  </div>
+                </div>
+                <div class="hub-card" onclick="navTo('configuracion')">
+                  <div class="hub-card-icon gray">
+                    <svg viewBox="0 0 24 24"><use href="#ico-settings" /></svg>
+                  </div>
+                  <div>
+                    <div class="hub-card-title">Configuracion</div>
+                    <div class="hub-card-sub">Preferencias</div>
+                  </div>
+                </div>
+                <div class="hub-card">
+                  <div class="hub-card-icon gray">
+                    <svg viewBox="0 0 24 24"><use href="#ico-shield" /></svg>
+                  </div>
+                  <div>
+                    <div class="hub-card-title">Seguridad</div>
+                    <div class="hub-card-sub">Contrasena, biometria</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Servicios -->
+              <div style="padding: 4px 16px 6px">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-tertiary);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Servicios
+                </div>
+              </div>
+              <div class="sg">
+                <button class="sr" onclick="navTo('servicios', 'f1')">
+                  <div class="sr-ic blue">
+                    <svg><use href="#ico-wrench" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Taller</div>
+                    <div class="sr-sub">Estado de trabajos activos</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('reservas')">
+                  <div class="sr-ic purple">
+                    <svg><use href="#ico-cal" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Reservas</div>
+                    <div class="sr-sub">Agendar y gestionar citas</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('facturas')">
+                  <div class="sr-ic orange">
+                    <svg><use href="#ico-file" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Facturas</div>
+                    <div class="sr-sub">Deudas, pagos y credito</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('tienda')">
+                  <div class="sr-ic green">
+                    <svg><use href="#ico-cart" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Tienda</div>
+                    <div class="sr-sub">Productos y servicios postventa</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('sucursales')">
+                  <div class="sr-ic green">
+                    <svg><use href="#ico-pin" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Sucursales</div>
+                    <div class="sr-sub">Ubicaciones y horarios</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sp8"></div>
+
+              <!-- Soporte -->
+              <div style="padding: 4px 16px 6px">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-tertiary);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Soporte
+                </div>
+              </div>
+              <div class="sg">
+                <button class="sr" onclick="navTo('notificaciónes')">
+                  <div class="sr-ic orange">
+                    <svg><use href="#ico-bell" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Notificaciones</div>
+                    <div class="sr-sub">Push, email, marketing</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('contactar')">
+                  <div class="sr-ic blue">
+                    <svg><use href="#ico-phone" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Contactar</div>
+                    <div class="sr-sub">Chat, llamada, WhatsApp</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr">
+                  <div class="sr-ic gray">
+                    <svg><use href="#ico-info" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Acerca de</div>
+                    <div class="sr-sub">Version 1.0.0 - Grupo Kaufmann</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sp8"></div>
+
+              <!-- Zona peligrosa -->
+              <div class="danger-zone">
+                <div class="dz-label">Zona peligrosa</div>
+                <button
+                  class="sr"
+                  style="background: transparent"
+                  onclick="go('s-delete', 'Eliminar Cuenta', 'Flujo App Store')"
+                >
+                  <div
+                    class="sr-ic"
+                    style="background: rgba(255, 107, 107, 0.12)"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="var(--danger)"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <use href="#ico-trash" />
+                    </svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t" style="color: var(--danger)">
+                      Eliminar cuenta
+                    </div>
+                    <div class="sr-sub">Accion irreversible</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <div style="padding: 10px 14px">
+                <button
+                  class="btn-ghost-full"
+                  style="
+                    color: var(--danger);
+                    border-color: rgba(255, 107, 107, 0.18);
+                  "
+                >
+                  Cerrar Sesion
+                </button>
+              </div>
+              <div
+                style="
+                  text-align: center;
+                  padding: 6px 0 16px;
+                  font-size: 11px;
+                  color: var(--text-tertiary);
+                "
+              >
+                v1.0.0 - Kaufmann App
+              </div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-home" /></svg>
+                </div>
+                <div class="tab-label">Inicio</div>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="2" />
+                    <path d="M16 8h4l3 5v3h-7V8z" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                </div>
+                <div class="tab-label">Mis Autos</div>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <div class="tab-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path
+                      d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                    />
+                  </svg>
+                </div>
+                <div class="tab-label">Tienda</div>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-tool" /></svg>
+                </div>
+                <div class="tab-label">Servicios</div>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                </div>
+                <div class="tab-label">Contactar</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════════
+     SCREEN 2: PERFIL DETAIL — V3 migrated/adapted
+═══════════════════════════════════════════════════════════ -->
+          <div class="screen" id="s-detail">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar" style="justify-content: space-between">
+              <button
+                class="nbar-back"
+                onclick="go('s-hub', 'Mi Perfil — Hub', 'Hub grid 2x3')"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ico-chevron-left" />
+                </svg>
+              </button>
+              <div class="chrome-logo">KAUFMANN</div>
+              <div class="av-pill" onclick="navTo('perfil')">
+                <svg width="14" height="14" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" /></svg
+                ><span class="av-pill-name">Pedro</span>
+              </div>
+            </div>
+            <div class="body">
+              <!-- Profile Hero Card -->
+              <div class="prof-hero">
+                <div class="prof-hero-d1"></div>
+                <div class="prof-hero-d2"></div>
+                <div class="prof-av-row">
+                  <div class="prof-av">PG</div>
+                  <div class="prof-av-info">
+                    <div class="prof-name">Pedro González</div>
+                    <div class="prof-email">pedro.gonzalez@gmail.com</div>
+                    <div class="prof-rut">
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="11"
+                        height="11"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect x="3" y="4" width="18" height="16" rx="2" />
+                        <line x1="7" y1="9" x2="17" y2="9" />
+                        <line x1="7" y1="13" x2="13" y2="13" />
+                      </svg>
+                      12.345.678-9
+                    </div>
+                  </div>
+                </div>
+                <div class="prof-chips-row">
+                  <div
+                    class="prof-chip"
+                    onclick="
+                      go('s-datos', 'Mis Datos', 'Campos editables de perfil')
+                    "
+                  >
+                    <svg><use href="#ico-edit" /></svg>
+                    Editar perfil
+                  </div>
+                  <div class="prof-chip">
+                    <svg><use href="#ico-car" /></svg>
+                    2 vehículos
+                  </div>
+                </div>
+              </div>
+
+              <div class="sp12"></div>
+
+              <!-- Grupo: Cuenta -->
+              <div style="padding: 0 16px 6px">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-tertiary);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Cuenta
+                </div>
+              </div>
+              <div class="sg">
+                <button
+                  class="sr"
+                  onclick="
+                    go('s-datos', 'Mis Datos', 'Campos editables de perfil')
+                  "
+                >
+                  <div class="sr-ic blue">
+                    <svg><use href="#ico-user" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Mis datos</div>
+                    <div class="sr-sub">Nombre, email, teléfono, dirección</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr">
+                  <div class="sr-ic purple">
+                    <svg><use href="#ico-shield" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Seguridad</div>
+                    <div class="sr-sub">Contraseña, acceso biométrico</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('vehículos')">
+                  <div class="sr-ic blue">
+                    <svg><use href="#ico-car" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Mis vehículos</div>
+                    <div class="sr-sub">GLC 300 - KWRS-21 y 1 mas</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sp8"></div>
+
+              <!-- Grupo: Preferencias -->
+              <div style="padding: 4px 16px 6px">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-tertiary);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Preferencias
+                </div>
+              </div>
+              <div class="sg">
+                <button class="sr" onclick="navTo('notificaciónes')">
+                  <div class="sr-ic orange">
+                    <svg><use href="#ico-bell" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Notificaciónes</div>
+                    <div class="sr-sub">Push, email marketing</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button
+                  class="sr"
+                  onclick="
+                    go('s-sucursal', 'Mi Sucursal', 'Mapa, horarios, servicios')
+                  "
+                >
+                  <div class="sr-ic green">
+                    <svg><use href="#ico-pin" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Sucursal preferida</div>
+                    <div class="sr-sub">Las Condes — Av. Kennedy 5413</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sp8"></div>
+
+              <!-- Grupo: Servicios (links cross-module) -->
+              <div style="padding: 4px 16px 6px">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-tertiary);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Servicios
+                </div>
+              </div>
+              <div class="sg">
+                <button class="sr" onclick="navTo('servicios', 'f1')">
+                  <div class="sr-ic blue">
+                    <svg><use href="#ico-wrench" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Taller</div>
+                    <div class="sr-sub">Estado de trabajos activos</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('reservas')">
+                  <div class="sr-ic purple">
+                    <svg><use href="#ico-cal" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Reservas</div>
+                    <div class="sr-sub">Agendar y gestionar citas</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('facturas')">
+                  <div class="sr-ic orange">
+                    <svg><use href="#ico-file" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Facturas</div>
+                    <div class="sr-sub">Deudas, pagos y credito</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('tienda')">
+                  <div class="sr-ic green">
+                    <svg><use href="#ico-cart" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Tienda</div>
+                    <div class="sr-sub">Productos y servicios postventa</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr" onclick="navTo('sucursales')">
+                  <div class="sr-ic green">
+                    <svg><use href="#ico-pin" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Sucursales</div>
+                    <div class="sr-sub">Ubicaciones y horarios</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <div class="sp8"></div>
+
+              <!-- Grupo: Soporte -->
+              <div style="padding: 4px 16px 6px">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-tertiary);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                  "
+                >
+                  Soporte
+                </div>
+              </div>
+              <div class="sg">
+                <button class="sr" onclick="navTo('contactar')">
+                  <div class="sr-ic blue">
+                    <svg><use href="#ico-phone" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Contactar</div>
+                    <div class="sr-sub">Chat, llamada, WhatsApp</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+                <button class="sr">
+                  <div class="sr-ic gray">
+                    <svg><use href="#ico-info" /></svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t">Acerca de</div>
+                    <div class="sr-sub">Versión 1.0.0 - Grupo Kaufmann</div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Danger zone -->
+              <div class="sp8"></div>
+              <div class="danger-zone">
+                <div class="dz-label">Zona peligrosa</div>
+                <button
+                  class="sr"
+                  style="background: transparent"
+                  onclick="
+                    go(
+                      's-delete',
+                      'Eliminar Cuenta',
+                      'Flujo App Store mandatorio',
+                    )
+                  "
+                >
+                  <div
+                    class="sr-ic"
+                    style="background: rgba(255, 107, 107, 0.12)"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="var(--danger)"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <use href="#ico-trash" />
+                    </svg>
+                  </div>
+                  <div class="sr-info">
+                    <div class="sr-t" style="color: var(--danger)">
+                      Eliminar cuenta
+                    </div>
+                    <div class="sr-sub">
+                      Acción irreversible — mandato App Store
+                    </div>
+                  </div>
+                  <div class="sr-chevron">
+                    <svg><use href="#ico-chevron-right" /></svg>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Logout -->
+              <div class="logout-wrap">
+                <button class="btn-logout">
+                  <svg><use href="#ico-logout" /></svg>
+                  Cerrar sesión
+                </button>
+              </div>
+              <div class="sp16"></div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-home" /></svg>
+                </div>
+                <div class="tab-label">Inicio</div>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="2" />
+                    <path d="M16 8h4l3 5v3h-7V8z" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                </div>
+                <div class="tab-label">Mis Autos</div>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <div class="tab-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path
+                      d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                    />
+                  </svg>
+                </div>
+                <div class="tab-label">Tienda</div>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-tool" /></svg>
+                </div>
+                <div class="tab-label">Servicios</div>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                </div>
+                <div class="tab-label">Contactar</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════════
+     SCREEN 3: MIS DATOS — V2
+═══════════════════════════════════════════════════════════ -->
+          <div class="screen" id="s-datos">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar">
+              <button
+                class="nbar-back"
+                onclick="go('s-hub', 'Mi Perfil — Hub', 'Hub grid 2x3')"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ico-chevron-left" />
+                </svg>
+              </button>
+              <div class="nbar-title">Mis Datos</div>
+              <button class="nbar-action">Editar</button>
+            </div>
+            <div class="body">
+              <div class="sec-label">INFORMACIÓN PERSONAL</div>
+              <div class="info-wrap">
+                <div class="info-row">
+                  <div class="info-key">Nombre</div>
+                  <div class="info-val">Pedro González</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-key">RUT</div>
+                  <div class="info-val">12.345.678-9</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-key">Correo</div>
+                  <div class="info-val" style="font-size: 12px">
+                    juan.perez@email.com
+                  </div>
+                </div>
+                <div class="info-row">
+                  <div class="info-key">Teléfono</div>
+                  <div class="info-val">+56 9 1234 5678</div>
+                </div>
+              </div>
+              <div class="sec-label">DATOS DE FACTURACIÓN</div>
+              <div class="info-wrap">
+                <div class="info-row">
+                  <div class="info-key">Razón Social</div>
+                  <div class="info-val">Pedro González</div>
+                </div>
+                <div class="info-row">
+                  <div class="info-key">Giro</div>
+                  <div class="info-val">Persona Natural</div>
+                </div>
+              </div>
+              <div class="sec-label">PREFERENCIAS</div>
+              <div class="card">
+                <div
+                  style="
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text-secondary);
+                    margin-bottom: 10px;
+                  "
+                >
+                  Canal Preferido
+                </div>
+                <div class="chip-group" style="margin-bottom: 16px">
+                  <div class="chip on">WhatsApp</div>
+                  <div class="chip on">App</div>
+                  <div class="chip">Correo</div>
+                </div>
+                <div
+                  style="
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text-secondary);
+                    margin-bottom: 10px;
+                  "
+                >
+                  Intereses
+                </div>
+                <div class="chip-group">
+                  <div class="chip on">Ofertas</div>
+                  <div class="chip on">Mantenciónes</div>
+                  <div class="chip">Repuestos</div>
+                  <div class="chip">DIMO</div>
+                </div>
+              </div>
+              <div style="height: 32px"></div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-home" /></svg>
+                </div>
+                <div class="tab-label">Inicio</div>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="2" />
+                    <path d="M16 8h4l3 5v3h-7V8z" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                </div>
+                <div class="tab-label">Mis Autos</div>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <div class="tab-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path
+                      d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                    />
+                  </svg>
+                </div>
+                <div class="tab-label">Tienda</div>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-tool" /></svg>
+                </div>
+                <div class="tab-label">Servicios</div>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                </div>
+                <div class="tab-label">Contactar</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════════
+     SCREEN 4: MIS EJECUTIVOS — V2 B:Creativa
+═══════════════════════════════════════════════════════════ -->
+          <div class="screen" id="s-ejecutivos">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar" style="justify-content: space-between">
+              <button
+                class="nbar-back"
+                onclick="go('s-hub', 'Mi Perfil — Hub', 'Hub grid 2x3')"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ico-chevron-left" />
+                </svg>
+              </button>
+              <div class="chrome-logo">KAUFMANN</div>
+              <div class="av-pill" onclick="navTo('perfil')">
+                <svg width="14" height="14" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" /></svg
+                ><span class="av-pill-name">Pedro</span>
+              </div>
+            </div>
+            <div class="body">
+              <div style="height: 14px"></div>
+              <div class="exec-card">
+                <div class="exec-card-header">
+                  <div class="exec-avatar comercial">RM</div>
+                  <div style="flex: 1">
+                    <div class="exec-role-badge comercial">
+                      Ejecutivo Comercial
+                    </div>
+                    <div class="exec-name">Ricardo Morales</div>
+                    <div class="exec-branch">
+                      <svg viewBox="0 0 24 24"><use href="#ico-pin" /></svg
+                      >Sucursal Las Condes
+                    </div>
+                  </div>
+                </div>
+                <div class="exec-actions">
+                  <div class="exec-action-btn">
+                    <div class="exec-action-circle phone">
+                      <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                    </div>
+                    <span class="exec-action-lbl">Llamar</span>
+                  </div>
+                  <div class="exec-action-btn">
+                    <div class="exec-action-circle wa">
+                      <svg viewBox="0 0 24 24"><use href="#ico-message" /></svg>
+                    </div>
+                    <span class="exec-action-lbl">WhatsApp</span>
+                  </div>
+                  <div class="exec-action-btn">
+                    <div class="exec-action-circle mail">
+                      <svg viewBox="0 0 24 24"><use href="#ico-mail" /></svg>
+                    </div>
+                    <span class="exec-action-lbl">Correo</span>
+                  </div>
+                </div>
+              </div>
+              <div class="exec-card">
+                <div class="exec-card-header">
+                  <div class="exec-avatar servicio">LC</div>
+                  <div style="flex: 1">
+                    <div class="exec-role-badge servicio">
+                      Asesora de Servicio
+                    </div>
+                    <div class="exec-name">Laura Castillo</div>
+                    <div class="exec-branch">
+                      <svg viewBox="0 0 24 24"><use href="#ico-pin" /></svg
+                      >Sucursal Providencia
+                    </div>
+                  </div>
+                </div>
+                <div class="exec-actions">
+                  <div class="exec-action-btn">
+                    <div class="exec-action-circle phone">
+                      <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                    </div>
+                    <span class="exec-action-lbl">Llamar</span>
+                  </div>
+                  <div class="exec-action-btn">
+                    <div class="exec-action-circle wa">
+                      <svg viewBox="0 0 24 24"><use href="#ico-message" /></svg>
+                    </div>
+                    <span class="exec-action-lbl">WhatsApp</span>
+                  </div>
+                  <div class="exec-action-btn">
+                    <div class="exec-action-circle mail">
+                      <svg viewBox="0 0 24 24"><use href="#ico-mail" /></svg>
+                    </div>
+                    <span class="exec-action-lbl">Correo</span>
+                  </div>
+                </div>
+              </div>
+              <div class="exec-info-note">
+                <svg viewBox="0 0 24 24"><use href="#ico-info" /></svg>
+                <span
+                  >Tu asesora de servicio fue asignada en tu última visita al
+                  taller de Providencia. Puedes contactarla directamente para
+                  agendar o consultar el estado de tu vehículo.</span
+                >
+              </div>
+              <div style="height: 16px"></div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-home" /></svg>
+                </div>
+                <div class="tab-label">Inicio</div>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="2" />
+                    <path d="M16 8h4l3 5v3h-7V8z" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                </div>
+                <div class="tab-label">Mis Autos</div>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <div class="tab-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path
+                      d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                    />
+                  </svg>
+                </div>
+                <div class="tab-label">Tienda</div>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-tool" /></svg>
+                </div>
+                <div class="tab-label">Servicios</div>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                </div>
+                <div class="tab-label">Contactar</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════════
+     SCREEN 5: MI SUCURSAL — V2
+═══════════════════════════════════════════════════════════ -->
+          <div class="screen" id="s-sucursal">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar" style="justify-content: space-between">
+              <button
+                class="nbar-back"
+                onclick="go('s-hub', 'Mi Perfil — Hub', 'Hub grid 2x3')"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ico-chevron-left" />
+                </svg>
+              </button>
+              <div class="chrome-logo">KAUFMANN</div>
+              <div class="av-pill" onclick="navTo('perfil')">
+                <svg width="14" height="14" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" /></svg
+                ><span class="av-pill-name">Pedro</span>
+              </div>
+            </div>
+            <div class="suc-map">
+              <div class="suc-map-pin">
+                <div class="suc-map-pin-dot">
+                  <svg viewBox="0 0 24 24"><use href="#ico-pin" /></svg>
+                </div>
+              </div>
+              <div
+                style="
+                  position: absolute;
+                  bottom: 10px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  font-size: 11px;
+                  font-weight: 700;
+                  color: #fff;
+                  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+                  white-space: nowrap;
+                "
+              >
+                Sucursal Las Condes
+              </div>
+            </div>
+            <div class="body">
+              <div class="suc-info-card">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-size: 16px;
+                        font-weight: 800;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Sucursal Las Condes
+                    </div>
+                    <div
+                      style="
+                        font-size: 12px;
+                        color: var(--text-secondary);
+                        margin-top: 3px;
+                      "
+                    >
+                      Av. Apoquindo 4501, Las Condes, Santiago
+                    </div>
+                  </div>
+                  <div class="suc-status-open">Abierto</div>
+                </div>
+                <div style="font-size: 11px; color: var(--text-tertiary)">
+                  Cierra hoy a las 18:00 hrs
+                </div>
+              </div>
+              <div class="suc-pill-row">
+                <button class="suc-pill nav">
+                  <svg viewBox="0 0 24 24">
+                    <line x1="22" y1="2" x2="11" y2="13" />
+                    <polygon points="22 2 15 22 11 13 2 9 22 2" /></svg
+                  >Navegar
+                </button>
+                <button class="suc-pill">
+                  <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>Llamar
+                </button>
+                <button class="suc-pill">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg
+                  >Compartir
+                </button>
+              </div>
+              <div class="sec-label">HORARIO DE ATENCIÓN</div>
+              <div class="suc-hours-card">
+                <div class="suc-hours-row suc-hours-today">
+                  <span class="suc-hours-day">Lunes (hoy)</span
+                  ><span class="suc-hours-time">08:30 - 18:00</span>
+                </div>
+                <div class="suc-hours-row">
+                  <span class="suc-hours-day">Martes</span
+                  ><span class="suc-hours-time">08:30 - 18:00</span>
+                </div>
+                <div class="suc-hours-row">
+                  <span class="suc-hours-day">Miércoles</span
+                  ><span class="suc-hours-time">08:30 - 18:00</span>
+                </div>
+                <div class="suc-hours-row">
+                  <span class="suc-hours-day">Jueves</span
+                  ><span class="suc-hours-time">08:30 - 18:00</span>
+                </div>
+                <div class="suc-hours-row">
+                  <span class="suc-hours-day">Viernes</span
+                  ><span class="suc-hours-time">08:30 - 17:30</span>
+                </div>
+                <div class="suc-hours-row">
+                  <span class="suc-hours-day">Sábado</span
+                  ><span class="suc-hours-time">09:00 - 13:00</span>
+                </div>
+                <div class="suc-hours-row">
+                  <span class="suc-hours-day">Domingo</span
+                  ><span class="suc-hours-closed">Cerrado</span>
+                </div>
+              </div>
+              <div class="sec-label">SERVICIOS DISPONIBLES</div>
+              <div class="suc-svc-grid">
+                <div class="suc-svc-chip">
+                  <svg viewBox="0 0 24 24"><use href="#ico-wrench" /></svg
+                  ><span>Taller mecánico</span>
+                </div>
+                <div class="suc-svc-chip">
+                  <svg viewBox="0 0 24 24"><use href="#ico-car" /></svg
+                  ><span>Venta de autos</span>
+                </div>
+                <div class="suc-svc-chip">
+                  <svg viewBox="0 0 24 24"><use href="#ico-store" /></svg
+                  ><span>Repuestos</span>
+                </div>
+                <div class="suc-svc-chip">
+                  <svg viewBox="0 0 24 24"><use href="#ico-file" /></svg
+                  ><span>Financiamiento</span>
+                </div>
+                <div class="suc-svc-chip">
+                  <svg viewBox="0 0 24 24"><use href="#ico-shield" /></svg
+                  ><span>Garantías</span>
+                </div>
+                <div class="suc-svc-chip">
+                  <svg viewBox="0 0 24 24"><use href="#ico-tag" /></svg
+                  ><span>Accesorios</span>
+                </div>
+              </div>
+              <div style="height: 16px"></div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-home" /></svg>
+                </div>
+                <div class="tab-label">Inicio</div>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="2" />
+                    <path d="M16 8h4l3 5v3h-7V8z" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                </div>
+                <div class="tab-label">Mis Autos</div>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <div class="tab-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path
+                      d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                    />
+                  </svg>
+                </div>
+                <div class="tab-label">Tienda</div>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-tool" /></svg>
+                </div>
+                <div class="tab-label">Servicios</div>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                </div>
+                <div class="tab-label">Contactar</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- ═══════════════════════════════════════════════════════════
+     SCREEN 6: ELIMINAR CUENTA — V2
+═══════════════════════════════════════════════════════════ -->
+          <div class="screen" id="s-delete">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar">
+              <button
+                class="nbar-back"
+                onclick="go('s-detail', 'Perfil Detail', 'V3 hero + settings')"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ico-chevron-left" />
+                </svg>
+              </button>
+              <div class="nbar-title">Eliminar Cuenta</div>
+            </div>
+            <div class="body">
+              <div style="text-align: center; padding: 28px 0 12px">
+                <svg
+                  width="52"
+                  height="52"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--danger)"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ico-alert" />
+                </svg>
+              </div>
+              <div style="text-align: center; padding: 0 24px 20px">
+                <div
+                  style="
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                  "
+                >
+                  ¿Deseas eliminar tu cuenta?
+                </div>
+              </div>
+              <div
+                style="
+                  margin: 0 16px 14px;
+                  background: var(--surface);
+                  border-radius: 22px;
+                  border-left: 4px solid var(--danger);
+                  padding: 16px;
+                  box-shadow: var(--card-shadow);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 6px 0;
+                    border-bottom: 1px solid var(--border-light);
+                  "
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--danger)"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" /></svg
+                  ><span style="font-size: 13px; color: var(--text-primary)"
+                    >Se eliminarán todos tus datos personales</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 6px 0;
+                    border-bottom: 1px solid var(--border-light);
+                  "
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--danger)"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" /></svg
+                  ><span style="font-size: 13px; color: var(--text-primary)"
+                    >Se eliminarán tus vehículos registrados</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 6px 0;
+                  "
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--danger)"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" /></svg
+                  ><span style="font-size: 13px; color: var(--text-primary)"
+                    >Perderás acceso a tus facturas e historial</span
+                  >
+                </div>
+              </div>
+              <div
+                style="
+                  margin: 0 16px 12px;
+                  padding: 14px 16px;
+                  background: var(--primary-tint);
+                  border: 1px solid var(--border-accent);
+                  border-radius: 14px;
+                  display: flex;
+                  gap: 10px;
+                  align-items: flex-start;
+                "
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--primary)"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  style="flex-shrink: 0; margin-top: 1px"
+                >
+                  <use href="#ico-info" /></svg
+                ><span
+                  style="
+                    font-size: 12px;
+                    color: var(--text-secondary);
+                    line-height: 1.5;
+                  "
+                  >Por ley, Kaufmann debe conservar tus documentos tributarios
+                  por el período requerido por el SII</span
+                >
+              </div>
+              <div
+                style="
+                  margin: 0 16px 12px;
+                  padding: 14px 16px;
+                  background: var(--surface);
+                  border-radius: 14px;
+                  box-shadow: var(--card-shadow);
+                  display: flex;
+                  gap: 10px;
+                  align-items: flex-start;
+                "
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--text-secondary)"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  style="flex-shrink: 0; margin-top: 1px"
+                >
+                  <use href="#ico-info" /></svg
+                ><span
+                  style="
+                    font-size: 12px;
+                    color: var(--text-secondary);
+                    line-height: 1.5;
+                  "
+                  >Tu cuenta será eliminada permanentemente despues de 30 días.
+                  Si cambias de opinion, solo inicia sesión antes de que se
+                  cumpla el plazo.</span
+                >
+              </div>
+              <div
+                class="check-row"
+                style="margin: 0 16px 20px"
+                onclick="
+                  this.querySelector('.check-box').classList.toggle('checked');
+                  var btn = document.getElementById('btn-del');
+                  btn.disabled =
+                    !this.querySelector('.check-box').classList.contains(
+                      'checked',
+                    );
+                "
+              >
+                <div class="check-box"></div>
+                <div class="check-label">
+                  Entiendo que mi cuenta será eliminada permanentemente en 30
+                  días
+                </div>
+              </div>
+              <div style="padding: 0 16px 10px">
+                <button class="btn-danger" id="btn-del" disabled>
+                  Continuar con la eliminación
+                </button>
+              </div>
+              <div style="padding: 0 16px 28px">
+                <button
+                  class="btn-ghost-full"
+                  onclick="
+                    go('s-detail', 'Perfil Detail', 'V3 hero + settings')
+                  "
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-home" /></svg>
+                </div>
+                <div class="tab-label">Inicio</div>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="1" y="3" width="15" height="13" rx="2" />
+                    <path d="M16 8h4l3 5v3h-7V8z" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                </div>
+                <div class="tab-label">Mis Autos</div>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <div class="tab-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path
+                      d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                    />
+                  </svg>
+                </div>
+                <div class="tab-label">Tienda</div>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-tool" /></svg>
+                </div>
+                <div class="tab-label">Servicios</div>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <div class="tab-icon">
+                  <svg viewBox="0 0 24 24"><use href="#ico-phone" /></svg>
+                </div>
+                <div class="tab-label">Contactar</div>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /device-scr -->
+      </div>
+      <!-- /device -->
+    </main>
+
+    <script>
+      /* Mode switcher (light/dark) */
+      function setMode(m) {
+        document.body.dataset.mode = m;
+        document
+          .querySelectorAll(".mode-tog-btn")
+          .forEach((b) => b.classList.remove("on"));
+        document.getElementById("mode-" + m).classList.add("on");
+      }
+
+      /* Screen navigation */
+      var navMap = {
+        "s-hub": "nav-hub",
+        "s-detail": "nav-detail",
+        "s-datos": "nav-datos",
+        "s-ejecutivos": "nav-ejecutivos",
+        "s-sucursal": "nav-sucursal",
+        "s-delete": "nav-delete",
+      };
+      function go(id, name, desc) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        var n = document.getElementById("sb-sname");
+        var d = document.getElementById("sb-sdesc");
+        if (n) n.textContent = name || "";
+        if (d) d.textContent = desc || "";
+        document
+          .querySelectorAll(".sb-btn")
+          .forEach((b) => b.classList.remove("on"));
+        var nb = document.getElementById(navMap[id]);
+        if (nb) nb.classList.add("on");
+      }
+
+      /* Cross-file navigation */
+      function navTo(module, screen) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(
+            { action: "navigate", module: module, screen: screen || null },
+            "*",
+          );
+        }
+      }
+
+      /* Toggle clicks on .tog-wrap */
+      document.querySelectorAll(".tog-wrap").forEach((t) => {
+        t.addEventListener("click", () => t.classList.toggle("on"));
+      });
+    </script>
+  </body>
+</html>

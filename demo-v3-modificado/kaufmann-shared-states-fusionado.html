@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaufmann App — Estados Compartidos</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0E14;display:flex;min-height:100vh;color:#E8EEF5}
+
+/* ══════════════════════════════════════════════
+   UNIFIED CSS TOKENS — DARK DEFAULT (Versión Final / Best Of)
+══════════════════════════════════════════════ */
+:root{
+  --primary:#0071BB;
+  --primary-dark:#003A6E;
+  --background:#0B1018;
+  --surface:#131A24;
+  --text-primary:#E8EEF5;
+  --text-secondary:#8A96A6;
+  --text-tertiary:#5A6878;
+  --border:rgba(255,255,255,0.04);
+  --border-light:rgba(255,255,255,0.025);
+  --card-shadow:0 2px 8px rgba(0,0,0,0.45),0 0 1px rgba(0,113,187,0.12);
+  --success:#3FC76A;
+  --warning:#F0B840;
+  --danger:#F05454;
+  --header-bg:#000000;
+  --bnav-bg:#0B1018;
+  --bnav-active:#0071BB;
+  --bnav-inactive:#5A6878;
+  --skeleton-base:#1A2233;
+  --skeleton-shine:#222D40;
+  --sidebar-accent:#0071BB;
+  --btn-bg:#0071BB;
+  --btn-text:#FFFFFF;
+  --state-icon-bg:rgba(0,113,187,0.14);
+  --state-error-bg:rgba(240,84,84,0.12);
+  --state-error-title:#F05454;
+  --state-empty-bg:rgba(0,113,187,0.12);
+  --empty-ill-border:rgba(0,113,187,0.28);
+  --error-network-bg:rgba(240,84,84,0.10);
+  --error-server-bg:rgba(240,184,64,0.10);
+}
+
+/* Light mode overrides */
+body[data-mode="light"]{
+  --background:#F0F3F8;
+  --surface:#FFFFFF;
+  --text-primary:#0F1923;
+  --text-secondary:#4A5A6E;
+  --text-tertiary:#8896A8;
+  --border:#D6DDE6;
+  --border-light:#EAEEf4;
+  --card-shadow:0 1px 3px rgba(0,30,64,0.07),0 4px 14px rgba(0,30,64,0.05);
+  --success:#18963A;
+  --warning:#D97706;
+  --danger:#DC2626;
+  --bnav-bg:#FFFFFF;
+  --bnav-active:#0071BB;
+  --bnav-inactive:#8896A8;
+  --skeleton-base:#D8DEE6;
+  --skeleton-shine:#EEF2F7;
+  --state-icon-bg:#EAF4FB;
+  --state-error-bg:#FEE2E2;
+  --state-error-title:#B91C1C;
+  --state-empty-bg:#EAF4FB;
+  --empty-ill-border:rgba(0,113,187,0.18);
+  --error-network-bg:#FFF2F0;
+  --error-server-bg:#FFF6E0;
+}
+
+/* ══════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════ */
+.sidebar{
+  width:268px;background:#06090F;padding:0;overflow-y:auto;
+  position:fixed;top:0;left:0;bottom:0;z-index:10;
+  display:flex;flex-direction:column;
+  border-right:1px solid #111820;
+}
+.sb-header{padding:22px 20px 18px;border-bottom:1px solid #111820}
+.sb-brand-text{font-size:13px;font-weight:800;color:#fff;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px}
+.sb-sub{font-size:9px;color:#1E2E40;letter-spacing:0.8px;text-transform:uppercase;font-weight:600}
+.sb-title-area{padding:16px 20px 6px;border-bottom:1px solid #111820}
+.sb-title{color:#fff;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:4px}
+.sb-subtitle{color:#2E3F52;font-size:10px;line-height:1.5;font-weight:500}
+.sb-version{display:inline-block;background:#111820;color:var(--sidebar-accent);font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;margin-top:6px;letter-spacing:0.5px}
+
+/* Mode toggle */
+.mode-toggle{padding:12px 20px;border-bottom:1px solid #111820}
+.mt-label{color:#1E2E40;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:7px}
+.mt-wrap{display:flex;background:#111820;border-radius:9px;padding:3px;gap:2px}
+.mt-btn{flex:1;padding:7px 4px;border:none;border-radius:7px;font-size:10px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;background:transparent;color:#2E3F52;line-height:1.3}
+.mt-btn.on{background:#1A2A3A;color:#E6EDF3;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+
+/* Screen nav */
+.sb-nav{padding:10px 10px 6px;flex:1}
+.sb-nav-label{color:#192430;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;padding:0 8px;margin:10px 0 4px}
+.sb-nav-label:first-child{margin-top:2px}
+.sb-btn{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+  padding:7px 10px;border:none;border-radius:7px;background:transparent;
+  color:#3A4A5A;font-size:11.5px;cursor:pointer;transition:all 0.15s;
+  line-height:1.3;margin-bottom:1px;
+}
+.sb-btn:hover{background:#111820;color:#8AAABB}
+.sb-btn.on{background:#111820;color:#fff}
+.sb-btn-num{
+  width:20px;height:20px;border-radius:5px;display:flex;align-items:center;
+  justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;
+  background:#0A1018;color:#1E2E40;
+}
+.sb-btn.on .sb-btn-num{background:var(--sidebar-accent);color:#fff}
+.sb-btn-info{flex:1;min-width:0}
+.sb-btn-title{font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-btn-desc{font-size:9.5px;color:#1E2E40;margin-top:1px;line-height:1.3}
+.sb-btn.on .sb-btn-desc{color:#3A5A7A}
+
+/* Notes and footer */
+.sb-notes{padding:12px 20px;border-top:1px solid #111820}
+.sb-notes-title{color:#1E2E40;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
+.sb-note{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.sb-note-num{
+  width:17px;height:17px;border-radius:50%;background:#111820;
+  color:#0071BB;font-size:8px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.sb-note-text{color:#2E4055;font-size:9.5px;line-height:1.55}
+.sb-footer{padding:10px 20px;border-top:1px solid #111820}
+.sb-footer-text{color:#192430;font-size:8.5px;text-align:center;letter-spacing:0.3px;line-height:1.6}
+
+/* ══════════════════════════════════════════════
+   MAIN + DEVICE FRAME
+══════════════════════════════════════════════ */
+.main{margin-left:268px;flex:1;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px 40px}
+.device{
+  width:390px;height:844px;background:#060A0E;border-radius:48px;padding:10px;
+  box-shadow:
+    0 0 0 1px #2A3040,
+    0 0 0 3px #060A0E,
+    0 0 0 4.5px #181E28,
+    0 50px 120px rgba(0,0,0,0.98);
+  position:relative;flex-shrink:0;
+}
+.notch{
+  width:120px;height:30px;background:#060A0E;border-radius:0 0 16px 16px;
+  position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  z-index:100;display:flex;align-items:center;justify-content:center;
+}
+.notch-pill{width:72px;height:6px;background:#141C28;border-radius:3px}
+.device-scr{
+  width:100%;height:100%;background:var(--background);
+  border-radius:40px;overflow:hidden;position:relative;
+  transition:background 0.3s;
+}
+
+/* ══════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════ */
+.screen{display:none;flex-direction:column;position:absolute;inset:0;overflow:hidden}
+.screen.active{display:flex}
+
+/* ══════════════════════════════════════════════
+   STATUS BAR
+══════════════════════════════════════════════ */
+.sbar{
+  height:50px;display:flex;align-items:flex-end;
+  justify-content:space-between;padding:0 24px 8px;
+  flex-shrink:0;background:#000000;
+}
+.s-time{font-size:15px;font-weight:700;color:#FFFFFF}
+.s-icons{display:flex;gap:5px;align-items:center}
+.bars{display:flex;align-items:flex-end;gap:1px}
+.bar{width:3px;border-radius:1px;background:#FFFFFF}
+.bar:nth-child(1){height:4px}.bar:nth-child(2){height:7px}.bar:nth-child(3){height:10px}.bar:nth-child(4){height:13px}
+.batt{width:22px;height:11px;border:1.5px solid #FFFFFF;border-radius:3px;position:relative;padding:1.5px}
+.batt::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:2px;height:5px;background:#FFFFFF;border-radius:0 1px 1px 0}
+.batt-fill{height:100%;border-radius:1px;width:75%;background:#FFFFFF}
+
+/* ══════════════════════════════════════════════
+   APP HEADER — always black
+══════════════════════════════════════════════ */
+.aheader{
+  height:52px;display:flex;align-items:center;padding:0 16px;gap:8px;
+  background:#000000;border-bottom:1px solid rgba(255,255,255,0.07);
+  flex-shrink:0;position:relative;
+}
+.ah-logo{display:flex;align-items:center;flex:1}
+.ah-right{display:flex;gap:6px;align-items:center;margin-left:auto}
+.ah-btn{
+  width:36px;height:36px;border:none;background:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border-radius:10px;position:relative;
+}
+.ah-btn svg{width:20px;height:20px;stroke:#FFFFFF;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ah-badge{
+  position:absolute;top:0;right:0;width:16px;height:16px;
+  background:#DC2626;border-radius:50%;font-size:8px;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;
+  border:2px solid #000000;
+}
+.ah-av{
+  width:32px;height:32px;border-radius:50%;background:#0071BB;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0;letter-spacing:.5px;
+}
+.ah-title{
+  position:absolute;left:50%;transform:translateX(-50%);
+  font-size:16px;font-weight:700;color:#fff;white-space:nowrap;
+}
+.ah-back{
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;background:none;border:none;flex-shrink:0;
+}
+/* Kaufmann chrome wordmark — Versión Final style */
+.kw-chrome{
+  font-family:'Times New Roman',Georgia,'Palatino Linotype',serif;
+  font-size:16px;font-weight:400;letter-spacing:5px;
+  background:linear-gradient(45deg,#8A9AAA 5%,#FFFFFF 10%,#B8C4D0 30%,#E8EEF4 50%,#B8C4D0 70%,#FFFFFF 80%,#8A9AAA 95%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 3px rgba(200,215,240,0.3));
+}
+
+/* ══════════════════════════════════════════════
+   SCROLL BODY
+══════════════════════════════════════════════ */
+.body{flex:1;overflow-y:auto;background:var(--background)}
+.body::-webkit-scrollbar{display:none}
+
+/* ══════════════════════════════════════════════
+   BOTTOM NAV — 5 tabs correcto: Inicio | Mis Autos | Servicios | Contactar | Tienda
+══════════════════════════════════════════════ */
+.bnav{
+  height:82px;background:var(--bnav-bg);
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;padding:10px 0 0;flex-shrink:0;
+}
+body[data-mode="light"] .bnav{border-top:1px solid var(--border)}
+.bn-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:4px;cursor:pointer;border:none;background:none;padding:0 2px;
+}
+.bn-tab svg{
+  width:22px;height:22px;stroke:var(--bnav-inactive);fill:none;
+  stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.18s;
+}
+.bn-tab-lbl{font-size:9px;text-align:center;line-height:1.2;color:var(--bnav-inactive);transition:color 0.18s;font-weight:500}
+.bn-tab.on svg{stroke:var(--bnav-active)}
+.bn-tab.on .bn-tab-lbl{color:var(--bnav-active);font-weight:700}
+
+/* ══════════════════════════════════════════════
+   SHIMMER SKELETON
+══════════════════════════════════════════════ */
+@keyframes shimmer{
+  0%{background-position:-780px 0}
+  100%{background-position:780px 0}
+}
+.sk{
+  border-radius:10px;display:block;
+  background:linear-gradient(90deg,var(--skeleton-base) 25%,var(--skeleton-shine) 50%,var(--skeleton-base) 75%);
+  background-size:1560px 100%;
+  animation:shimmer 1.6s infinite linear;
+}
+.sk-round{border-radius:50%}
+/* Skeleton structures — Versión Final (8 screens) */
+.skel-hero{height:108px;border-radius:20px;margin:12px 16px 8px}
+.skel-section-label{height:14px;width:100px;border-radius:8px;margin:10px 16px 8px}
+.skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 6px}
+.skel-quick{height:88px;border-radius:16px}
+.skel-promo{height:80px;border-radius:14px;margin:6px 16px 8px}
+.skel-activity-row{display:flex;flex-direction:column;gap:8px;padding:0 16px 16px}
+.skel-activity{height:60px;border-radius:14px}
+.skel-list-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);margin:0 16px 8px;border-radius:14px;box-shadow:var(--card-shadow)}
+.skel-list-icon{width:44px;height:44px;border-radius:50%;flex-shrink:0}
+.skel-list-lines{flex:1;display:flex;flex-direction:column;gap:8px}
+.skel-list-line-1{height:13px;border-radius:7px;width:70%}
+.skel-list-line-2{height:11px;border-radius:7px;width:50%}
+
+/* ══════════════════════════════════════════════
+   ERROR STATES
+══════════════════════════════════════════════ */
+.error-center{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 28px;text-align:center;
+}
+.error-ill{
+  width:88px;height:88px;border-radius:28px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:24px;
+}
+.error-ill-network{background:var(--error-network-bg);border:1.5px solid rgba(240,84,84,0.22)}
+.error-ill-server{background:var(--error-server-bg);border:1.5px solid rgba(240,184,64,0.22)}
+.error-title{font-size:20px;font-weight:800;color:var(--text-primary);margin-bottom:10px;line-height:1.2}
+.error-subtitle{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:28px}
+.error-code{font-size:11px;color:var(--text-tertiary);margin-top:20px;font-family:monospace;letter-spacing:0.5px}
+
+
+/* ══════════════════════════════════════════════
+   EMPTY STATES
+══════════════════════════════════════════════ */
+.empty-center{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 28px;text-align:center;
+}
+.empty-ill{
+  width:80px;height:80px;border-radius:26px;
+  background:var(--state-empty-bg);
+  border:1.5px solid var(--empty-ill-border);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+}
+.empty-title{font-size:18px;font-weight:800;color:var(--text-primary);margin-bottom:8px;line-height:1.25}
+.empty-subtitle{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:24px}
+
+/* Notification panel empty */
+.notif-panel{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 32px;text-align:center;background:var(--background);
+}
+.notif-ill{
+  width:72px;height:72px;border-radius:22px;
+  background:var(--state-empty-bg);
+  border:1.5px solid var(--empty-ill-border);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:18px;
+}
+.notif-title{font-size:17px;font-weight:800;color:var(--text-primary);margin-bottom:8px}
+.notif-subtitle{font-size:13px;color:var(--text-secondary);line-height:1.6}
+
+/* ══════════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════════ */
+.btn-prim{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:14px;background:var(--btn-bg);color:var(--btn-text);
+  border:none;border-radius:13px;font-size:15px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:opacity 0.15s;
+}
+.btn-prim svg{width:18px;height:18px;stroke:var(--btn-text);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-prim:active{opacity:0.85}
+.btn-ghost{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:13px;background:transparent;
+  color:var(--primary);border:1.5px solid var(--primary);
+  border-radius:13px;font-size:15px;font-weight:700;cursor:pointer;
+  font-family:inherit;margin-top:10px;transition:opacity 0.15s;
+}
+body[data-mode="light"] .btn-ghost{color:#0071BB;border-color:#0071BB}
+.btn-ghost:active{opacity:0.75}
+.btn-txt{background:none;border:none;color:var(--primary);font-size:14px;font-weight:600;cursor:pointer;padding:10px 0 0;font-family:inherit;text-align:center;display:block;width:100%}
+
+/* ══════════════════════════════════════════════
+   MISC COMPONENTS
+══════════════════════════════════════════════ */
+.av-pill{
+  height:28px;border-radius:14px;border:1px solid rgba(255,255,255,0.2);
+  padding:0 10px 0 8px;display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.06);cursor:pointer;flex-shrink:0;
+}
+.av-pill svg{stroke:rgba(255,255,255,0.7);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.av-pill-name{font-size:11px;font-weight:600;color:rgba(255,255,255,0.8);letter-spacing:0.3px}
+.page-title-bar{padding:18px 16px 10px;border-bottom:1px solid var(--border-light);flex-shrink:0;background:var(--background)}
+.page-title{font-size:22px;font-weight:800;color:var(--text-primary)}
+.page-subtitle{font-size:13px;color:var(--text-tertiary);margin-top:3px}
+.ico{display:block;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     SVG SYMBOL DEFS
+══════════════════════════════════════════════ -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </symbol>
+    <symbol id="ic-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l2-4h10l2 4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/>
+    </symbol>
+    <symbol id="ic-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </symbol>
+    <symbol id="ic-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42A2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+    </symbol>
+    <symbol id="ic-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+    </symbol>
+    <symbol id="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+    </symbol>
+    <symbol id="ic-wifi-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>
+    </symbol>
+    <symbol id="ic-alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </symbol>
+    <symbol id="ic-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </symbol>
+    <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    </symbol>
+    <symbol id="ic-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </symbol>
+    <symbol id="ic-x-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+    </symbol>
+    <symbol id="ic-package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+    </symbol>
+    <symbol id="ic-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </symbol>
+    <symbol id="ic-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+    </symbol>
+    <symbol id="ic-info-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ══════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sb-header">
+    <div class="sb-brand-text">KAUFMANN</div>
+    <div class="sb-sub">ESTADOS COMPARTIDOS</div>
+  </div>
+
+  <div class="sb-title-area">
+    <div class="sb-title">Estados Compartidos</div>
+    <div class="sb-subtitle">Skeleton loading, errores y vacíos del sistema</div>
+    <span class="sb-version">Versión Final · Mar 2026</span>
+  </div>
+
+  <!-- Mode toggle -->
+  <div class="mode-toggle" id="mode-toggle-wrap">
+    <div class="mt-label">Modo</div>
+    <div class="mt-wrap">
+      <button class="mt-btn" id="mt-light" onclick="setMode('light')">Claro</button>
+      <button class="mt-btn on" id="mt-dark" onclick="setMode('dark')">Oscuro</button>
+    </div>
+  </div>
+
+  <!-- Screen navigation (8 screens) -->
+  <nav class="sb-nav" id="nav-final">
+    <div class="sb-nav-label">Skeleton Loading</div>
+    <button class="sb-btn on" id="fn-1" onclick="goFinal(1)">
+      <div class="sb-btn-num">1</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Skeleton — Home</div>
+        <div class="sb-btn-desc">Shimmer full-screen mientras carga inicio</div>
+      </div>
+    </button>
+    <button class="sb-btn" id="fn-2" onclick="goFinal(2)">
+      <div class="sb-btn-num">2</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Skeleton — Lista</div>
+        <div class="sb-btn-desc">Shimmer para listas de items</div>
+      </div>
+    </button>
+    <div class="sb-nav-label">Estados de Error</div>
+    <button class="sb-btn" id="fn-3" onclick="goFinal(3)">
+      <div class="sb-btn-num">3</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Error — Sin Conexión</div>
+        <div class="sb-btn-desc">Red caida / timeout de conexión</div>
+      </div>
+    </button>
+    <button class="sb-btn" id="fn-4" onclick="goFinal(4)">
+      <div class="sb-btn-num">4</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Error — Servidor</div>
+        <div class="sb-btn-desc">Error 500 / falla interna del sistema</div>
+      </div>
+    </button>
+    <div class="sb-nav-label">Estados Vacíos</div>
+    <button class="sb-btn" id="fn-5" onclick="goFinal(5)">
+      <div class="sb-btn-num">5</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Vacío — Mis Autos</div>
+        <div class="sb-btn-desc">Usuario sin vehículos vinculados</div>
+      </div>
+    </button>
+    <button class="sb-btn" id="fn-6" onclick="goFinal(6)">
+      <div class="sb-btn-num">6</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Vacío — Reservas</div>
+        <div class="sb-btn-desc">Sin reservas de servicio pendientes</div>
+      </div>
+    </button>
+    <button class="sb-btn" id="fn-7" onclick="goFinal(7)">
+      <div class="sb-btn-num">7</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Vacío — Notificaciónes</div>
+        <div class="sb-btn-desc">Panel sin contenido</div>
+      </div>
+    </button>
+    <button class="sb-btn" id="fn-8" onclick="goFinal(8)">
+      <div class="sb-btn-num">8</div>
+      <div class="sb-btn-info">
+        <div class="sb-btn-title">Vacío — Tienda</div>
+        <div class="sb-btn-desc">Productos no disponibles</div>
+      </div>
+    </button>
+  </nav>
+
+  <div class="sb-notes">
+    <div class="sb-notes-title">Notas de Diseño</div>
+    <div class="sb-note"><div class="sb-note-num">1</div><div class="sb-note-text">8 pantallas — 2 skeletons, 2 errores, 4 vacíos. Dark default con toggle claro/oscuro. Paleta Best Of.</div></div>
+    <div class="sb-note"><div class="sb-note-num">2</div><div class="sb-note-text">Header negro #000000 persistente. Bottom nav 5 tabs: Inicio | Mis Autos | Servicios | Contactar | Tienda.</div></div>
+    <div class="sb-note"><div class="sb-note-num">3</div><div class="sb-note-text">Iconos SVG Feather inline — stroke 1.75, sin fill, sin emojis. Skeleton shimmer CSS puro, animación 1.6s ciclo.</div></div>
+  </div>
+
+  <div class="sb-footer">
+    <div class="sb-footer-text">Grupo Kaufmann · Estados Compartidos<br>Diseño UI · Stefano Cubillos · Valaris · 2026</div>
+  </div>
+</aside>
+
+<!-- ══════════════════════════════════════════════
+     DEVICE FRAME
+══════════════════════════════════════════════ -->
+<div class="main">
+<div class="device">
+  <div class="notch"><div class="notch-pill"></div></div>
+  <div class="device-scr" id="device-scr">
+
+    <!-- ═══════════════════════════════════════
+         8 SCREENS
+    ═══════════════════════════════════════ -->
+
+    <!-- ══ FINAL S-1: SKELETON HOME ══ -->
+    <div class="screen active" id="f-s-1">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader">
+        <div class="ah-logo">
+          <span class="kw-chrome">KAUFMANN</span>
+        </div>
+        <div class="ah-right">
+          <div style="width:34px;height:34px;border-radius:50%" class="sk"></div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="sk skel-hero"></div>
+        <div class="sk skel-section-label"></div>
+        <div class="skel-grid">
+          <div class="sk skel-quick"></div><div class="sk skel-quick"></div>
+          <div class="sk skel-quick"></div><div class="sk skel-quick"></div>
+        </div>
+        <div class="sk skel-promo"></div>
+        <div class="sk skel-section-label" style="margin-top:10px"></div>
+        <div class="skel-activity-row">
+          <div class="sk skel-activity"></div>
+          <div class="sk skel-activity"></div>
+          <div class="sk skel-activity"></div>
+        </div>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab on" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-1 -->
+
+    <!-- ══ FINAL S-2: SKELETON LISTA ══ -->
+    <div class="screen" id="f-s-2">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader" style="position:relative">
+        <div class="ah-logo"><span class="kw-chrome">KAUFMANN</span></div>
+        <div class="sk" style="width:100px;height:14px;border-radius:8px;position:absolute;left:50%;transform:translateX(-50%)"></div>
+      </div>
+      <div class="body" style="padding-top:14px">
+        <div class="skel-list-item"><div class="sk sk-round skel-list-icon"></div><div class="skel-list-lines"><div class="sk skel-list-line-1"></div><div class="sk skel-list-line-2"></div></div></div>
+        <div class="skel-list-item"><div class="sk sk-round skel-list-icon"></div><div class="skel-list-lines"><div class="sk skel-list-line-1" style="width:55%"></div><div class="sk skel-list-line-2" style="width:40%"></div></div></div>
+        <div class="skel-list-item"><div class="sk sk-round skel-list-icon"></div><div class="skel-list-lines"><div class="sk skel-list-line-1" style="width:65%"></div><div class="sk skel-list-line-2" style="width:48%"></div></div></div>
+        <div class="skel-list-item"><div class="sk sk-round skel-list-icon"></div><div class="skel-list-lines"><div class="sk skel-list-line-1" style="width:60%"></div><div class="sk skel-list-line-2" style="width:45%"></div></div></div>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab on" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-2 -->
+
+    <!-- ══ FINAL S-3: ERROR — SIN CONEXION ══ -->
+    <div class="screen" id="f-s-3">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader">
+        <div class="ah-logo"><span class="kw-chrome">KAUFMANN</span></div>
+      </div>
+      <div class="error-center">
+        <div class="error-ill error-ill-network">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wifi-off"/></svg>
+        </div>
+        <div class="error-title">Sin conexión</div>
+        <div class="error-subtitle">No pudimos conectar con el servidor. Verifica tu conexión a internet e intenta de nuevo.</div>
+        <div style="width:100%">
+          <button class="btn-prim"><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-refresh"/></svg>Reintentar</button>
+          <button class="btn-ghost">Volver al inicio</button>
+        </div>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab on" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-3 -->
+
+    <!-- ══ FINAL S-4: ERROR — SERVIDOR ══ -->
+    <div class="screen" id="f-s-4">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader">
+        <div class="ah-logo"><span class="kw-chrome">KAUFMANN</span></div>
+      </div>
+      <div class="error-center">
+        <div class="error-ill error-ill-server">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-alert-triangle"/></svg>
+        </div>
+        <div class="error-title">Algo salió mal</div>
+        <div class="error-subtitle">Estamos trabajando para solucionarlo. Intenta de nuevo en unos minutos.</div>
+        <div style="width:100%">
+          <button class="btn-prim"><svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-refresh"/></svg>Reintentar</button>
+        </div>
+        <div class="error-code">ERR-500 &nbsp;·&nbsp; 30/03/2026 10:15</div>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab on" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-4 -->
+
+    <!-- ══ FINAL S-5: VACIO — MIS AUTOS ══ -->
+    <div class="screen" id="f-s-5">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader">
+        <div class="ah-logo"><span class="kw-chrome">KAUFMANN</span></div>
+        <div class="ah-right">
+          <button class="ah-btn"><svg viewBox="0 0 24 24"><use href="#ic-bell"/></svg></button>
+          <div class="av-pill" onclick="navTo('perfil')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-user"/></svg><span class="av-pill-name">Pedro</span></div>
+        </div>
+      </div>
+      <div class="page-title-bar">
+        <div class="page-title">Mis Vehículos</div>
+        <div class="page-subtitle">Administra tus vehículos Kaufmann</div>
+      </div>
+      <div class="empty-center">
+        <div class="empty-ill">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0071BB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg>
+        </div>
+        <div class="empty-title">Aún no tienes vehículos</div>
+        <div class="empty-subtitle">Agrega tu primer vehículo para acceder a todos los servicios Kaufmann desde esta app.</div>
+        <button class="btn-prim" style="max-width:280px">
+          <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-plus"/></svg>
+          Agregar vehículo
+        </button>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab on" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-5 -->
+
+    <!-- ══ FINAL S-6: VACIO — RESERVAS ══ -->
+    <div class="screen" id="f-s-6">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader">
+        <div class="ah-logo"><span class="kw-chrome">KAUFMANN</span></div>
+        <div class="ah-right">
+          <button class="ah-btn"><svg viewBox="0 0 24 24"><use href="#ic-bell"/></svg></button>
+          <div class="av-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-user"/></svg><span class="av-pill-name">Pedro</span></div>
+        </div>
+      </div>
+      <div class="page-title-bar">
+        <div class="page-title">Mis Reservas</div>
+        <div class="page-subtitle">Servicios agendados y próximas citas</div>
+      </div>
+      <div class="empty-center">
+        <div class="empty-ill">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0071BB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-calendar"/></svg>
+        </div>
+        <div class="empty-title">Sin reservas pendientes</div>
+        <div class="empty-subtitle">Agenda tu próximo servicio y nosotros nos encargamos del resto.</div>
+        <button class="btn-prim" style="max-width:280px">
+          <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><use href="#ic-plus"/></svg>
+          Agendar servicio
+        </button>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab on" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-6 -->
+
+    <!-- ══ FINAL S-7: VACIO — NOTIFICACIONES ══ -->
+    <div class="screen" id="f-s-7">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader" style="position:relative">
+        <button class="ah-back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="ah-title">Notificaciónes</span>
+        <div class="ah-right" style="opacity:0.4;pointer-events:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-x-circle"/></svg>
+          <span style="font-size:12px;color:#fff;margin-left:2px">Borrar todo</span>
+        </div>
+      </div>
+      <div class="notif-panel">
+        <div class="notif-ill">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0071BB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bell"/></svg>
+        </div>
+        <div class="notif-title">Sin notificaciónes</div>
+        <div class="notif-subtitle">Cuando tengas actualizaciones sobre tus vehículos o servicios, aparecerán aqui.</div>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-7 -->
+
+    <!-- ══ FINAL S-8: VACIO — TIENDA ══ -->
+    <div class="screen" id="f-s-8">
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons"><div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div><div class="batt"><div class="batt-fill"></div></div></div>
+      </div>
+      <div class="aheader">
+        <div class="ah-logo"><span class="kw-chrome">KAUFMANN</span></div>
+        <div class="ah-right">
+          <button class="ah-btn"><svg viewBox="0 0 24 24"><use href="#ic-bell"/></svg></button>
+          <div class="av-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-user"/></svg><span class="av-pill-name">Pedro</span></div>
+        </div>
+      </div>
+      <div class="page-title-bar">
+        <div class="page-title">Tienda</div>
+        <div class="page-subtitle">Productos y servicios para tu vehículo</div>
+      </div>
+      <div class="empty-center">
+        <div class="empty-ill">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0071BB" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-package"/></svg>
+        </div>
+        <div class="empty-title">Productos no disponibles</div>
+        <div class="empty-subtitle">Los productos para tu vehículo se están cargando. Intenta nuevamente en unos momentos.</div>
+        <button class="btn-prim" style="max-width:280px">
+          <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-refresh"/></svg>
+          Reintentar
+        </button>
+      </div>
+      <div class="bnav">
+        <button class="bn-tab" onclick="navTo('home')"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg><span class="bn-tab-lbl">Inicio</span></button>
+        <button class="bn-tab" onclick="navTo('vehículos')"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg><span class="bn-tab-lbl">Mis Autos</span></button>
+        <button class="bn-tab on" onclick="navTo('tienda')"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg><span class="bn-tab-lbl">Tienda</span></button>
+        <button class="bn-tab" onclick="navTo('servicios')"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg><span class="bn-tab-lbl">Servicios</span></button>
+        <button class="bn-tab" onclick="navTo('contactar')"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg><span class="bn-tab-lbl">Contactar</span></button>
+      </div>
+    </div><!-- /f-s-8 -->
+
+
+  </div><!-- /device-scr -->
+</div><!-- /device -->
+</div><!-- /main -->
+
+<script>
+/* ══════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════ */
+var currentScreen = 1;
+var currentMode = 'dark';
+
+/* ══════════════════════════════════════════════
+   SCREEN NAVIGATION
+══════════════════════════════════════════════ */
+function goFinal(n) {
+  currentScreen = n;
+  showScreen(n);
+}
+
+function showScreen(n) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  var el = document.getElementById('f-s-' + n);
+  if (el) el.classList.add('active');
+  for (var i = 1; i <= 8; i++) {
+    var btn = document.getElementById('fn-' + i);
+    if (btn) btn.classList.toggle('on', i === n);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   DARK/LIGHT MODE
+══════════════════════════════════════════════ */
+function setMode(mode) {
+  currentMode = mode;
+  document.body.setAttribute('data-mode', mode);
+  document.getElementById('mt-light').classList.toggle('on', mode === 'light');
+  document.getElementById('mt-dark').classList.toggle('on', mode === 'dark');
+}
+
+/* ══════════════════════════════════════════════
+   CROSS-FILE NAVIGATION
+══════════════════════════════════════════════ */
+function navTo(module) {
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage({action:'navigate', module:module}, '*');
+  }
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+(function init() {
+  document.body.setAttribute('data-mode', 'dark');
+  showScreen(1);
+})();
+</script>
+</body>
+</html>

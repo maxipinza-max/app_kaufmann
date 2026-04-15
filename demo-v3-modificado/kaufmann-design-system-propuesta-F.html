@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaufmann App — Design System Fusionado</title>
+<style>
+/* ── TOKENS — Light Mode (default, from fusionado wireframes) ── */
+:root {
+  --primary:        #0071BB;
+  --primary-dark:   #003252;
+  --primary-light:  #00BAE0;
+  --primary-tint:   #E7F0F8;
+  --primary-tint2:  rgba(0,113,187,0.08);
+
+  --bg:             #F0F3F8;
+  --surface:        #FFFFFF;
+  --surface-up:     #FFFFFF;
+  --surface-down:   #E4EAF0;
+  --border:         #D4DCE6;
+  --border-light:   #E4EAF0;
+
+  --text-1:         #1A2633;
+  --text-2:         #52657A;
+  --text-3:         #8096AA;
+
+  --success:        #3FC76A;
+  --success-bg:     #E5F4E9;
+  --warning:        #F0B840;
+  --warning-bg:     #FFF5DC;
+  --danger:         #F05454;
+  --danger-bg:      #FEE2E2;
+  --info:           #0071BB;
+  --info-bg:        #E7F0F8;
+
+  --header:         #000000;
+  --bnav-bg:        #000000;
+  --bnav-active:    #0071BB;
+  --bnav-inactive:  #4A5A6A;
+
+  --shadow-sm:  0 1px 3px rgba(0,20,50,.07), 0 4px 14px rgba(0,20,50,.05), 0 0 1px rgba(0,113,187,.06);
+  --shadow-md:  0 4px 20px rgba(0,50,82,.13);
+  --shadow-lg:  0 8px 32px rgba(0,50,82,.18);
+
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-pill: 999px;
+
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── TOKENS — Dark Mode (from fusionado wireframes) ── */
+body.dark {
+  --primary:        #0071BB;
+  --primary-dark:   #003252;
+  --primary-light:  #00BAE0;
+  --primary-tint:   rgba(0,113,187,0.14);
+  --primary-tint2:  rgba(0,113,187,0.08);
+
+  --bg:             #0B1018;
+  --surface:        #131A24;
+  --surface-up:     #1A2333;
+  --surface-down:   #060A0E;
+  --border:         rgba(255,255,255,.07);
+  --border-light:   rgba(255,255,255,.04);
+
+  --text-1:         #EDF2F7;
+  --text-2:         #8A96A6;
+  --text-3:         #50606E;
+
+  --success:        #3FC76A;
+  --success-bg:     rgba(63,199,106,.12);
+  --warning:        #F0B840;
+  --warning-bg:     rgba(240,184,64,.12);
+  --danger:         #F05454;
+  --danger-bg:      rgba(240,84,84,.12);
+  --info:           #0071BB;
+  --info-bg:        rgba(0,113,187,.12);
+
+  --header:         #000000;
+  --bnav-bg:        #0B1018;
+  --bnav-active:    #0071BB;
+  --bnav-inactive:  rgba(255,255,255,0.3);
+
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.45), 0 4px 14px rgba(0,0,0,.3), 0 0 1px rgba(0,113,187,.12);
+  --shadow-md:  0 4px 20px rgba(0,0,0,.5), 0 0 24px rgba(0,113,187,.07);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,.6), 0 0 40px rgba(0,113,187,.08);
+}
+
+/* ── RESET & BASE ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-1);
+  transition: background .25s, color .25s;
+  min-height: 100vh;
+}
+
+/* ── LAYOUT ────────────────────────────────────────────── */
+.page-header {
+  background: var(--header);
+  color: #fff;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-k {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+}
+
+.logo-wordmark {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.logo-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,.5);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  color: #fff;
+  font-size: 13px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.toggle-btn:hover { background: rgba(255,255,255,.18); }
+.toggle-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+/* ── SECTION ───────────────────────────────────────────── */
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.section-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-1);
+  margin-bottom: 20px;
+}
+
+/* ── COLORS ────────────────────────────────────────────── */
+.palette-group { margin-bottom: 20px; }
+.palette-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+.swatch-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: default; }
+.swatch-box { width: 64px; height: 48px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform .15s; }
+.swatch-box:hover { transform: scale(1.06); }
+.swatch-name { font-size: 10px; font-weight: 600; color: var(--text-2); text-align: center; max-width: 64px; }
+.swatch-hex { font-size: 9px; color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
+
+/* ── TYPOGRAPHY ────────────────────────────────────────── */
+.type-row { display: flex; align-items: baseline; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+.type-row:last-child { border-bottom: none; }
+.type-meta { width: 100px; flex-shrink: 0; font-size: 11px; color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
+.type-sample { color: var(--text-1); }
+
+/* ── ICONS ─────────────────────────────────────────────── */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 12px;
+}
+
+.icon-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .15s, transform .15s;
+}
+
+.icon-cell:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.icon-cell svg { width: 20px; height: 20px; stroke: var(--primary); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.icon-label { font-size: 9px; font-weight: 600; color: var(--text-3); text-align: center; }
+
+/* ── COMPONENTS ────────────────────────────────────────── */
+.comp-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.comp-group-title { font-size: 12px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.comp-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  border: none;
+  transition: opacity .15s, transform .1s;
+}
+
+.btn:active { transform: scale(.97); }
+.btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.btn-primary { background: var(--primary); color: #fff; box-shadow: var(--shadow-sm); }
+.btn-primary:hover { opacity: .88; }
+.btn-ghost { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-ghost:hover { background: var(--primary-tint); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border: 1.5px solid var(--danger); }
+
+/* Card */
+.demo-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+  max-width: 320px;
+}
+
+.card-tag { font-size: 10px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+.card-title { font-size: 16px; font-weight: 700; color: var(--text-1); margin-bottom: 4px; }
+.card-body { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 14px; }
+.card-price { font-size: 18px; font-weight: 800; color: var(--text-1); }
+.card-price span { font-size: 11px; font-weight: 500; color: var(--text-3); margin-left: 4px; }
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badge-success { background: var(--success-bg); color: var(--success); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); }
+.badge-danger  { background: var(--danger-bg);  color: var(--danger);  }
+.badge-info    { background: var(--info-bg);    color: var(--info);    }
+.badge-neutral { background: var(--surface-down); color: var(--text-2); }
+
+/* Inputs */
+.input-group { display: flex; flex-direction: column; gap: 4px; max-width: 260px; }
+.input-label { font-size: 12px; font-weight: 600; color: var(--text-2); }
+
+.input-field {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: var(--font);
+  color: var(--text-1);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  width: 100%;
+}
+
+.input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint2); }
+.input-error .input-field { border-color: var(--danger); }
+.input-error .input-hint { color: var(--danger); }
+.input-hint { font-size: 11px; color: var(--text-3); }
+
+/* Bottom Nav */
+.bottom-nav {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  max-width: 390px;
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 12px 4px 10px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.nav-tab.active svg { stroke: var(--primary); }
+.nav-tab.active .nav-label { color: var(--primary); font-weight: 700; }
+.nav-tab svg { width: 20px; height: 20px; stroke: var(--text-3); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: stroke .15s; }
+.nav-label { font-size: 9px; font-weight: 600; color: var(--text-3); transition: color .15s; }
+
+/* Stepper */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  max-width: 360px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  position: relative;
+}
+
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+}
+
+.step-item.done::after,
+.step-item.active::after { background: var(--primary); }
+
+.step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-3);
+  transition: all .2s;
+}
+
+.step-item.done .step-dot { background: var(--primary); border-color: var(--primary); color: #fff; }
+.step-item.active .step-dot { background: var(--surface); border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 3px var(--primary-tint2); }
+.step-label { font-size: 10px; font-weight: 600; color: var(--text-3); }
+.step-item.active .step-label { color: var(--primary); }
+.step-item.done .step-label { color: var(--text-2); }
+
+/* ── SPACING SECTION ───────────────────────────────────── */
+.radius-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.radius-demo { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.radius-box { width: 56px; height: 40px; background: var(--primary-tint); border: 1.5px solid var(--primary); }
+.radius-meta { font-size: 10px; font-weight: 600; color: var(--text-2); text-align: center; }
+.radius-px { font-size: 9px; color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
+.shadow-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+.shadow-demo { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.shadow-box { width: 80px; height: 56px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.shadow-meta { font-size: 10px; font-weight: 600; color: var(--text-2); }
+.spacing-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.sp-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.sp-bar { background: var(--primary); width: 12px; border-radius: 2px; }
+.sp-meta { font-size: 9px; font-weight: 600; color: var(--text-3); font-family: 'SF Mono', 'Fira Code', monospace; }
+
+/* ── DIVIDER ───────────────────────────────────────────── */
+.divider { height: 1px; background: var(--border-light); }
+
+/* ── FOOTER ────────────────────────────────────────────── */
+.page-footer {
+  text-align: center;
+  padding: 24px 32px 40px;
+  font-size: 12px;
+  color: var(--text-3);
+  border-top: 1px solid var(--border-light);
+}
+</style>
+</head>
+<body>
+
+<!-- SVG DEFS -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></symbol>
+    <symbol id="ic-car" viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h14l2 5v5h-2"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/><path d="M5 12h14"/></symbol>
+    <symbol id="ic-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="ic-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></symbol>
+    <symbol id="ic-bag" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></symbol>
+    <symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></symbol>
+    <symbol id="ic-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+    <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></symbol>
+    <symbol id="ic-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></symbol>
+    <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="ic-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="ic-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+    <symbol id="ic-truck" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+    <symbol id="ic-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+    <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+    <symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+    <symbol id="ic-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></symbol>
+  </defs>
+</svg>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="logo-mark">
+    <div class="logo-k">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">
+        <polyline points="4 4 4 20"/><polyline points="4 12 14 4"/><polyline points="4 12 14 20"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-wordmark">Kaufmann</div>
+      <div class="logo-sub">Design System · Fusionado</div>
+    </div>
+  </div>
+  <button class="toggle-btn" onclick="toggleDark()" id="themeBtn">
+    <svg><use href="#ic-moon"/></svg>
+    <span id="themeLbl">Oscuro</span>
+  </button>
+</header>
+
+<div class="container">
+
+  <!-- ── 1. COLORS ── -->
+  <section>
+    <div class="section-title">01</div>
+    <div class="section-heading">Paleta de Color</div>
+
+    <div class="palette-group">
+      <div class="palette-label">Primarios</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#0071BB"></div><div class="swatch-name">Primary</div><div class="swatch-hex">#0071BB</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#003252"></div><div class="swatch-name">Dark</div><div class="swatch-hex">#003252</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#00BAE0"></div><div class="swatch-name">Light</div><div class="swatch-hex">#00BAE0</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#E7F0F8; border:1px solid #D4DCE6"></div><div class="swatch-name">Tint</div><div class="swatch-hex">#E7F0F8</div></div>
+      </div>
+    </div>
+
+    <div class="palette-group">
+      <div class="palette-label">Superficies (Claro)</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#F0F3F8"></div><div class="swatch-name">Background</div><div class="swatch-hex">#F0F3F8</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#FFFFFF; border:1px solid #D4DCE6"></div><div class="swatch-name">Surface</div><div class="swatch-hex">#FFFFFF</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#E4EAF0"></div><div class="swatch-name">Sunken</div><div class="swatch-hex">#E4EAF0</div></div>
+      </div>
+    </div>
+
+    <div class="palette-group">
+      <div class="palette-label">Superficies (Oscuro — Fusionado)</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#0B1018"></div><div class="swatch-name">Background</div><div class="swatch-hex">#0B1018</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#131A24"></div><div class="swatch-name">Surface</div><div class="swatch-hex">#131A24</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#1A2333"></div><div class="swatch-name">Elevated</div><div class="swatch-hex">#1A2333</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#0071BB"></div><div class="swatch-name">Primary·D</div><div class="swatch-hex">#0071BB</div></div>
+      </div>
+    </div>
+
+    <div class="palette-group">
+      <div class="palette-label">Bottom Nav & Header</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#000000"></div><div class="swatch-name">Header</div><div class="swatch-hex">#000000</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#0B1018"></div><div class="swatch-name">Bnav·Dark</div><div class="swatch-hex">#0B1018</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#000000"></div><div class="swatch-name">Bnav·Light</div><div class="swatch-hex">#000000</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#0071BB"></div><div class="swatch-name">Active</div><div class="swatch-hex">#0071BB</div></div>
+      </div>
+    </div>
+
+    <div class="palette-group">
+      <div class="palette-label">Texto (Claro / Oscuro)</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#1A2633"></div><div class="swatch-name">Primary·L</div><div class="swatch-hex">#1A2633</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#52657A"></div><div class="swatch-name">Secondary·L</div><div class="swatch-hex">#52657A</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#8096AA"></div><div class="swatch-name">Tertiary·L</div><div class="swatch-hex">#8096AA</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#EDF2F7"></div><div class="swatch-name">Primary·D</div><div class="swatch-hex">#EDF2F7</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#8A96A6"></div><div class="swatch-name">Secondary·D</div><div class="swatch-hex">#8A96A6</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#50606E"></div><div class="swatch-name">Tertiary·D</div><div class="swatch-hex">#50606E</div></div>
+      </div>
+    </div>
+
+    <div class="palette-group">
+      <div class="palette-label">Semánticos</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#3FC76A"></div><div class="swatch-name">Success</div><div class="swatch-hex">#3FC76A</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#F0B840"></div><div class="swatch-name">Warning</div><div class="swatch-hex">#F0B840</div></div>
+        <div class="swatch"><div class="swatch-box" style="background:#F05454"></div><div class="swatch-name">Danger</div><div class="swatch-hex">#F05454</div></div>
+      </div>
+    </div>
+
+    <div class="palette-group">
+      <div class="palette-label">Fijo (Header — todas las pantallas)</div>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch-box" style="background:#000000"></div><div class="swatch-name">Header</div><div class="swatch-hex">#000000</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 2. TYPOGRAPHY ── -->
+  <section>
+    <div class="section-title">02</div>
+    <div class="section-heading">Tipografia</div>
+
+    <div style="margin-bottom:12px; font-size:12px; color:var(--text-3);">Stack: <code>-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif</code></div>
+
+    <div class="type-row"><div class="type-meta">24px / 800</div><div class="type-sample" style="font-size:24px;font-weight:800;line-height:1.2">Bienvenido a Kaufmann</div></div>
+    <div class="type-row"><div class="type-meta">20px / 700</div><div class="type-sample" style="font-size:20px;font-weight:700;line-height:1.25">Mis Vehiculos</div></div>
+    <div class="type-row"><div class="type-meta">17px / 700</div><div class="type-sample" style="font-size:17px;font-weight:700">Servicio en Taller</div></div>
+    <div class="type-row"><div class="type-meta">15px / 600</div><div class="type-sample" style="font-size:15px;font-weight:600">GLA 200 — ABCD-12</div></div>
+    <div class="type-row"><div class="type-meta">14px / 400</div><div class="type-sample" style="font-size:14px;font-weight:400;color:var(--text-2)">Su vehiculo ha sido revisado y esta listo para retiro.</div></div>
+    <div class="type-row"><div class="type-meta">12px / 500</div><div class="type-sample" style="font-size:12px;font-weight:500;color:var(--text-2)">Kilometraje actual: 32.450 km</div></div>
+    <div class="type-row"><div class="type-meta">11px / 600</div><div class="type-sample" style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px">Categoria / Label</div></div>
+    <div class="type-row"><div class="type-meta">9px / 600</div><div class="type-sample" style="font-size:9px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:2px">Tab Nav / Badge</div></div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 3. ICONS ── -->
+  <section>
+    <div class="section-title">03</div>
+    <div class="section-heading">Iconografia</div>
+    <div style="font-size:12px; color:var(--text-3); margin-bottom:16px;">SVG inline — stroke-width: 1.75 — stroke-linecap: round — monocromo. Sin CDN. Sin emojis.</div>
+
+    <div class="icon-grid">
+      <div class="icon-cell"><svg><use href="#ic-home"/></svg><div class="icon-label">home</div></div>
+      <div class="icon-cell"><svg><use href="#ic-car"/></svg><div class="icon-label">car</div></div>
+      <div class="icon-cell"><svg><use href="#ic-wrench"/></svg><div class="icon-label">wrench</div></div>
+      <div class="icon-cell"><svg><use href="#ic-file"/></svg><div class="icon-label">file</div></div>
+      <div class="icon-cell"><svg><use href="#ic-bag"/></svg><div class="icon-label">bag</div></div>
+      <div class="icon-cell"><svg><use href="#ic-bell"/></svg><div class="icon-label">bell</div></div>
+      <div class="icon-cell"><svg><use href="#ic-user"/></svg><div class="icon-label">user</div></div>
+      <div class="icon-cell"><svg><use href="#ic-cal"/></svg><div class="icon-label">cal</div></div>
+      <div class="icon-cell"><svg><use href="#ic-pin"/></svg><div class="icon-label">pin</div></div>
+      <div class="icon-cell"><svg><use href="#ic-phone"/></svg><div class="icon-label">phone</div></div>
+      <div class="icon-cell"><svg><use href="#ic-settings"/></svg><div class="icon-label">settings</div></div>
+      <div class="icon-cell"><svg><use href="#ic-search"/></svg><div class="icon-label">search</div></div>
+      <div class="icon-cell"><svg><use href="#ic-check"/></svg><div class="icon-label">check</div></div>
+      <div class="icon-cell"><svg><use href="#ic-alert"/></svg><div class="icon-label">alert</div></div>
+      <div class="icon-cell"><svg><use href="#ic-clock"/></svg><div class="icon-label">clock</div></div>
+      <div class="icon-cell"><svg><use href="#ic-download"/></svg><div class="icon-label">download</div></div>
+      <div class="icon-cell"><svg><use href="#ic-truck"/></svg><div class="icon-label">truck</div></div>
+      <div class="icon-cell"><svg><use href="#ic-star"/></svg><div class="icon-label">star</div></div>
+      <div class="icon-cell"><svg><use href="#ic-shield"/></svg><div class="icon-label">shield</div></div>
+      <div class="icon-cell"><svg><use href="#ic-tag"/></svg><div class="icon-label">tag</div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 4. COMPONENTS ── -->
+  <section>
+    <div class="section-title">04</div>
+    <div class="section-heading">Componentes</div>
+
+    <!-- Buttons -->
+    <div class="comp-group">
+      <div class="comp-group-title">Botones</div>
+      <div class="comp-row">
+        <button class="btn btn-primary">
+          <svg style="width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#ic-check"/></svg>
+          Confirmar Reserva
+        </button>
+        <button class="btn btn-ghost">Ver Detalles</button>
+        <button class="btn btn-danger">
+          <svg style="width:15px;height:15px;stroke:var(--danger);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><use href="#ic-alert"/></svg>
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="comp-group">
+      <div class="comp-group-title">Card de Producto</div>
+      <div class="demo-card">
+        <div class="card-tag">Aceites y Filtros</div>
+        <div class="card-title">Aceite Motor 5W-30 MB 229.5</div>
+        <div class="card-body">Lubricante original Mercedes-Benz para motores gasolina. 5 litros.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div class="card-price">$42.900 <span>IVA incluido</span></div>
+          <button class="btn btn-primary" style="padding:7px 14px;font-size:12px">Comprar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="comp-group">
+      <div class="comp-group-title">Badges de Estado</div>
+      <div class="comp-row">
+        <span class="badge badge-success">Completado</span>
+        <span class="badge badge-warning">En proceso</span>
+        <span class="badge badge-danger">Cancelado</span>
+        <span class="badge badge-info">Agendado</span>
+        <span class="badge badge-neutral">Pendiente</span>
+      </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="comp-group">
+      <div class="comp-group-title">Campos de Formulario</div>
+      <div class="comp-row" style="align-items:flex-start">
+        <div class="input-group">
+          <div class="input-label">Patente del vehiculo</div>
+          <input class="input-field" type="text" placeholder="ABCD-12" value="GKRP-24">
+          <div class="input-hint">Formato chileno</div>
+        </div>
+        <div class="input-group input-error">
+          <div class="input-label">RUT del titular</div>
+          <input class="input-field" type="text" placeholder="12.345.678-9" value="12.345.678-K">
+          <div class="input-hint">RUT invalido — verifique el digito verificador</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="comp-group">
+      <div class="comp-group-title">Navegacion Inferior (5 tabs — DEC-011)</div>
+      <div class="bottom-nav">
+        <div class="nav-tab active">
+          <svg><use href="#ic-home"/></svg>
+          <div class="nav-label">Inicio</div>
+        </div>
+        <div class="nav-tab">
+          <svg><use href="#ic-car"/></svg>
+          <div class="nav-label">Mis Autos</div>
+        </div>
+        <div class="nav-tab">
+          <svg><use href="#ic-wrench"/></svg>
+          <div class="nav-label">Servicios</div>
+        </div>
+        <div class="nav-tab">
+          <svg><use href="#ic-phone"/></svg>
+          <div class="nav-label">Contactar</div>
+        </div>
+        <div class="nav-tab">
+          <svg><use href="#ic-bag"/></svg>
+          <div class="nav-label">Tienda</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="comp-group">
+      <div class="comp-group-title">Stepper de Checkout (3 pasos max)</div>
+      <div class="stepper">
+        <div class="step-item done">
+          <div class="step-dot">
+            <svg style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><use href="#ic-check"/></svg>
+          </div>
+          <div class="step-label">Resumen</div>
+        </div>
+        <div class="step-item active">
+          <div class="step-dot">2</div>
+          <div class="step-label">Pago</div>
+        </div>
+        <div class="step-item">
+          <div class="step-dot">3</div>
+          <div class="step-label">Confirmacion</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── 5. SPACING & SHADOWS ── -->
+  <section>
+    <div class="section-title">05</div>
+    <div class="section-heading">Espaciado y Sombras</div>
+
+    <div class="comp-group">
+      <div class="comp-group-title">Border Radius</div>
+      <div class="radius-row">
+        <div class="radius-demo"><div class="radius-box" style="border-radius:6px"></div><div class="radius-meta">sm</div><div class="radius-px">6px</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:12px"></div><div class="radius-meta">md</div><div class="radius-px">12px</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:16px"></div><div class="radius-meta">lg</div><div class="radius-px">16px</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:24px"></div><div class="radius-meta">xl</div><div class="radius-px">24px</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:48px"></div><div class="radius-meta">2xl</div><div class="radius-px">48px</div></div>
+        <div class="radius-demo"><div class="radius-box" style="border-radius:999px;width:64px;height:40px"></div><div class="radius-meta">pill</div><div class="radius-px">999px</div></div>
+      </div>
+    </div>
+
+    <div class="comp-group">
+      <div class="comp-group-title">Sombras</div>
+      <div class="shadow-row">
+        <div class="shadow-demo"><div class="shadow-box" style="box-shadow:var(--shadow-sm)"></div><div class="shadow-meta">sm — Cards base</div></div>
+        <div class="shadow-demo"><div class="shadow-box" style="box-shadow:var(--shadow-md)"></div><div class="shadow-meta">md — Cards elevadas</div></div>
+        <div class="shadow-demo"><div class="shadow-box" style="box-shadow:var(--shadow-lg)"></div><div class="shadow-meta">lg — Modales / Nav</div></div>
+      </div>
+    </div>
+
+    <div class="comp-group">
+      <div class="comp-group-title">Escala de Espaciado</div>
+      <div class="spacing-row">
+        <div class="sp-item"><div class="sp-bar" style="height:4px"></div><div class="sp-meta">4px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:8px"></div><div class="sp-meta">8px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:12px"></div><div class="sp-meta">12px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:16px"></div><div class="sp-meta">16px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:20px"></div><div class="sp-meta">20px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:24px"></div><div class="sp-meta">24px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:32px"></div><div class="sp-meta">32px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:40px"></div><div class="sp-meta">40px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:48px"></div><div class="sp-meta">48px</div></div>
+        <div class="sp-item"><div class="sp-bar" style="height:56px"></div><div class="sp-meta">56px</div></div>
+      </div>
+    </div>
+
+    <div class="comp-group">
+      <div class="comp-group-title">Alturas Fijas de App Shell</div>
+      <div style="font-size:12px; color:var(--text-2); line-height:2; font-family:'SF Mono','Fira Code',monospace;">
+        Status bar: 50px &nbsp;|&nbsp; App header: 56px &nbsp;|&nbsp; Bottom nav: 82px<br>
+        iPhone 14 Pro frame: 390 x 844px &nbsp;|&nbsp; Frame radius: 48px &nbsp;|&nbsp; Notch: 120 x 30px
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="page-footer">
+  Grupo Kaufmann &nbsp;·&nbsp; Design System &nbsp;·&nbsp; Fusionado &nbsp;·&nbsp; 2026
+</footer>
+
+<script>
+  var dark = false;
+  function toggleDark() {
+    dark = !dark;
+    document.body.classList.toggle('dark', dark);
+    document.getElementById('themeLbl').textContent = dark ? 'Claro' : 'Oscuro';
+    var btn = document.getElementById('themeBtn');
+    btn.querySelector('use').setAttribute('href', dark ? '#ic-sun' : '#ic-moon');
+  }
+</script>
+</body>
+</html>

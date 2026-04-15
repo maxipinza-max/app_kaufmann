@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaufmann App — Notificaciónes · Lista V3 + Detalle V2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0A0E14;display:flex;min-height:100vh;color:#E8EEF5}
+
+/* ══════════════════════════════════════════════
+   CSS TOKENS — VERSIÓN FINAL (dark default)
+══════════════════════════════════════════════ */
+:root{
+  --primary:#0071BB;--primary-dark:#003A6E;--primary-mid:#0059A0;
+  --primary-tint:rgba(0,113,187,0.16);--primary-tint-2:rgba(0,113,187,0.09);
+  --background:#0B1018;--surface:#131A24;
+  --text-primary:#E8EEF5;--text-secondary:#8A96A6;--text-tertiary:#5A6878;
+  --border:rgba(255,255,255,0.04);--border-light:rgba(255,255,255,0.025);
+  --hero-grad:linear-gradient(160deg,#050C16 0%,#071426 30%,#0A2040 65%,#0D3060 100%);
+  --card-shadow:0 2px 8px rgba(0,0,0,0.45),0 0 1px rgba(0,113,187,0.12);
+  --card-shadow-md:0 4px 20px rgba(0,0,0,0.55),0 0 30px rgba(0,113,187,0.08);
+  --success:#3FC76A;--success-bg:rgba(63,199,106,0.11);
+  --warning:#F0B840;--warning-bg:rgba(240,184,64,0.11);
+  --danger:#F05454;--danger-bg:rgba(240,84,84,0.11);
+  --header-bg:#000000;
+  --bnav-bg:#0B1018;--bnav-border:rgba(255,255,255,0.05);
+  --bnav-active:#0071BB;--bnav-inactive:#5A6878;
+  --notif-unread-ring:0 0 0 2px rgba(0,113,187,0.45),0 0 12px rgba(0,113,187,0.15);
+  --nav-bg:#000000;--nav-border:rgba(255,255,255,0.08);
+  --nav-text:#FFFFFF;
+  --btn-primary-bg:#00ADEF;--btn-primary-text:#FFFFFF;
+  --ic-reserva-bg:rgba(74,111,212,0.18);--ic-reserva-color:#63B3FF;
+}
+
+/* ══ LIGHT MODE OVERRIDE ══ */
+body[data-mode="light"]{
+  --primary:#0071BB;--primary-tint:#E6F2FC;--primary-tint-2:#CCE4F8;
+  --background:#F0F3F8;--surface:#FFFFFF;
+  --text-primary:#0F1923;--text-secondary:#4A5A6E;--text-tertiary:#8896A8;
+  --border:#D6DDE6;--border-light:#EAEEf4;
+  --hero-grad:linear-gradient(160deg,#001E40 0%,#003870 45%,#005A9A 100%);
+  --card-shadow:0 1px 3px rgba(0,30,64,0.07),0 4px 14px rgba(0,30,64,0.05);
+  --card-shadow-md:0 3px 8px rgba(0,30,64,0.09),0 10px 28px rgba(0,30,64,0.06);
+  --success:#18963A;--warning:#D97706;--danger:#DC2626;
+  --bnav-bg:#FFFFFF;--bnav-border:#D6DDE6;
+  --bnav-active:#0071BB;--bnav-inactive:#8896A8;
+  --notif-unread-ring:0 0 0 2px rgba(0,113,187,0.30);
+  --ic-reserva-bg:#EEF4FF;--ic-reserva-color:#4A6FD4;
+}
+
+
+/* ══════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════ */
+.sidebar{width:268px;background:#060A10;padding:0;overflow-y:auto;position:fixed;top:0;left:0;bottom:0;z-index:10;display:flex;flex-direction:column;border-right:1px solid #0F1820}
+.sb-hdr{padding:22px 20px 16px;border-bottom:1px solid #0F1820}
+.sb-brand-chrome{font-family:'Times New Roman',Georgia,'Palatino Linotype',serif;font-size:14px;font-weight:400;letter-spacing:5px;background:linear-gradient(45deg,#8A9AAA 5%,#FFFFFF 10%,#B8C4D0 30%,#E8EEF4 50%,#B8C4D0 70%,#FFFFFF 80%,#8A9AAA 95%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 3px rgba(200,215,240,0.3)) drop-shadow(0 0 8px rgba(180,200,230,0.12))}
+.sb-sub{font-size:9px;color:#243040;letter-spacing:1.2px;text-transform:uppercase;font-weight:600;margin-top:5px}
+.sb-info{padding:14px 20px 12px;border-bottom:1px solid #0F1820}
+.sb-sname{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px}
+.sb-sdesc{font-size:10px;color:#2E3F52;line-height:1.5}
+.sb-ver{display:inline-block;background:#0F1820;color:#0071BB;font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;margin-top:6px;letter-spacing:0.5px}
+/* Mode toggle */
+.mode-toggler{padding:10px 20px;border-bottom:1px solid #0F1820}
+.mode-tog-label{color:#1E2E40;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
+.mode-tog-wrap{display:flex;background:#0F1820;border-radius:9px;padding:3px;gap:2px}
+.mode-tog-btn{flex:1;padding:6px 4px;border:none;border-radius:7px;font-size:9.5px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;background:transparent;color:#2E3F52;line-height:1.3}
+.mode-tog-btn.on{background:#1A2A3A;color:#E8EEF5;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+/* Nav */
+.sb-nav{padding:8px 10px 4px;flex:1}
+.sb-nav-lbl{color:#182430;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;padding:0 8px;margin:8px 0 4px}
+.sb-btn{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:7px 10px;border:none;border-radius:7px;background:transparent;color:#3A4A5A;font-size:11.5px;cursor:pointer;transition:all 0.15s;line-height:1.3;margin-bottom:1px}
+.sb-btn:hover{background:#0F1820;color:#8AABB8}.sb-btn.on{background:#0F1820;color:#fff}
+.sb-btn-n{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;background:#08100E;color:#1E2E40}
+.sb-btn.on .sb-btn-n{background:#0071BB;color:#fff}
+.sb-btn-i{flex:1;min-width:0}.sb-btn-t{font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-btn-d{font-size:9.5px;color:#1E2E40;margin-top:1px;line-height:1.3}.sb-btn.on .sb-btn-d{color:#3A5A7A}
+.sb-notes{padding:12px 20px;border-top:1px solid #0F1820}
+.sb-notes-t{color:#1E2E40;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
+.sb-note{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.sb-nn{width:17px;height:17px;border-radius:50%;background:#0F1820;color:#0071BB;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.sb-nt{color:#2E4055;font-size:9.5px;line-height:1.55}
+.sb-foot{padding:10px 20px;border-top:1px solid #0F1820}
+.sb-foot-t{color:#182430;font-size:8.5px;text-align:center;letter-spacing:0.3px;line-height:1.6}
+
+/* ══════════════════════════════════════════════
+   DEVICE FRAME
+══════════════════════════════════════════════ */
+.main{margin-left:268px;flex:1;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px 40px}
+.device{width:390px;height:844px;background:#060A0E;border-radius:48px;padding:10px;box-shadow:0 0 0 1px #2A3040,0 0 0 3px #060A0E,0 0 0 4.5px #181E28,0 50px 120px rgba(0,0,0,0.98);position:relative;flex-shrink:0}
+.notch{width:120px;height:30px;background:#060A0E;border-radius:0 0 16px 16px;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;justify-content:center}
+.notch-pill{width:72px;height:6px;background:#141C28;border-radius:3px}
+.device-scr{width:100%;height:100%;background:var(--background);border-radius:40px;overflow:hidden;position:relative}
+.screen{display:none;flex-direction:column;position:absolute;inset:0;overflow:hidden}.screen.active{display:flex}
+
+
+/* ══ STATUS BAR ══ */
+.sbar{height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 8px;flex-shrink:0;background:#000000}
+.s-time{font-size:15px;font-weight:700;color:#fff}
+.s-icons{display:flex;gap:5px;align-items:center}
+.bars{display:flex;align-items:flex-end;gap:1px}
+.bar{width:3px;border-radius:1px;background:#fff}
+.bar:nth-child(1){height:4px}.bar:nth-child(2){height:7px}.bar:nth-child(3){height:10px}.bar:nth-child(4){height:13px}
+.batt-ic{width:22px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative;padding:1.5px}
+.batt-ic::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:2px;height:5px;background:#fff;border-radius:0 1px 1px 0}
+.batt-fill{height:100%;border-radius:1px;width:75%;background:#fff}
+
+/* ══ NAV BAR (V2 polished) ══ */
+.nbar{height:52px;display:flex;align-items:center;padding:0 16px;flex-shrink:0;gap:10px;background:var(--nav-bg);border-bottom:1px solid var(--nav-border)}
+.nav-logo{flex:1;display:flex;align-items:center}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-icon-btn{width:36px;height:36px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:10px;position:relative}
+.nav-badge{position:absolute;top:2px;right:2px;width:16px;height:16px;background:var(--danger);border-radius:50%;font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;border:2px solid #000}
+.av-pill{height:28px;border-radius:14px;border:1px solid rgba(255,255,255,0.2);padding:0 10px 0 8px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);cursor:pointer;flex-shrink:0}
+.av-pill svg{stroke:rgba(255,255,255,0.7);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.av-pill-name{font-size:11px;font-weight:600;color:rgba(255,255,255,0.8);letter-spacing:0.3px}
+
+/* ══ BACK NAV BAR (for detail screen) ══ */
+.nbar-back-btn{width:32px;height:32px;border:none;background:rgba(255,255,255,0.06);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.nbar-back-btn svg{stroke:#fff;fill:none}
+.nbar-page-title{font-size:13px;color:rgba(255,255,255,0.45);font-weight:500;flex-shrink:0}
+
+/* ══ PAGE HEADER (below nav) ══ */
+.pg-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border-light)}
+.pg-hdr-left{display:flex;align-items:center;gap:10px}
+.pg-back{width:32px;height:32px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;padding:0}
+.pg-back svg{stroke:var(--text-primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pg-title{font-size:17px;font-weight:800;color:var(--text-primary);letter-spacing:-.3px}
+.pg-action{font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;padding:6px 2px;background:none;border:none;font-family:inherit}
+
+/* ══ SCROLL BODY ══ */
+.body{flex:1;overflow-y:auto;background:var(--background)}.body::-webkit-scrollbar{display:none}
+
+/* ══ BOTTOM NAV (V2 polished, 5 tabs, DEC-011) ══ */
+.bnav{height:82px;background:var(--bnav-bg);border-top:1px solid var(--bnav-border);display:flex;padding:8px 0 0;flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:none;padding:0 2px}
+.tab-icon{display:flex;align-items:center;justify-content:center;width:24px;height:22px;transition:all 0.2s}
+.tab-label{font-size:9px;text-align:center;line-height:1.2;color:var(--bnav-inactive);transition:all 0.2s;font-weight:500}
+.tab-icon svg{width:20px;height:20px;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;stroke:var(--bnav-inactive)}
+.tab.on .tab-icon svg{stroke:var(--bnav-active)}
+.tab.on .tab-label{color:var(--bnav-active);font-weight:700}
+
+/* ══════════════════════════════════════════════
+   NOTIF LIST — V3 BEST OF COMPONENT STYLES
+══════════════════════════════════════════════ */
+.notif-group-label{padding:12px 16px 6px;font-size:11px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+.notif-list{display:flex;flex-direction:column;padding:0 16px 8px}
+.notif-item{background:var(--surface);border-radius:16px;padding:13px 14px;display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--card-shadow);border:1px solid var(--border-light);transition:transform .15s;position:relative}
+.notif-item.unread{border:1px solid rgba(0,113,187,0.28);box-shadow:var(--notif-unread-ring),var(--card-shadow)}
+.notif-item:active{transform:scale(0.98)}
+body[data-mode="light"] .notif-item{background:#FFFFFF;border:1px solid var(--border-light)}
+body[data-mode="light"] .notif-item.unread{border:1px solid rgba(0,113,187,0.22);box-shadow:var(--notif-unread-ring),var(--card-shadow)}
+.notif-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-ic svg{width:18px;height:18px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic-taller{background:var(--primary-tint)}.ic-taller svg{stroke:var(--primary)}
+.ic-mantención{background:var(--warning-bg)}.ic-mantención svg{stroke:var(--warning)}
+.ic-reserva{background:var(--ic-reserva-bg)}.ic-reserva svg{stroke:var(--ic-reserva-color)}
+.ic-factura{background:var(--success-bg)}.ic-factura svg{stroke:var(--success)}
+.ic-oferta{background:rgba(240,184,64,0.12)}.ic-oferta svg{stroke:var(--warning)}
+.notif-body{flex:1;min-width:0}
+.notif-title{font-size:13.5px;font-weight:700;color:var(--text-primary);line-height:1.35;margin-bottom:3px}
+.notif-item.unread .notif-title{font-weight:800}
+.notif-sub{font-size:11.5px;color:var(--text-secondary);line-height:1.45;margin-bottom:4px}
+.notif-time{font-size:10.5px;color:var(--text-tertiary);font-weight:500}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--primary);flex-shrink:0;margin-top:4px}
+.notif-dot.hidden{visibility:hidden}
+.del-btn{display:inline-flex;align-items:center;gap:6px;margin:2px auto 14px;background:none;border:none;font-size:12.5px;color:var(--text-tertiary);cursor:pointer;font-family:inherit;padding:8px 12px;border-radius:8px}
+.del-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+/* ══════════════════════════════════════════════
+   NOTIF DETAIL — V2 CONTEXTUAL COMPONENT STYLES
+══════════════════════════════════════════════ */
+.notif-detail-hero{display:flex;flex-direction:column;align-items:center;padding:28px 24px 18px;text-align:center}
+.notif-detail-icon-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.notif-detail-icon-circle.success{background:rgba(63,199,106,0.12);border:1.5px solid rgba(63,199,106,0.22)}
+.notif-detail-icon-circle.success svg{stroke:var(--success);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+body[data-mode="light"] .notif-detail-icon-circle.success{background:rgba(24,150,58,0.1);border-color:rgba(24,150,58,0.2)}
+body[data-mode="light"] .notif-detail-icon-circle.success svg{stroke:#18963A}
+.notif-detail-title{font-size:19px;font-weight:800;color:var(--text-primary);margin-bottom:5px;letter-spacing:-0.2px}
+.notif-detail-meta{font-size:12px;color:var(--text-tertiary)}
+/* Message card */
+.detail-card{background:var(--surface);border-radius:16px;padding:16px 18px;margin:0 16px 10px;box-shadow:var(--card-shadow);border:1px solid var(--border-light)}
+.detail-card-text{font-size:13px;color:var(--text-secondary);line-height:1.65}
+.detail-card-text strong{color:var(--text-primary)}
+/* Info rows */
+.info-wrap{margin:0 16px 10px;border-radius:14px;overflow:hidden;box-shadow:var(--card-shadow)}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border-light)}
+.info-row:last-child{border-bottom:none}
+.info-key{font-size:13px;color:var(--text-secondary)}
+.info-val{font-size:13px;font-weight:600;color:var(--text-primary)}
+/* Map snippet */
+.map-snippet{margin:0 16px 12px;border-radius:14px;overflow:hidden;box-shadow:var(--card-shadow)}
+.map-placeholder{height:80px;background:linear-gradient(135deg,#091929 0%,#0d2e4e 35%,#081e35 60%,#04111f 100%);display:flex;align-items:flex-end;padding:10px 12px;position:relative}
+body[data-mode="light"] .map-placeholder{background:linear-gradient(135deg,#1a3a5c 0%,#2a5a8c 35%,#1a4a7a 60%,#0d2e4e 100%)}
+.map-placeholder::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.map-pin-row{display:flex;align-items:center;gap:6px;position:relative;z-index:2;width:100%}
+.map-pin-dot{width:28px;height:28px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,113,187,0.5)}
+.map-pin-dot svg{stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.map-pin-label{font-size:12px;font-weight:600;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.5)}
+.map-how-btn{margin-left:auto;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.map-how-btn svg{stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* CTAs */
+.btn-prim{padding:15px;border-radius:13px;font-size:15px;font-weight:700;width:100%;background:var(--btn-primary-bg);color:var(--btn-primary-text);border:none;cursor:pointer;font-family:inherit}
+.btn-outline-phone{padding:14px;border-radius:13px;font-size:14px;font-weight:600;width:100%;background:transparent;color:var(--primary);border:1.5px solid var(--primary);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
+.btn-outline-phone svg{stroke:var(--primary);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     SVG ICON DEFS
+══════════════════════════════════════════════ -->
+<svg width="0" height="0" style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="ic-car" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+    <symbol id="ic-bag" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+    <symbol id="ic-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.36a16 16 0 0 0 5.55 5.55l1.9-1.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+    <symbol id="ic-alert-tri" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="ic-check-circle" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+    <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+    <symbol id="ic-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+    <symbol id="ic-chevron-left" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
+    <symbol id="ic-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+    <symbol id="ic-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="ic-arrow-up-right" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></symbol>
+    <symbol id="ic-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  </defs>
+</svg>
+
+<!-- ══════════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sb-hdr">
+    <div class="sb-brand-chrome">KAUFMANN</div>
+    <div class="sb-sub">App · Notificaciónes Fusionado</div>
+  </div>
+  <div class="sb-info">
+    <div class="sb-sname">Notificaciónes</div>
+    <div class="sb-sdesc">Lista V3 Best Of + Detalle V2 Contextual. Lo mejor de ambas propuestas en un flujo cohesivo.</div>
+    <span class="sb-ver">Versión Final · 2026-03-30</span>
+  </div>
+
+  <!-- Mode toggle -->
+  <div class="mode-toggler" id="modeToggler">
+    <div class="mode-tog-label">Modo</div>
+    <div class="mode-tog-wrap">
+      <button class="mode-tog-btn" id="modeLightBtn" onclick="setMode('light',this)">Claro</button>
+      <button class="mode-tog-btn on" id="modeDarkBtn" onclick="setMode('dark',this)">Oscuro</button>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-nav-lbl">Pantallas</div>
+    <button class="sb-btn on" id="sbtn-final-lista" onclick="goFinal('f-lista')">
+      <span class="sb-btn-n">1</span>
+      <span class="sb-btn-i"><div class="sb-btn-t">Lista de Notificaciónes</div><div class="sb-btn-d">V3 · grupos Hoy / Esta semana</div></span>
+    </button>
+    <button class="sb-btn" id="sbtn-final-detalle" onclick="goFinal('f-detalle')">
+      <span class="sb-btn-n">2</span>
+      <span class="sb-btn-i"><div class="sb-btn-t">Detalle Notificación</div><div class="sb-btn-d">V2 · hero + info + mapa + CTAs</div></span>
+    </button>
+  </nav>
+
+  <div class="sb-notes">
+    <div class="sb-notes-t">Notas</div>
+    <div class="sb-note"><span class="sb-nn">1</span><span class="sb-nt">Lista: V3 Best Of — cards con unread ring azul, agrupación por fecha, iconos categóricos.</span></div>
+    <div class="sb-note"><span class="sb-nn">2</span><span class="sb-nt">Detalle: V2 Contextual — hero icono circular, info rows, mapa snippet, CTAs duales.</span></div>
+    <div class="sb-note"><span class="sb-nn">3</span><span class="sb-nt">Header V2 en ambas pantallas: logo chrome serif + pill nombre + badge campana.</span></div>
+  </div>
+  <div class="sb-foot"><div class="sb-foot-t">Grupo Kaufmann · Diseño UI v3 · 2026</div></div>
+</aside>
+
+<!-- ══════════════════════════════════════════════
+     DEVICE FRAME
+══════════════════════════════════════════════ -->
+<main class="main">
+<div class="device">
+  <div class="notch"><div class="notch-pill"></div></div>
+  <div class="device-scr">
+
+    <!-- ══════════════════════════════════════
+         VERSION FINAL — SCREEN 1: LISTA
+    ══════════════════════════════════════ -->
+    <div class="screen active" id="f-lista">
+      <!-- Status bar -->
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons">
+          <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+          <div class="batt-ic"><div class="batt-fill"></div></div>
+        </div>
+      </div>
+      <!-- V2 polished nav bar -->
+      <div class="nbar">
+        <div class="nav-logo">
+          <span style="font-family:'Times New Roman',Georgia,'Palatino Linotype',serif;font-size:16px;font-weight:400;letter-spacing:5px;background:linear-gradient(45deg,#8A9AAA 5%,#FFFFFF 10%,#B8C4D0 30%,#E8EEF4 50%,#B8C4D0 70%,#FFFFFF 80%,#8A9AAA 95%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 3px rgba(200,215,240,0.3)) drop-shadow(0 0 8px rgba(180,200,230,0.12));">KAUFMANN</span>
+        </div>
+        <div class="nav-right">
+          <button class="nav-icon-btn" onclick="goFinal('f-lista')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bell"/></svg>
+            <div class="nav-badge">3</div>
+          </button>
+          <div class="av-pill" onclick="navTo('perfil')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-user"/></svg>
+            <span class="av-pill-name">Pedro</span>
+          </div>
+        </div>
+      </div>
+      <!-- Page header with title + action -->
+      <div class="pg-hdr">
+        <div class="pg-hdr-left"><div class="pg-title">Notificaciónes</div></div>
+        <button class="pg-action">Preferencias</button>
+      </div>
+      <!-- Scrollable body — V3 Best Of notification list -->
+      <div class="body">
+        <!-- Group: Hoy -->
+        <div class="notif-group-label">Hoy</div>
+        <div class="notif-list">
+          <!-- Unread: vehicle in workshop -->
+          <div class="notif-item unread" onclick="goFinal('f-detalle')">
+            <div class="notif-ic ic-taller">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-wrench"/></svg>
+            </div>
+            <div class="notif-body">
+              <div class="notif-title">Tu GLC 300 está listo para retiro</div>
+              <div class="notif-sub">Mantención completada en Las Condes. OT #48221 finalizada.</div>
+              <div class="notif-time">Hace 20 min</div>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+          <!-- Unread: maintenance alert -->
+          <div class="notif-item unread" onclick="goFinal('f-detalle')">
+            <div class="notif-ic ic-mantención">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-alert-tri"/></svg>
+            </div>
+            <div class="notif-body">
+              <div class="notif-title">Mantención próxima 50.000 km</div>
+              <div class="notif-sub">Tu GLC 300 alcanzará su próxima revisión en ~1.200 km.</div>
+              <div class="notif-time">Hace 2 h</div>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+          <!-- Unread: offer -->
+          <div class="notif-item unread" onclick="goFinal('f-detalle')">
+            <div class="notif-ic ic-oferta">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-tag"/></svg>
+            </div>
+            <div class="notif-body">
+              <div class="notif-title">Oferta: Kit aceites 15% dcto</div>
+              <div class="notif-sub">Solo por hoy. Kit aceite + filtro compatible con tu GLC 300.</div>
+              <div class="notif-time">Hace 4 h</div>
+            </div>
+            <div class="notif-dot"></div>
+          </div>
+        </div>
+        <!-- Group: Esta semana -->
+        <div class="notif-group-label">Esta semana</div>
+        <div class="notif-list">
+          <!-- Read: reservation confirmed -->
+          <div class="notif-item" onclick="goFinal('f-detalle')">
+            <div class="notif-ic ic-reserva">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check-circle"/></svg>
+            </div>
+            <div class="notif-body">
+              <div class="notif-title">Reserva confirmada 25 Mar</div>
+              <div class="notif-sub">Servicio express agendado 10:30 h en Las Condes.</div>
+              <div class="notif-time">Lun 25 Mar</div>
+            </div>
+            <div class="notif-dot hidden"></div>
+          </div>
+          <!-- Read: invoice available -->
+          <div class="notif-item" onclick="goFinal('f-detalle')">
+            <div class="notif-ic ic-factura">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-file-text"/></svg>
+            </div>
+            <div class="notif-body">
+              <div class="notif-title">Factura OT #41188 disponible</div>
+              <div class="notif-sub">Mantención completada. Total: $148.900 IVA incluido.</div>
+              <div class="notif-time">Dom 24 Mar</div>
+            </div>
+            <div class="notif-dot hidden"></div>
+          </div>
+        </div>
+        <!-- Clear all action -->
+        <div style="text-align:center;padding:4px 0 16px">
+          <button class="del-btn">
+            <svg viewBox="0 0 24 24" width="14" height="14"><use href="#ic-trash"/></svg>
+            Borrar todas
+          </button>
+        </div>
+      </div>
+      <!-- V2 bottom nav — 5 tabs DEC-011 -->
+      <div class="bnav">
+        <button class="tab" onclick="navTo('home')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></div>
+          <div class="tab-label">Inicio</div>
+        </button>
+        <button class="tab" onclick="navTo('vehículos')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg></div>
+          <div class="tab-label">Mis Autos</div>
+        </button>
+        <button class="tab" onclick="navTo('tienda')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#ic-bag"/></svg></div>
+          <div class="tab-label">Tienda</div>
+        </button>
+        <button class="tab" onclick="navTo('servicios')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg></div>
+          <div class="tab-label">Servicios</div>
+        </button>
+        <button class="tab">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg></div>
+          <div class="tab-label">Contactar</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         VERSION FINAL — SCREEN 2: DETALLE
+    ══════════════════════════════════════ -->
+    <div class="screen" id="f-detalle">
+      <!-- Status bar -->
+      <div class="sbar">
+        <span class="s-time">9:41</span>
+        <div class="s-icons">
+          <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+          <div class="batt-ic"><div class="batt-fill"></div></div>
+        </div>
+      </div>
+      <!-- V2 nav bar with back arrow -->
+      <div class="nbar">
+        <button class="nbar-back-btn" onclick="goFinal('f-lista')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-left"/></svg>
+        </button>
+        <div class="nav-logo" style="justify-content:center">
+          <span style="font-family:'Times New Roman',Georgia,'Palatino Linotype',serif;font-size:16px;font-weight:400;letter-spacing:5px;background:linear-gradient(45deg,#8A9AAA 5%,#FFFFFF 10%,#B8C4D0 30%,#E8EEF4 50%,#B8C4D0 70%,#FFFFFF 80%,#8A9AAA 95%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 3px rgba(200,215,240,0.3)) drop-shadow(0 0 8px rgba(180,200,230,0.12));">KAUFMANN</span>
+        </div>
+        <div class="nav-right">
+          <span class="nbar-page-title">Notificación</span>
+        </div>
+      </div>
+      <!-- Scrollable body — V2 Contextual detail -->
+      <div class="body">
+        <!-- Centered icon hero: success check circle -->
+        <div class="notif-detail-hero">
+          <div class="notif-detail-icon-circle success">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg>
+          </div>
+          <div class="notif-detail-title">Tu vehículo está listo</div>
+          <div class="notif-detail-meta">Hace 20 min · Trabajos en Taller</div>
+        </div>
+        <!-- Message card -->
+        <div class="detail-card">
+          <div class="detail-card-text">El servicio de mantención de tu <strong>Mercedes-Benz GLC 300 KWRS-21</strong> ha finalizado en Sucursal Las Condes. Tu vehículo está disponible para retiro en recepción, presentando tu RUT.</div>
+        </div>
+        <!-- Info rows -->
+        <div class="info-wrap">
+          <div class="info-row">
+            <span class="info-key">Sucursal</span>
+            <span class="info-val">Las Condes</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Vehículo</span>
+            <span class="info-val">GLC 300</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Patente</span>
+            <span class="info-val">KWRS-21</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">OT</span>
+            <span class="info-val">#48221</span>
+          </div>
+          <div class="info-row">
+            <span class="info-key">Ejecutivo</span>
+            <span class="info-val">Ricardo Morales</span>
+          </div>
+        </div>
+        <!-- Map snippet (V2 style C key differentiator) -->
+        <div class="map-snippet">
+          <div class="map-placeholder">
+            <div class="map-pin-row">
+              <div class="map-pin-dot">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-pin"/></svg>
+              </div>
+              <span class="map-pin-label">Sucursal Las Condes</span>
+              <button class="map-how-btn">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-arrow-up-right"/></svg>
+                Cómo llegar
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Dual CTAs -->
+        <div style="padding:4px 16px 10px">
+          <button class="btn-prim" onclick="navTo('servicios')">Ver detalle del trabajo</button>
+        </div>
+        <div style="padding:0 16px 28px">
+          <button class="btn-outline-phone">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg>
+            Llamar a Ricardo Morales
+          </button>
+        </div>
+      </div>
+      <!-- V2 bottom nav — 5 tabs DEC-011 -->
+      <div class="bnav">
+        <button class="tab" onclick="navTo('home')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></div>
+          <div class="tab-label">Inicio</div>
+        </button>
+        <button class="tab" onclick="navTo('vehículos')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg></div>
+          <div class="tab-label">Mis Autos</div>
+        </button>
+        <button class="tab" onclick="navTo('tienda')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24" width="22" height="22"><use href="#ic-bag"/></svg></div>
+          <div class="tab-label">Tienda</div>
+        </button>
+        <button class="tab" onclick="navTo('servicios')">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg></div>
+          <div class="tab-label">Servicios</div>
+        </button>
+        <button class="tab">
+          <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg></div>
+          <div class="tab-label">Contactar</div>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /device-scr -->
+</div><!-- /device -->
+</main>
+
+<script>
+/* ══ CROSS-FILE NAVIGATION (iframe postMessage) ══ */
+function navTo(module){
+  if(window.parent&&window.parent!==window){
+    window.parent.postMessage({action:'navigate',module:module},'*');
+  }
+}
+
+/* ══ INTERNAL SCREEN NAVIGATION ══ */
+function goFinal(id){
+  document.querySelectorAll('.screen').forEach(function(s){
+    s.classList.remove('active');
+  });
+  var t=document.getElementById(id);
+  if(t)t.classList.add('active');
+  document.querySelectorAll('.sb-btn').forEach(function(b){
+    b.classList.remove('on');
+  });
+  var matchBtn=document.getElementById('sbtn-final-'+id.replace('f-',''));
+  if(matchBtn)matchBtn.classList.add('on');
+}
+
+/* ══ DARK/LIGHT MODE TOGGLE ══ */
+function setMode(mode,btn){
+  document.getElementById('modeLightBtn').classList.remove('on');
+  document.getElementById('modeDarkBtn').classList.remove('on');
+  btn.classList.add('on');
+  if(mode==='light'){
+    document.body.setAttribute('data-mode','light');
+  } else {
+    document.body.removeAttribute('data-mode');
+  }
+}
+
+/* ══ INIT: default state = dark mode ══ */
+(function init(){
+  document.getElementById('modeDarkBtn').classList.add('on');
+  document.getElementById('modeLightBtn').classList.remove('on');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2669 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaufmann App — Home Fusionado</title>
+    <style>
+      /* ══════════════════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════════════════ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #0a0e14;
+        display: flex;
+        min-height: 100vh;
+        color: #e8eef5;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   TOKENS — Versión Final DARK (default, applied to body)
+══════════════════════════════════════════════════════════════ */
+      :root {
+        --primary: #0071bb;
+        --primary-dark: #003a6e;
+        --primary-mid: #0059a0;
+        --primary-tint: rgba(0, 113, 187, 0.16);
+        --primary-tint-2: rgba(0, 113, 187, 0.09);
+        --background: #0b1018;
+        --surface: #131a24;
+        --text-primary: #e8eef5;
+        --text-secondary: #8a96a6;
+        --text-tertiary: #5a6878;
+        --border: rgba(255, 255, 255, 0.04);
+        --border-light: rgba(255, 255, 255, 0.025);
+        --hero-grad: linear-gradient(
+          160deg,
+          #050c16 0%,
+          #071426 30%,
+          #0a2040 65%,
+          #0d3060 100%
+        );
+        --card-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.45), 0 0 1px rgba(0, 113, 187, 0.12);
+        --card-shadow-md:
+          0 4px 20px rgba(0, 0, 0, 0.55), 0 0 30px rgba(0, 113, 187, 0.08);
+        --success: #3fc76a;
+        --success-bg: rgba(63, 199, 106, 0.11);
+        --warning: #f0b840;
+        --warning-bg: rgba(240, 184, 64, 0.11);
+        --danger: #f05454;
+        --danger-bg: rgba(240, 84, 84, 0.11);
+        --header-bg: #000000;
+        --bnav-bg: #000000;
+        --bnav-border: rgba(255, 255, 255, 0.05);
+        --bnav-active: #0071bb;
+        --bnav-inactive: #5a6878;
+        --icon-bg-taller: rgba(0, 113, 187, 0.14);
+        --icon-bg-vehículos: rgba(59, 130, 246, 0.14);
+        --icon-bg-reservas: rgba(139, 92, 246, 0.14);
+        --icon-bg-tienda: rgba(63, 199, 106, 0.14);
+        --icon-stroke-taller: #0071bb;
+        --icon-stroke-vehículos: #4a8ae8;
+        --icon-stroke-reservas: #8a6ae8;
+        --icon-stroke-tienda: #3fc76a;
+        --seg-bg: rgba(255, 255, 255, 0.055);
+        --seg-active-bg: #1a2638;
+        --seg-active-shadow:
+          0 1px 6px rgba(59, 158, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.4);
+        --skel-base: rgba(255, 255, 255, 0.06);
+        --skel-shine: rgba(255, 255, 255, 0.11);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   LIGHT MODE OVERRIDE (Versión Final)
+══════════════════════════════════════════════════════════════ */
+      body[data-mode="light"] {
+        --primary: #0071bb;
+        --primary-tint: #e6f2fc;
+        --primary-tint-2: #cce4f8;
+        --background: #f0f3f8;
+        --surface: #ffffff;
+        --text-primary: #0f1923;
+        --text-secondary: #4a5a6e;
+        --text-tertiary: #8896a8;
+        --border: #d6dde6;
+        --border-light: #eaeef4;
+        --hero-grad: linear-gradient(
+          160deg,
+          #001e40 0%,
+          #003870 45%,
+          #005a9a 100%
+        );
+        --card-shadow:
+          0 1px 3px rgba(0, 30, 64, 0.07), 0 4px 14px rgba(0, 30, 64, 0.05);
+        --card-shadow-md:
+          0 3px 8px rgba(0, 30, 64, 0.09), 0 10px 28px rgba(0, 30, 64, 0.06);
+        --success: #18963a;
+        --success-bg: #e6f7ec;
+        --warning: #d97706;
+        --warning-bg: #fef3c7;
+        --danger: #dc2626;
+        --danger-bg: #fee2e2;
+        --bnav-bg: #ffffff;
+        --bnav-border: #d6dde6;
+        --bnav-active: #0071bb;
+        --bnav-inactive: #8896a8;
+        --icon-bg-taller: #eaf4fb;
+        --icon-bg-vehículos: #e5eefe;
+        --icon-bg-reservas: #ede5fb;
+        --icon-bg-tienda: #e6f7ec;
+        --icon-stroke-taller: #0071bb;
+        --icon-stroke-vehículos: #4a6fd4;
+        --icon-stroke-reservas: #7a4fbf;
+        --icon-stroke-tienda: #18963a;
+        --skel-base: #d8e2ec;
+        --skel-shine: #eaf0f6;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════════════════ */
+      .sidebar {
+        width: 268px;
+        background: #06090f;
+        padding: 0;
+        overflow-y: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #111820;
+      }
+      .sb-hdr {
+        padding: 22px 20px 16px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-brand {
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+      .sb-sub {
+        font-size: 9px;
+        color: #1e2e40;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-top: 4px;
+      }
+
+      .sb-info {
+        padding: 12px 20px 10px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-sname {
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 2px;
+      }
+      .sb-sdesc {
+        font-size: 10px;
+        color: #2e3f52;
+        line-height: 1.5;
+      }
+      .sb-ver {
+        display: inline-block;
+        background: #111820;
+        color: #0071bb;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 5px;
+        margin-top: 5px;
+        letter-spacing: 0.5px;
+      }
+
+      /* Mode toggle */
+      .mode-toggler {
+        padding: 10px 20px;
+        border-bottom: 1px solid #111820;
+      }
+      .mode-tog-label {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 7px;
+      }
+      .mode-tog-wrap {
+        display: flex;
+        background: #111820;
+        border-radius: 9px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .mode-tog-btn {
+        flex: 1;
+        padding: 6px 4px;
+        border: none;
+        border-radius: 7px;
+        font-size: 9.5px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: #2e3f52;
+        line-height: 1.3;
+        font-family: inherit;
+      }
+      .mode-tog-btn.on {
+        background: #1a2a3a;
+        color: #e6edf3;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      /* Screen nav */
+      .state-toggler {
+        padding: 10px 20px;
+        border-bottom: 1px solid #111820;
+      }
+      .state-tog-label {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 7px;
+      }
+      .state-tog-wrap {
+        display: flex;
+        background: #111820;
+        border-radius: 9px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .state-tog-btn {
+        flex: 1;
+        padding: 6px 4px;
+        border: none;
+        border-radius: 7px;
+        font-size: 8.5px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: #2e3f52;
+        line-height: 1.3;
+        font-family: inherit;
+      }
+      .state-tog-btn.on {
+        background: #0d4a2a;
+        color: #3fb950;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .sb-nav {
+        padding: 8px 10px 4px;
+        flex: 1;
+      }
+      .sb-nav-lbl {
+        color: #192430;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        padding: 0 8px;
+        margin: 8px 0 4px;
+      }
+      .sb-btn {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: 100%;
+        text-align: left;
+        padding: 7px 10px;
+        border: none;
+        border-radius: 7px;
+        background: transparent;
+        color: #3a4a5a;
+        font-size: 11px;
+        cursor: pointer;
+        transition: all 0.15s;
+        line-height: 1.3;
+        margin-bottom: 1px;
+        font-family: inherit;
+      }
+      .sb-btn:hover {
+        background: #111820;
+        color: #8aaabb;
+      }
+      .sb-btn.on {
+        background: #111820;
+        color: #fff;
+      }
+      .sb-btn-n {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 800;
+        flex-shrink: 0;
+        background: #0a1018;
+        color: #1e2e40;
+      }
+      .sb-btn.on .sb-btn-n {
+        background: #0071bb;
+        color: #fff;
+      }
+      .sb-btn-i {
+        flex: 1;
+        min-width: 0;
+      }
+      .sb-btn-t {
+        font-weight: 600;
+        font-size: 11px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sb-btn-d {
+        font-size: 9px;
+        color: #1e2e40;
+        margin-top: 1px;
+        line-height: 1.3;
+      }
+      .sb-btn.on .sb-btn-d {
+        color: #3a5a7a;
+      }
+
+      .sb-notes {
+        padding: 12px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-notes-t {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .sb-note {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: flex-start;
+      }
+      .sb-nn {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #111820;
+        color: #0071bb;
+        font-size: 8px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .sb-nt {
+        color: #2e4055;
+        font-size: 9.5px;
+        line-height: 1.55;
+      }
+
+      .sb-foot {
+        padding: 10px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-foot-t {
+        color: #192430;
+        font-size: 8.5px;
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 1.6;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   MAIN + DEVICE FRAME
+══════════════════════════════════════════════════════════════ */
+      .main {
+        margin-left: 268px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 32px 40px;
+      }
+      .device {
+        width: 390px;
+        height: 844px;
+        background: #060a0e;
+        border-radius: 48px;
+        padding: 10px;
+        box-shadow:
+          0 0 0 1px #2a3040,
+          0 0 0 3px #060a0e,
+          0 0 0 4.5px #181e28,
+          0 50px 120px rgba(0, 0, 0, 0.98);
+        position: relative;
+        flex-shrink: 0;
+      }
+      .notch {
+        width: 120px;
+        height: 30px;
+        background: #060a0e;
+        border-radius: 0 0 16px 16px;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .notch-pill {
+        width: 72px;
+        height: 6px;
+        background: #141c28;
+        border-radius: 3px;
+      }
+      .device-scr {
+        width: 100%;
+        height: 100%;
+        background: var(--background);
+        border-radius: 40px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════════════════════ */
+      .screen {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   STATUS BAR — always black
+══════════════════════════════════════════════════════════════ */
+      .sbar {
+        height: 50px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 0 24px 8px;
+        flex-shrink: 0;
+        background: #000000;
+      }
+      .s-time {
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+      .s-icons {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 1px;
+      }
+      .bar {
+        width: 3px;
+        border-radius: 1px;
+        background: #ffffff;
+      }
+      .bar:nth-child(1) {
+        height: 4px;
+      }
+      .bar:nth-child(2) {
+        height: 7px;
+      }
+      .bar:nth-child(3) {
+        height: 10px;
+      }
+      .bar:nth-child(4) {
+        height: 13px;
+      }
+      .batt-ic {
+        width: 22px;
+        height: 11px;
+        border: 1.5px solid #ffffff;
+        border-radius: 3px;
+        position: relative;
+        padding: 1.5px;
+      }
+      .batt-ic::after {
+        content: "";
+        position: absolute;
+        right: -4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 5px;
+        background: #ffffff;
+        border-radius: 0 1px 1px 0;
+      }
+      .batt-fill {
+        height: 100%;
+        border-radius: 1px;
+        width: 75%;
+        background: #ffffff;
+      }
+      /* ══════════════════════════════════════════════════════════════
+   VERSION FINAL — NAV BAR (from V2/F)
+══════════════════════════════════════════════════════════════ */
+      .nbar {
+        height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        flex-shrink: 0;
+        gap: 10px;
+        background: #000000;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+      }
+      .nav-right {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        margin-left: auto;
+      }
+      .nav-icon-btn {
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background: none;
+        border: none;
+        position: relative;
+      }
+      .nav-badge {
+        position: absolute;
+        top: -1px;
+        right: -2px;
+        width: 15px;
+        height: 15px;
+        background: var(--danger);
+        border-radius: 50%;
+        font-size: 8px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        border: 1.5px solid #000000;
+      }
+      .ico {
+        display: block;
+        flex-shrink: 0;
+      }
+      .av-pill {
+        height: 28px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0 10px 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        transition: background 0.2s;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .av-pill:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .av-pill svg {
+        stroke: rgba(255, 255, 255, 0.7);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .av-pill-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        letter-spacing: 0.3px;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SCROLL BODY
+══════════════════════════════════════════════════════════════ */
+      .body {
+        flex: 1;
+        overflow-y: auto;
+        background: var(--background);
+      }
+      .body::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BOTTOM NAV — Versión Final (V2 style — #000000 fixed)
+══════════════════════════════════════════════════════════════ */
+      .bnav {
+        height: 82px;
+        background: #000000;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        padding: 8px 0 0;
+        flex-shrink: 0;
+      }
+      .tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0 2px;
+        font-family: inherit;
+      }
+      .tab svg {
+        stroke: var(--bnav-inactive);
+        opacity: 0.85;
+        transition: all 0.2s;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tab-label {
+        font-size: 9px;
+        text-align: center;
+        line-height: 1.2;
+        color: var(--bnav-inactive);
+        transition: all 0.2s;
+      }
+      .tab.on svg {
+        stroke: var(--bnav-active);
+        opacity: 1;
+      }
+      .tab.on .tab-label {
+        color: var(--bnav-active);
+        font-weight: 700;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════════════════════════════ */
+      .sec-hdr {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px 6px;
+      }
+      .sec-t {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+      .sec-l {
+        font-size: 13px;
+        color: var(--primary);
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .sec-l svg {
+        width: 14px;
+        height: 14px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   VEHICLE CARD HERO — Versión Final (V3 Best Of style)
+══════════════════════════════════════════════════════════════ */
+      .vc {
+        margin: 12px 16px 6px;
+        border-radius: 22px;
+        background: var(--hero-grad);
+        padding: 18px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow:
+          0 6px 28px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(0, 113, 187, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        min-height: 112px;
+      }
+      .vc-d1 {
+        position: absolute;
+        right: -25px;
+        top: -25px;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        pointer-events: none;
+      }
+      .vc-d2 {
+        position: absolute;
+        right: 20px;
+        bottom: -35px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+        pointer-events: none;
+      }
+      .vc-car-img {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        width: 58%;
+        object-fit: cover;
+        object-position: left center;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.55) 40%,
+          rgba(0, 0, 0, 0.85) 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(0, 0, 0, 0.55) 40%,
+          rgba(0, 0, 0, 0.85) 100%
+        );
+        mix-blend-mode: luminosity;
+        opacity: 0.7;
+      }
+      .vc-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 1;
+      }
+      .vc-lbl {
+        font-size: 10px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.42);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 3px;
+      }
+      .vc-mdl {
+        font-size: 18px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.2;
+        margin-bottom: 2px;
+        letter-spacing: -0.3px;
+      }
+      .vc-yr {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .vc-plate {
+        background: rgba(255, 255, 255, 0.13);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        padding: 5px 10px;
+        border-radius: 7px;
+        flex-shrink: 0;
+        font-family: "Courier New", monospace;
+      }
+      .vc-bot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+      }
+      .vc-km-l {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.38);
+        margin-bottom: 2px;
+        font-weight: 500;
+      }
+      .vc-km {
+        font-size: 15px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .vc-chip {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 11px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+      .vc-chip svg {
+        width: 12px;
+        height: 12px;
+        stroke: rgba(255, 255, 255, 0.85);
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   QUICK GRID 2x2 — Versión Final
+══════════════════════════════════════════════════════════════ */
+      .qgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 10px 16px 6px;
+      }
+      .qcard {
+        background: var(--surface);
+        border-radius: 16px;
+        padding: 15px 13px 13px;
+        box-shadow: var(--card-shadow);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        border: 1px solid var(--border);
+      }
+      .qcard:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow-md);
+      }
+      .qcard:active {
+        transform: scale(0.97);
+      }
+      .qi {
+        width: 44px;
+        height: 44px;
+        border-radius: 13px;
+        background: var(--primary-tint);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .qi svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .qi.qi-taller {
+        background: var(--icon-bg-taller);
+      }
+      .qi.qi-taller svg {
+        stroke: var(--icon-stroke-taller);
+      }
+      .qi.qi-vehículos {
+        background: var(--icon-bg-vehículos);
+      }
+      .qi.qi-vehículos svg {
+        stroke: var(--icon-stroke-vehículos);
+      }
+      .qi.qi-reservas {
+        background: var(--icon-bg-reservas);
+      }
+      .qi.qi-reservas svg {
+        stroke: var(--icon-stroke-reservas);
+      }
+      .qi.qi-tienda {
+        background: var(--icon-bg-tienda);
+      }
+      .qi.qi-tienda svg {
+        stroke: var(--icon-stroke-tienda);
+      }
+      .qt {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+      .qd {
+        font-size: 10.5px;
+        color: var(--text-tertiary);
+        line-height: 1.4;
+        margin-top: 1px;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   PROMO BANNER — Versión Final
+══════════════════════════════════════════════════════════════ */
+      .promo {
+        margin: 8px 16px 6px;
+        border-radius: 16px;
+        background: var(--hero-grad);
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(0, 50, 82, 0.22);
+        border: 1px solid rgba(0, 113, 187, 0.15);
+      }
+      .promo-d {
+        position: absolute;
+        right: -15px;
+        top: -15px;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        pointer-events: none;
+      }
+      .promo-ic {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .promo-ic svg {
+        width: 21px;
+        height: 21px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .promo-c {
+        flex: 1;
+        min-width: 0;
+      }
+      .promo-eye {
+        font-size: 9px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.42);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 3px;
+      }
+      .promo-t {
+        font-size: 13.5px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.25;
+        margin-bottom: 6px;
+      }
+      .promo-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+      }
+      .promo-cta svg {
+        width: 11px;
+        height: 11px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   ALERT BANNER
+══════════════════════════════════════════════════════════════ */
+      .alert-ban {
+        margin: 8px 16px 4px;
+        border-radius: 14px;
+        background: var(--warning-bg);
+        border: 1px solid rgba(240, 184, 64, 0.2);
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .alert-ic {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(240, 184, 64, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .alert-ic svg {
+        stroke: var(--warning);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .alert-info {
+        flex: 1;
+      }
+      .alert-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+      }
+      .alert-s {
+        font-size: 11px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   ACTIVITY CARDS — Versión Final
+══════════════════════════════════════════════════════════════ */
+      .act-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 0 16px 12px;
+      }
+      .act-card {
+        background: var(--surface);
+        border-radius: 14px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: var(--card-shadow);
+        cursor: pointer;
+        border-left: 3px solid var(--primary);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--primary);
+      }
+      .act-card.ok {
+        border-left-color: var(--success);
+      }
+      .act-card.warn {
+        border-left-color: var(--warning);
+      }
+      .act-ic {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--primary-tint);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .act-ic svg {
+        width: 17px;
+        height: 17px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .act-card.ok .act-ic {
+        background: var(--success-bg);
+      }
+      .act-card.ok .act-ic svg {
+        stroke: var(--success);
+      }
+      .act-card.warn .act-ic {
+        background: var(--warning-bg);
+      }
+      .act-card.warn .act-ic svg {
+        stroke: var(--warning);
+      }
+      .act-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .act-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .act-s {
+        font-size: 11px;
+        color: var(--text-tertiary);
+        line-height: 1.3;
+      }
+      .act-bdg {
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+      .bdg-prog {
+        background: rgba(0, 113, 187, 0.14);
+        color: var(--primary);
+      }
+      .bdg-ok {
+        background: var(--success-bg);
+        color: var(--success);
+      }
+      .bdg-warn {
+        background: var(--warning-bg);
+        color: var(--warning);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   EMPTY STATE — Versión Final
+══════════════════════════════════════════════════════════════ */
+      .empty-hero {
+        padding: 32px 24px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .empty-ic-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 24px;
+        background: var(--primary-tint);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+      }
+      .empty-ic-wrap svg {
+        width: 32px;
+        height: 32px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .empty-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+        line-height: 1.3;
+      }
+      .empty-desc {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      .btn-prim {
+        width: 100%;
+        padding: 15px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: opacity 0.15s;
+        font-family: inherit;
+      }
+      .btn-prim:active {
+        opacity: 0.85;
+      }
+      .btn-prim svg {
+        width: 18px;
+        height: 18px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .qr-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 14px;
+        padding: 12px;
+        background: var(--surface);
+        border-radius: 12px;
+        width: 100%;
+        text-align: left;
+        border: 1px solid var(--border);
+      }
+      .qr-note svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--text-tertiary);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .qr-note-text {
+        font-size: 11px;
+        color: var(--text-tertiary);
+        line-height: 1.5;
+      }
+
+      /* Store mini cards */
+      .store-row {
+        display: flex;
+        gap: 8px;
+        padding: 0 16px 16px;
+      }
+      .store-mini-card {
+        flex: 1;
+        border-radius: 14px;
+        padding: 14px 12px;
+        background: var(--hero-grad);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+      .store-mini-card-d {
+        position: absolute;
+        right: -12px;
+        bottom: -12px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        pointer-events: none;
+      }
+      .store-mini-tag {
+        font-size: 9px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.42);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .store-mini-t {
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.3;
+      }
+      .store-mini-ic {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2px;
+      }
+      .store-mini-ic svg {
+        width: 16px;
+        height: 16px;
+        stroke: #fff;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SKELETON SHIMMER
+══════════════════════════════════════════════════════════════ */
+      @keyframes shimmer {
+        0% {
+          background-position: -370px 0;
+        }
+        100% {
+          background-position: 370px 0;
+        }
+      }
+      .skel {
+        border-radius: 10px;
+        background: linear-gradient(
+          90deg,
+          var(--skel-base) 0%,
+          var(--skel-shine) 50%,
+          var(--skel-base) 100%
+        );
+        background-size: 740px 100%;
+        animation: shimmer 1.6s infinite linear;
+      }
+      .skel-vc {
+        height: 112px;
+        border-radius: 22px;
+        margin: 12px 16px 6px;
+      }
+      .skel-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 10px 16px 6px;
+      }
+      .skel-q {
+        height: 92px;
+        border-radius: 16px;
+      }
+      .skel-promo {
+        height: 82px;
+        border-radius: 16px;
+        margin: 8px 16px 6px;
+      }
+      .skel-act-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 0 16px 12px;
+      }
+      .skel-act {
+        height: 60px;
+        border-radius: 14px;
+      }
+
+      /* Spacers */
+      .sp {
+        height: 8px;
+        flex-shrink: 0;
+      }
+      .sp12 {
+        height: 12px;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SVG ICON DEFS -->
+    <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <symbol id="ic-home" viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </symbol>
+        <symbol id="ic-car" viewBox="0 0 24 24">
+          <path
+            d="M5 17H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1l2-4h10l2 4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"
+          />
+          <circle cx="7.5" cy="17.5" r="2.5" />
+          <circle cx="16.5" cy="17.5" r="2.5" />
+        </symbol>
+        <symbol id="ic-wrench" viewBox="0 0 24 24">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+          />
+        </symbol>
+        <symbol id="ic-file" viewBox="0 0 24 24">
+          <path
+            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+          />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <line x1="10" y1="9" x2="8" y2="9" />
+        </symbol>
+        <symbol id="ic-bag" viewBox="0 0 24 24">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 0 1-8 0" />
+        </symbol>
+        <symbol id="ic-bell" viewBox="0 0 24 24">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </symbol>
+        <symbol id="ic-cal" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </symbol>
+        <symbol id="ic-phone" viewBox="0 0 24 24">
+          <path
+            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+          />
+        </symbol>
+        <symbol id="ic-tag" viewBox="0 0 24 24">
+          <path
+            d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"
+          />
+          <line x1="7" y1="7" x2="7.01" y2="7" />
+        </symbol>
+        <symbol id="ic-chevr" viewBox="0 0 24 24">
+          <polyline points="9 18 15 12 9 6" />
+        </symbol>
+        <symbol id="ic-plus" viewBox="0 0 24 24">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </symbol>
+        <symbol id="ic-alert" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </symbol>
+        <symbol id="ic-check" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12" />
+        </symbol>
+        <symbol id="ic-pkg" viewBox="0 0 24 24">
+          <path
+            d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+          />
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+          <line x1="12" y1="22.08" x2="12" y2="12" />
+        </symbol>
+        <symbol id="ic-shield" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </symbol>
+        <symbol id="ic-user" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </symbol>
+        <symbol id="ic-cart" viewBox="0 0 24 24">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path
+            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- ════════════════ SIDEBAR ════════════════ -->
+    <aside class="sidebar">
+      <div class="sb-hdr">
+        <div class="sb-brand">KAUFMANN</div>
+        <div class="sb-sub">Home Fusionado · v3</div>
+      </div>
+
+      <div class="sb-info">
+        <div class="sb-sname" id="sb-sname">Home — Con vehículos</div>
+        <div class="sb-sdesc" id="sb-sdesc">
+          Pantalla principal con vehículos vinculados
+        </div>
+        <span class="sb-ver">Versión Final · 31 Mar 2026</span>
+      </div>
+
+      <!-- Mode toggle -->
+      <div class="mode-toggler" id="mode-toggler">
+        <div class="mode-tog-label">Modo</div>
+        <div class="mode-tog-wrap">
+          <button
+            class="mode-tog-btn"
+            id="mode-light"
+            onclick="setMode('light')"
+          >
+            Claro
+          </button>
+          <button
+            class="mode-tog-btn on"
+            id="mode-dark"
+            onclick="setMode('dark')"
+          >
+            Oscuro
+          </button>
+        </div>
+      </div>
+
+      <!-- Screen state -->
+      <div class="state-toggler">
+        <div class="state-tog-label">Estado de pantalla</div>
+        <div class="state-tog-wrap">
+          <button
+            class="state-tog-btn on"
+            id="st-with"
+            onclick="setState('with')"
+          >
+            Con autos
+          </button>
+          <button
+            class="state-tog-btn"
+            id="st-empty"
+            onclick="setState('empty')"
+          >
+            Sin autos
+          </button>
+          <button
+            class="state-tog-btn"
+            id="st-loading"
+            onclick="setState('loading')"
+          >
+            Cargando
+          </button>
+        </div>
+      </div>
+
+      <nav class="sb-nav">
+        <div class="sb-nav-lbl">Pantallas</div>
+        <button class="sb-btn on" id="nav-with" onclick="setState('with')">
+          <div class="sb-btn-n">1</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Con vehículos</div>
+            <div class="sb-btn-d">GLC 300 · KWRS-21 · 45.200 km</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-empty" onclick="setState('empty')">
+          <div class="sb-btn-n">2</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Sin vehículos</div>
+            <div class="sb-btn-d">Usuario nuevo — empty state</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-loading" onclick="setState('loading')">
+          <div class="sb-btn-n">3</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Cargando</div>
+            <div class="sb-btn-d">Skeleton shimmer — carga inicial</div>
+          </div>
+        </button>
+      </nav>
+
+      <div class="sb-notes">
+        <div class="sb-notes-t">Notas</div>
+        <div class="sb-note">
+          <div class="sb-nn">1</div>
+          <div class="sb-nt">
+            Contenido Best Of (V3 G) con header y bottom nav de Propuesta F —
+            V2. Header negro #000000 siempre con logo chrome serif KAUFMANN.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">2</div>
+          <div class="sb-nt">
+            Oscura por defecto. Toggle claro/oscuro con tokens del sistema de
+            diseño V3 G.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">3</div>
+          <div class="sb-nt">
+            Bottom nav: negro fijo #000000, Tienda en posicion central
+            destacada. Vehicle card con border-radius 22px y blue glow shadow.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">4</div>
+          <div class="sb-nt">
+            Iconos SVG Feather-style, stroke-width 1.75, monocromo. Sin emojis —
+            directriz MKT confirmada 2026-03-28.
+          </div>
+        </div>
+      </div>
+
+      <div class="sb-foot">
+        <div class="sb-foot-t">
+          Grupo Kaufmann · Home Fusionado · 31 Mar 2026<br />Versión Final ·
+          Diseño UI v3 · 2026
+        </div>
+      </div>
+    </aside>
+
+    <!-- ════════════════ DEVICE ════════════════ -->
+    <div class="main">
+      <div class="device">
+        <div class="notch"><div class="notch-pill"></div></div>
+        <div class="device-scr">
+          <!-- ════════════════════════════════════════════
+         SCREEN 1: CON VEHÍCULOS
+    ════════════════════════════════════════════ -->
+          <div class="screen active" id="s-with">
+            <!-- STATUS BAR (shared) -->
+            <div class="sbar">
+              <span class="s-time">9:41</span>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+
+            <!-- Header (V2 nbar) -->
+            <div class="nbar">
+              <div class="nav-logo">
+                <span
+                  style="
+                    font-family:
+                      &quot;Times New Roman&quot;, Georgia,
+                      &quot;Palatino Linotype&quot;, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3))
+                      drop-shadow(0 0 8px rgba(180, 200, 230, 0.12));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="nav-right">
+                <button class="nav-icon-btn" onclick="navTo('notificaciónes')">
+                  <svg
+                    class="ico"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#FFFFFF"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                  </svg>
+                  <div class="nav-badge">3</div>
+                </button>
+                <div class="av-pill" onclick="navTo('perfil')">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.7)"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  <span class="av-pill-name">Pedro</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- BODY: shared structure, tokens handle appearance -->
+            <div class="body">
+              <!-- Alert banner: mantención próxima -->
+              <div class="alert-ban">
+                <div class="alert-ic">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--warning)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <use href="#ic-alert" />
+                  </svg>
+                </div>
+                <div class="alert-info">
+                  <div class="alert-t">Mantención próxima</div>
+                  <div class="alert-s">
+                    GLC 300 · 50.000 km en aprox. 4.800 km
+                  </div>
+                </div>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--warning)"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  width="14"
+                  height="14"
+                >
+                  <use href="#ic-chevr" />
+                </svg>
+              </div>
+
+              <!-- Vehicle hero card -->
+              <div class="vc">
+                <div class="vc-d1"></div>
+                <div class="vc-d2"></div>
+                <img
+                  src="../../../Visual aprobada por kaufmann/Automoviles/MBC20041.jpg"
+                  class="vc-car-img"
+                  alt="Mercedes-Benz GLC 300"
+                  onerror="this.style.display = 'none'"
+                />
+                <div class="vc-top">
+                  <div>
+                    <div class="vc-lbl">Vehículo activo</div>
+                    <div class="vc-mdl">Mercedes-Benz GLC 300</div>
+                    <div class="vc-yr">2023 · Particular</div>
+                  </div>
+                  <div class="vc-plate">KWRS-21</div>
+                </div>
+                <div class="vc-bot">
+                  <div>
+                    <div class="vc-km-l">Kilometraje</div>
+                    <div class="vc-km">45.200 km</div>
+                  </div>
+                  <div class="vc-chip">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="12"
+                      height="12"
+                    >
+                      <use href="#ic-plus" />
+                    </svg>
+                    2 vehículos más
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick grid 2x2 -->
+              <div
+                class="sec-hdr"
+                style="padding-top: 14px; padding-bottom: 4px"
+              >
+                <span class="sec-t">Acceso rápido</span>
+              </div>
+              <div class="qgrid">
+                <div class="qcard" onclick="navTo('servicios', 'f1')">
+                  <div class="qi qi-taller">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="20"
+                      height="20"
+                    >
+                      <use href="#ic-wrench" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="qt">Taller</div>
+                    <div class="qd">Ver trabajos activos</div>
+                  </div>
+                </div>
+                <div class="qcard" onclick="navTo('vehículos')">
+                  <div class="qi qi-vehículos">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="20"
+                      height="20"
+                    >
+                      <use href="#ic-car" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="qt">Mis Autos</div>
+                    <div class="qd">Gestionar vehículos</div>
+                  </div>
+                </div>
+                <div class="qcard" onclick="navTo('reservas')">
+                  <div class="qi qi-reservas">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="20"
+                      height="20"
+                    >
+                      <use href="#ic-cal" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="qt">Reservas</div>
+                    <div class="qd">Agendar servicio</div>
+                  </div>
+                </div>
+                <div class="qcard" onclick="navTo('tienda')">
+                  <div class="qi qi-tienda">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="20"
+                      height="20"
+                    >
+                      <use href="#ic-bag" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="qt">Tienda</div>
+                    <div class="qd">Productos postventa</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Promo banner -->
+              <div class="promo" onclick="navTo('tienda')">
+                <div class="promo-d"></div>
+                <div class="promo-ic">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    width="21"
+                    height="21"
+                  >
+                    <use href="#ic-tag" />
+                  </svg>
+                </div>
+                <div class="promo-c">
+                  <div class="promo-eye">Tienda Kaufmann</div>
+                  <div class="promo-t">
+                    Prepago Mantención — Ahorra hasta 20%
+                  </div>
+                  <div class="promo-cta">
+                    Ver oferta
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="11"
+                      height="11"
+                    >
+                      <use href="#ic-chevr" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Activity -->
+              <div class="sec-hdr">
+                <span class="sec-t">Actividad reciente</span>
+                <span class="sec-l">
+                  Ver todo
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    width="14"
+                    height="14"
+                  >
+                    <use href="#ic-chevr" />
+                  </svg>
+                </span>
+              </div>
+              <div class="act-list">
+                <div class="act-card">
+                  <div class="act-ic">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="17"
+                      height="17"
+                    >
+                      <use href="#ic-wrench" />
+                    </svg>
+                  </div>
+                  <div class="act-info">
+                    <div class="act-t">Trabajo en taller — GLC 300</div>
+                    <div class="act-s">Sucursal Las Condes · Hoy</div>
+                  </div>
+                  <span class="act-bdg bdg-prog">En progreso</span>
+                </div>
+                <div class="act-card ok">
+                  <div class="act-ic">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="17"
+                      height="17"
+                    >
+                      <use href="#ic-cal" />
+                    </svg>
+                  </div>
+                  <div class="act-info">
+                    <div class="act-t">Reserva confirmada</div>
+                    <div class="act-s">25 Mar 10:00 · Suc. Providencia</div>
+                  </div>
+                  <span class="act-bdg bdg-ok">Confirmada</span>
+                </div>
+                <div class="act-card warn">
+                  <div class="act-ic">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="17"
+                      height="17"
+                    >
+                      <use href="#ic-file" />
+                    </svg>
+                  </div>
+                  <div class="act-info">
+                    <div class="act-t">Factura disponible</div>
+                    <div class="act-s">OT 204-8812 · $245.000 IVA inc.</div>
+                  </div>
+                  <span class="act-bdg bdg-warn">Pendiente</span>
+                </div>
+              </div>
+
+              <div class="sp12"></div>
+            </div>
+            <!-- /body -->
+
+            <!-- Bottom nav (V2 style — fixed black) -->
+            <div class="bnav">
+              <button class="tab on">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-home" />
+                </svg>
+                <span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-car" />
+                </svg>
+                <span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-cart" />
+                </svg>
+                <span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-wrench" />
+                </svg>
+                <span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-phone" />
+                </svg>
+                <span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+          <!-- /s-with -->
+
+          <!-- ════════════════════════════════════════════
+         SCREEN 2: SIN VEHÍCULOS
+    ════════════════════════════════════════════ -->
+          <div class="screen" id="s-empty">
+            <!-- STATUS BAR -->
+            <div class="sbar">
+              <span class="s-time">9:41</span>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+
+            <!-- Header -->
+            <div class="nbar">
+              <div class="nav-logo">
+                <span
+                  style="
+                    font-family:
+                      &quot;Times New Roman&quot;, Georgia,
+                      &quot;Palatino Linotype&quot;, serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    letter-spacing: 5px;
+                    background: linear-gradient(
+                      45deg,
+                      #8a9aaa 5%,
+                      #ffffff 10%,
+                      #b8c4d0 30%,
+                      #e8eef4 50%,
+                      #b8c4d0 70%,
+                      #ffffff 80%,
+                      #8a9aaa 95%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 3px rgba(200, 215, 240, 0.3))
+                      drop-shadow(0 0 8px rgba(180, 200, 230, 0.12));
+                  "
+                  >KAUFMANN</span
+                >
+              </div>
+              <div class="nav-right">
+                <button class="nav-icon-btn" onclick="navTo('notificaciónes')">
+                  <svg
+                    class="ico"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#FFFFFF"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                  </svg>
+                </button>
+                <div class="av-pill" onclick="navTo('perfil')">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.7)"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  <span class="av-pill-name">Pedro</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- BODY -->
+            <div class="body">
+              <div class="empty-hero">
+                <div class="empty-ic-wrap">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    width="32"
+                    height="32"
+                  >
+                    <use href="#ic-car" />
+                  </svg>
+                </div>
+                <div class="empty-title">
+                  Aún no tienes vehículos vinculados
+                </div>
+                <div class="empty-desc">
+                  Agrega tu Mercedes-Benz para acceder a taller, historial de
+                  mantenciónes y mucho más.
+                </div>
+                <button class="btn-prim">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    width="18"
+                    height="18"
+                  >
+                    <use href="#ic-plus" />
+                  </svg>
+                  Agregar vehículo
+                </button>
+                <div class="qr-note">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    width="18"
+                    height="18"
+                  >
+                    <use href="#ic-file" />
+                  </svg>
+                  <span class="qr-note-text"
+                    >¿Compraste un vehículo? Escanea el QR de tu factura para
+                    vincularlo automáticamente.</span
+                  >
+                </div>
+              </div>
+
+              <!-- Promo banner (always visible) -->
+              <div
+                class="promo"
+                style="margin-top: 4px"
+                onclick="navTo('tienda')"
+              >
+                <div class="promo-d"></div>
+                <div class="promo-ic">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    width="21"
+                    height="21"
+                  >
+                    <use href="#ic-bag" />
+                  </svg>
+                </div>
+                <div class="promo-c">
+                  <div class="promo-eye">Tienda Kaufmann</div>
+                  <div class="promo-t">
+                    Explora accesorios y productos para tu vehículo
+                  </div>
+                  <div class="promo-cta">
+                    Ver tienda
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="11"
+                      height="11"
+                    >
+                      <use href="#ic-chevr" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Explora mini cards -->
+              <div class="sec-hdr"><span class="sec-t">Explora más</span></div>
+              <div class="store-row">
+                <div
+                  class="store-mini-card"
+                  style="flex: 1.1"
+                  onclick="navTo('servicios')"
+                >
+                  <div class="store-mini-card-d"></div>
+                  <div class="store-mini-ic">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="16"
+                      height="16"
+                    >
+                      <use href="#ic-wrench" />
+                    </svg>
+                  </div>
+                  <div class="store-mini-tag">Postventa</div>
+                  <div class="store-mini-t">Reserva tu cita en taller</div>
+                </div>
+                <div
+                  class="store-mini-card"
+                  style="
+                    background: linear-gradient(
+                      160deg,
+                      #0d2a1a 0%,
+                      #0d4a30 100%
+                    );
+                  "
+                  onclick="navTo('contactar')"
+                >
+                  <div class="store-mini-card-d"></div>
+                  <div class="store-mini-ic">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      width="16"
+                      height="16"
+                    >
+                      <use href="#ic-shield" />
+                    </svg>
+                  </div>
+                  <div class="store-mini-tag">Kaufmann</div>
+                  <div class="store-mini-t">Garantía y seguros</div>
+                </div>
+              </div>
+
+              <div class="sp12"></div>
+            </div>
+            <!-- /body -->
+
+            <!-- Bottom nav -->
+            <div class="bnav">
+              <button class="tab on">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-home" />
+                </svg>
+                <span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-car" />
+                </svg>
+                <span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-cart" />
+                </svg>
+                <span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-wrench" />
+                </svg>
+                <span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-phone" />
+                </svg>
+                <span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+          <!-- /s-empty -->
+
+          <!-- ════════════════════════════════════════════
+         SCREEN 3: SKELETON LOADING
+    ════════════════════════════════════════════ -->
+          <div class="screen" id="s-loading">
+            <!-- STATUS BAR -->
+            <div class="sbar">
+              <span class="s-time">9:41</span>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+
+            <!-- Header skeleton -->
+            <div class="nbar" style="gap: 12px">
+              <div
+                class="skel"
+                style="
+                  height: 14px;
+                  width: 100px;
+                  border-radius: 6px;
+                  background: linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.07) 0%,
+                    rgba(255, 255, 255, 0.12) 50%,
+                    rgba(255, 255, 255, 0.07) 100%
+                  );
+                  background-size: 740px 100%;
+                  animation: shimmer 1.6s infinite linear;
+                "
+              ></div>
+              <div
+                style="
+                  margin-left: auto;
+                  display: flex;
+                  gap: 8px;
+                  align-items: center;
+                "
+              >
+                <div
+                  class="skel"
+                  style="
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    background: linear-gradient(
+                      90deg,
+                      rgba(255, 255, 255, 0.07) 0%,
+                      rgba(255, 255, 255, 0.12) 50%,
+                      rgba(255, 255, 255, 0.07) 100%
+                    );
+                    background-size: 740px 100%;
+                    animation: shimmer 1.6s infinite linear;
+                  "
+                ></div>
+                <div
+                  class="skel"
+                  style="
+                    width: 64px;
+                    height: 26px;
+                    border-radius: 14px;
+                    background: linear-gradient(
+                      90deg,
+                      rgba(255, 255, 255, 0.07) 0%,
+                      rgba(255, 255, 255, 0.12) 50%,
+                      rgba(255, 255, 255, 0.07) 100%
+                    );
+                    background-size: 740px 100%;
+                    animation: shimmer 1.6s infinite linear;
+                  "
+                ></div>
+              </div>
+            </div>
+
+            <!-- Skeleton body -->
+            <div class="body" style="padding-top: 4px">
+              <div class="skel skel-vc"></div>
+
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  padding: 14px 16px 6px;
+                "
+              >
+                <div
+                  class="skel"
+                  style="height: 14px; width: 100px; border-radius: 7px"
+                ></div>
+              </div>
+
+              <div class="skel-grid">
+                <div class="skel skel-q"></div>
+                <div class="skel skel-q"></div>
+                <div class="skel skel-q"></div>
+                <div class="skel skel-q"></div>
+              </div>
+
+              <div class="skel skel-promo"></div>
+
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  padding: 14px 16px 6px;
+                "
+              >
+                <div
+                  class="skel"
+                  style="height: 14px; width: 120px; border-radius: 7px"
+                ></div>
+                <div
+                  class="skel"
+                  style="height: 12px; width: 56px; border-radius: 7px"
+                ></div>
+              </div>
+              <div class="skel-act-row">
+                <div class="skel skel-act"></div>
+                <div class="skel skel-act"></div>
+                <div class="skel skel-act" style="opacity: 0.6"></div>
+              </div>
+            </div>
+
+            <!-- Bottom nav -->
+            <div class="bnav">
+              <button class="tab on">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-home" />
+                </svg>
+                <span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-car" />
+                </svg>
+                <span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-cart" />
+                </svg>
+                <span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab" onclick="navTo('servicios')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-wrench" />
+                </svg>
+                <span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <use href="#ic-phone" />
+                </svg>
+                <span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+          <!-- /s-loading -->
+        </div>
+        <!-- /device-scr -->
+      </div>
+      <!-- /device -->
+    </div>
+    <!-- /main -->
+
+    <script>
+      var currentMode = "dark";
+      var currentState = "with";
+
+      var stateInfo = {
+        with: {
+          name: "Home — Con vehículos",
+          desc: "Pantalla principal con vehículos vinculados",
+        },
+        empty: {
+          name: "Home — Sin vehículos",
+          desc: "Usuario nuevo sin autos vinculados",
+        },
+        loading: {
+          name: "Home — Cargando",
+          desc: "Skeleton shimmer durante carga inicial",
+        },
+      };
+
+      function setMode(mode) {
+        currentMode = mode;
+        if (mode === "dark") {
+          document.body.removeAttribute("data-mode");
+        } else {
+          document.body.setAttribute("data-mode", "light");
+        }
+        document
+          .getElementById("mode-light")
+          .classList.toggle("on", mode === "light");
+        document
+          .getElementById("mode-dark")
+          .classList.toggle("on", mode === "dark");
+      }
+
+      function setState(state) {
+        currentState = state;
+
+        // hide all screens
+        ["s-with", "s-empty", "s-loading"].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.classList.remove("active");
+        });
+        document.getElementById("s-" + state).classList.add("active");
+
+        // update sidebar info
+        var info = stateInfo[state];
+        document.getElementById("sb-sname").textContent = info.name;
+        document.getElementById("sb-sdesc").textContent = info.desc;
+
+        // update nav buttons
+        ["nav-with", "nav-empty", "nav-loading"].forEach(function (id) {
+          document.getElementById(id).classList.remove("on");
+        });
+        document.getElementById("nav-" + state).classList.add("on");
+
+        // update state toggle buttons
+        ["st-with", "st-empty", "st-loading"].forEach(function (id) {
+          document.getElementById(id).classList.remove("on");
+        });
+        document.getElementById("st-" + state).classList.add("on");
+      }
+
+      function navTo(module, screen) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(
+            { action: "navigate", module: module, screen: screen || null },
+            "*",
+          );
+        }
+      }
+
+      // Init: dark mode default
+    </script>
+  </body>
+</html>

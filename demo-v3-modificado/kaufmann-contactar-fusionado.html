@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaufmann App — Contactar v3</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;display:flex;min-height:100vh;color:var(--text-primary)}
+
+/* ═══════════════════════════════════════
+   DEFAULT: DARK
+═══════════════════════════════════════ */
+body{
+  background:#0A0E14;
+  --primary:#0071BB;--primary-dark:#003252;--primary-mid:#005A96;
+  --primary-tint:rgba(0,113,187,0.18);--primary-tint-2:rgba(0,113,187,0.10);
+  --background:#0B1018;--surface:#131A24;
+  --text-primary:#E8EEF5;--text-secondary:#8A96A6;--text-tertiary:#5A6878;
+  --border:rgba(255,255,255,0.07);--border-light:rgba(255,255,255,0.04);
+  --hero-grad:linear-gradient(160deg,#060C18 0%,#0A1E38 45%,#0D2E55 100%);
+  --card-shadow:0 2px 10px rgba(0,0,0,0.45),0 0 1px rgba(0,113,187,0.12);
+  --card-shadow-md:0 4px 20px rgba(0,0,0,0.55),0 0 30px rgba(0,113,187,0.06);
+  --success:#3FB950;--success-bg:rgba(63,185,80,0.13);
+  --warning:#E3B341;--warning-bg:rgba(227,179,65,0.13);
+  --danger:#F85149;--danger-bg:rgba(248,81,73,0.13);
+  --header-bg:#000000;
+  --bnav-bg:#0B1018;--bnav-border:rgba(255,255,255,0.07);
+  --bnav-active:#2D9AE5;--bnav-inactive:#5A6878;
+  --wa-bg:#25D366;--wa-text:#FFFFFF;
+  --phone-bg:rgba(0,113,187,0.16);--phone-text:#2D9AE5;
+  --email-bg:rgba(163,113,247,0.14);--email-text:#A882FF;
+  --emerg-bg:rgba(248,81,73,0.13);--emerg-text:#F85149;
+  --emerg-grad:linear-gradient(160deg,#1A0508 0%,#2D0A14 45%,#3D1020 100%);
+  --urgente-hero-bg:#0B1018;
+  --urgente-hero-title:#E8EEF5;
+  --urgente-hero-sub:#8A96A6;
+  --nbar-bg:#000000;
+  --svc-list-bg:#131A24;
+  --svc-border:rgba(255,255,255,0.06);
+  --svc-icon-bg:rgba(0,113,187,0.14);
+  --svc-icon-stroke:#2D9AE5;
+  --hours-bg:#131A24;
+  --contact-hero-bg:#000000;
+}
+
+/* LIGHT MODE */
+body[data-mode="light"]{
+  --primary:#0071BB;--primary-dark:#003252;--primary-mid:#005A96;
+  --primary-tint:#EAF4FB;--primary-tint-2:#D0E8F7;
+  --background:#F0F3F8;--surface:#FFFFFF;
+  --text-primary:#1A2633;--text-secondary:#5A6A7A;--text-tertiary:#8E9BAA;
+  --border:#DDE3EA;--border-light:#EEF2F7;
+  --hero-grad:linear-gradient(160deg,#001E3C 0%,#003A6B 50%,#0052A0 100%);
+  --card-shadow:0 1px 3px rgba(0,30,60,0.07),0 4px 14px rgba(0,30,60,0.05),0 0 0 1px rgba(0,113,187,0.06);
+  --card-shadow-md:0 2px 6px rgba(0,30,60,0.09),0 8px 24px rgba(0,30,60,0.07);
+  --success:#18963A;--success-bg:#E6F7EC;
+  --warning:#D97706;--warning-bg:#FEF3C7;
+  --danger:#DC2626;--danger-bg:#FEE2E2;
+  --header-bg:#000000;
+  --bnav-bg:#FFFFFF;--bnav-border:#DDE3EA;
+  --bnav-active:#0071BB;--bnav-inactive:#8E9BAA;
+  --wa-bg:#25D366;--wa-text:#FFFFFF;
+  --phone-bg:#EAF4FB;--phone-text:#0071BB;
+  --email-bg:#F0E6FB;--email-text:#7A4FBF;
+  --emerg-bg:#FEE2E2;--emerg-text:#DC2626;
+  --emerg-grad:linear-gradient(160deg,#7A0000 0%,#B00020 55%,#CC0033 100%);
+  --urgente-hero-bg:#F0F3F8;
+  --urgente-hero-title:#1A2633;
+  --urgente-hero-sub:#5A6A7A;
+  --nbar-bg:#000000;
+  --svc-list-bg:#FFFFFF;
+  --svc-border:#EEF2F7;
+  --svc-icon-bg:rgba(0,113,187,0.08);
+  --svc-icon-stroke:#0071BB;
+  --hours-bg:#FFFFFF;
+  --contact-hero-bg:#000000;
+}
+
+/* ═══════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════ */
+.sidebar{width:268px;background:#06090F;padding:0;overflow-y:auto;position:fixed;top:0;left:0;bottom:0;z-index:10;display:flex;flex-direction:column;border-right:1px solid #111820}
+.sb-hdr{padding:22px 20px 16px;border-bottom:1px solid #111820}
+.sb-brand{font-size:13px;font-weight:800;color:#fff;letter-spacing:3px;text-transform:uppercase}
+.sb-sub{font-size:9px;color:#1E2E40;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-top:6px}
+.sb-info{padding:14px 20px 10px;border-bottom:1px solid #111820}
+.sb-sname{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px}
+.sb-sdesc{font-size:10px;color:#2E3F52;line-height:1.5}
+.sb-ver{display:inline-block;background:#111820;color:#0071BB;font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;margin-top:6px;letter-spacing:0.5px}
+.mode-toggler{padding:10px 20px;border-bottom:1px solid #111820}
+.mode-tog-label{color:#1E2E40;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
+.mode-tog-wrap{display:flex;background:#111820;border-radius:9px;padding:3px;gap:2px}
+.mode-tog-btn{flex:1;padding:6px 4px;border:none;border-radius:7px;font-size:9.5px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;background:transparent;color:#2E3F52;line-height:1.3}
+.mode-tog-btn.on{background:#1A2A3A;color:#E6EDF3;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+.sb-nav{padding:8px 10px 4px;flex:1}
+.sb-nav-lbl{color:#192430;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;padding:0 8px;margin:8px 0 4px}
+.sb-btn{display:flex;align-items:center;gap:9px;width:100%;text-align:left;padding:7px 10px;border:none;border-radius:7px;background:transparent;color:#3A4A5A;font-size:11.5px;cursor:pointer;transition:all 0.15s;line-height:1.3;margin-bottom:1px}
+.sb-btn:hover{background:#111820;color:#8AAABB}
+.sb-btn.on{background:#111820;color:#fff}
+.sb-btn-n{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;background:#0A1018;color:#1E2E40}
+.sb-btn.on .sb-btn-n{background:#0071BB;color:#fff}
+.sb-btn-i{flex:1;min-width:0}
+.sb-btn-t{font-weight:600;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-btn-d{font-size:9.5px;color:#1E2E40;margin-top:1px;line-height:1.3}
+.sb-btn.on .sb-btn-d{color:#3A5A7A}
+.sb-notes{padding:12px 20px;border-top:1px solid #111820}
+.sb-notes-t{color:#1E2E40;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:8px}
+.sb-note{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.sb-nn{width:17px;height:17px;border-radius:50%;background:#111820;color:#0071BB;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.sb-nt{color:#2E4055;font-size:9.5px;line-height:1.55}
+.sb-foot{padding:10px 20px;border-top:1px solid #111820}
+.sb-foot-t{color:#192430;font-size:8.5px;text-align:center;letter-spacing:0.3px;line-height:1.6}
+
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+.main{margin-left:268px;flex:1;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px 40px}
+.device{width:390px;height:844px;background:#060A0E;border-radius:48px;padding:10px;box-shadow:0 0 0 1px #2A3040,0 0 0 3px #060A0E,0 0 0 4.5px #181E28,0 50px 120px rgba(0,0,0,0.98);position:relative;flex-shrink:0}
+.notch{width:120px;height:30px;background:#060A0E;border-radius:0 0 16px 16px;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;justify-content:center}
+.notch-pill{width:72px;height:6px;background:#141C28;border-radius:3px}
+.device-scr{width:100%;height:100%;background:var(--background);border-radius:40px;overflow:hidden;position:relative}
+
+/* ═══════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════ */
+.screen{display:none;flex-direction:column;position:absolute;inset:0;overflow:hidden}
+.screen.active{display:flex}
+
+/* ═══════════════════════════════════════
+   STATUS BAR
+═══════════════════════════════════════ */
+.sbar{height:50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 8px;flex-shrink:0;background:#000000}
+.s-time{font-size:15px;font-weight:700;color:#ffffff}
+.s-icons{display:flex;gap:5px;align-items:center}
+.bars{display:flex;align-items:flex-end;gap:1px}
+.bar{width:3px;border-radius:1px;background:#ffffff}
+.bar:nth-child(1){height:4px}.bar:nth-child(2){height:7px}.bar:nth-child(3){height:10px}.bar:nth-child(4){height:13px}
+.batt{width:22px;height:11px;border:1.5px solid #ffffff;border-radius:3px;position:relative;padding:1.5px}
+.batt::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:2px;height:5px;background:#ffffff;border-radius:0 1px 1px 0}
+.batt-fill{height:100%;border-radius:1px;width:75%;background:#ffffff}
+
+/* ═══════════════════════════════════════
+   APP HEADER (chrome: KAUFMANN + bell + Name Pill)
+═══════════════════════════════════════ */
+.aheader{height:56px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#000000;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.header-logo-wrap{flex:1;display:flex;align-items:center}
+.ah-btn{width:36px;height:36px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:10px;position:relative}
+.ah-btn svg{width:20px;height:20px;stroke:#ffffff;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ah-badge{position:absolute;top:0;right:0;width:16px;height:16px;background:#DC2626;border-radius:50%;font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;border:2px solid #000000}
+.name-pill{height:28px;border-radius:14px;border:1px solid rgba(255,255,255,0.2);padding:0 10px 0 8px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);cursor:pointer;flex-shrink:0}
+.name-pill svg{stroke:rgba(255,255,255,0.7);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;width:14px;height:14px}
+.name-pill-text{font-size:11px;font-weight:600;color:rgba(255,255,255,0.8);letter-spacing:0.3px}
+
+/* ═══════════════════════════════════════
+   NAV BAR (inner black header for sub-screens)
+═══════════════════════════════════════ */
+.nbar{height:56px;display:flex;align-items:center;padding:0 16px;gap:8px;background:var(--nbar-bg);border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+.nbar-back{width:34px;height:34px;border:none;background:rgba(255,255,255,0.08);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.nbar-back svg{stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nbar-title{flex:1;font-size:15px;font-weight:700;color:#ffffff}
+
+/* ═══════════════════════════════════════
+   BODY SCROLL
+═══════════════════════════════════════ */
+.body{flex:1;overflow-y:auto;background:var(--background)}
+.body::-webkit-scrollbar{display:none}
+
+/* ═══════════════════════════════════════
+   BOTTOM NAV (Inicio | Mis Autos | Tienda[featured] | Servicios | Contactar)
+═══════════════════════════════════════ */
+.bnav{height:82px;background:var(--bnav-bg);border-top:1px solid var(--bnav-border);display:flex;padding:10px 0 0;flex-shrink:0}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;border:none;background:none;padding:0 2px}
+.tab-icon svg{width:22px;height:22px;stroke:var(--bnav-inactive);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.18s}
+.tab-label{font-size:9px;text-align:center;line-height:1.2;color:var(--bnav-inactive);transition:color 0.18s;font-weight:500}
+.tab.on .tab-icon svg{stroke:var(--bnav-active)}
+.tab.on .tab-label{color:var(--bnav-active);font-weight:700}
+/* Featured Tienda tab */
+
+/* ═══════════════════════════════════════
+   SEGMENT: Automóvil / Vans / Camiones
+═══════════════════════════════════════ */
+.seg-wrap{background:#000000;padding:8px 16px 12px;flex-shrink:0}
+.seg{display:flex;background:rgba(255,255,255,0.08);border-radius:9px;padding:3px;gap:2px}
+.seg-btn{flex:1;padding:7px 4px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:transparent;color:rgba(255,255,255,0.4);transition:all 0.2s;letter-spacing:0.2px}
+.seg-btn.on{background:#2D9AE5;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.3)}
+body[data-mode="light"] .seg-btn.on{background:#0071BB}
+
+/* ═══════════════════════════════════════
+   SOS HERO (Urgente)
+═══════════════════════════════════════ */
+.sos-hero{background:var(--urgente-hero-bg);padding:24px 20px 14px;display:flex;flex-direction:column;align-items:center;text-align:center;flex-shrink:0}
+.sos-btn{width:80px;height:80px;border-radius:50%;background:#F85149;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 4px 24px rgba(248,81,73,0.45);margin-bottom:14px;flex-shrink:0}
+.sos-btn::before{content:'';position:absolute;inset:-10px;border-radius:50%;border:2px solid rgba(248,81,73,0.35);animation:sos-pulse 1.8s ease-out infinite}
+.sos-btn::after{content:'';position:absolute;inset:-22px;border-radius:50%;border:1.5px solid rgba(248,81,73,0.15);animation:sos-pulse 1.8s ease-out 0.4s infinite}
+@keyframes sos-pulse{0%{transform:scale(1);opacity:1}80%{transform:scale(1.22);opacity:0}100%{transform:scale(1.22);opacity:0}}
+.sos-title{font-size:17px;font-weight:800;color:var(--urgente-hero-title);letter-spacing:-0.3px;margin-bottom:4px;line-height:1.25}
+.sos-sub{font-size:12px;color:var(--urgente-hero-sub);line-height:1.4;max-width:280px}
+.sos-avail{display:inline-flex;align-items:center;gap:6px;background:rgba(63,185,80,0.08);border:1px solid rgba(63,185,80,0.22);color:#3FB950;font-size:10px;font-weight:700;padding:4px 11px;border-radius:20px;margin-top:10px;letter-spacing:0.5px;text-transform:uppercase}
+.sos-avail-dot{width:6px;height:6px;border-radius:50%;background:#3FB950;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
+
+/* ═══════════════════════════════════════
+   SERVICE LIST
+═══════════════════════════════════════ */
+.sec-lbl{padding:12px 16px 6px;font-size:10px;font-weight:800;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+.svc-list{background:var(--svc-list-bg);border-radius:14px;margin:0 16px 16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)}
+body[data-mode="light"] .svc-list{border:none;box-shadow:var(--card-shadow)}
+.svc-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--svc-border);cursor:pointer;transition:background 0.15s}
+.svc-card:last-child{border-bottom:none}
+.svc-icon{width:38px;height:38px;border-radius:10px;background:var(--svc-icon-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.svc-icon svg{width:17px;height:17px;fill:none;stroke:var(--svc-icon-stroke);stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.svc-icon.alert{background:rgba(248,81,73,0.1)}
+.svc-icon.alert svg{stroke:var(--danger)}
+.svc-info{flex:1;min-width:0}
+.svc-title{font-size:13px;font-weight:700;color:var(--text-primary)}
+.svc-sub{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.btn-sol{flex-shrink:0;padding:6px 12px;border-radius:9px;border:none;background:#F85149;color:#fff;font-size:9.5px;font-weight:800;cursor:pointer;letter-spacing:0.6px;text-transform:uppercase}
+
+/* ═══════════════════════════════════════
+   CONTACT HERO (black, 24/7 badge)
+═══════════════════════════════════════ */
+.contact-hero{background:var(--contact-hero-bg);padding:20px 20px 16px;flex-shrink:0;position:relative;overflow:hidden}
+.contact-hero-deco{position:absolute;right:-24px;bottom:-24px;width:110px;height:110px;border-radius:50%;background:rgba(240,33,0,0.05);pointer-events:none}
+.emerg-badge{display:inline-flex;align-items:center;gap:6px;margin-bottom:10px}
+.emerg-dot{width:10px;height:10px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px rgba(240,33,0,0.7);animation:blink 1.4s ease-in-out infinite;flex-shrink:0}
+.emerg-label{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--danger);text-transform:uppercase}
+.contact-hero-title{font-size:22px;font-weight:900;color:#fff;line-height:1.15;margin-bottom:6px}
+.contact-hero-sub{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5}
+.cta-row{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.btn-call{width:100%;padding:15px;border-radius:13px;border:none;background:#F85149;color:#fff;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(248,81,73,0.3)}
+.btn-call svg{stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.btn-wa{width:100%;padding:15px;border-radius:13px;border:none;background:#25D366;color:#fff;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 4px 16px rgba(37,211,102,0.28)}
+.btn-wa svg{fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ═══════════════════════════════════════
+   CHANNEL CARDS (Otros canales)
+═══════════════════════════════════════ */
+.ch-section{padding:0 16px;display:flex;flex-direction:column;gap:10px}
+.ch-lbl{padding:12px 16px 6px;font-size:11px;font-weight:700;letter-spacing:0.8px;color:var(--text-tertiary);text-transform:uppercase}
+.ch-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(19,26,36,0.9);border-radius:13px;box-shadow:var(--card-shadow);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+body[data-mode="light"] .ch-card{backdrop-filter:none;background:#FFFFFF;border-color:var(--border-light)}
+.ch-ic{width:36px;height:36px;border-radius:10px;background:var(--svc-icon-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ch-ic svg{width:18px;height:18px;fill:none;stroke:var(--svc-icon-stroke);stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.ch-info{flex:1}
+.ch-name{font-size:13px;font-weight:700;color:var(--text-primary)}
+.ch-sub{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.ch-arr svg{width:16px;height:16px;fill:none;stroke:var(--text-tertiary);stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+/* ═══════════════════════════════════════
+   HOURS BLOCK
+═══════════════════════════════════════ */
+.hours-block{margin:8px 16px 16px;padding:14px;background:rgba(19,26,36,0.9);border-radius:13px;box-shadow:var(--card-shadow);border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+body[data-mode="light"] .hours-block{backdrop-filter:none;background:#FFFFFF;border-color:var(--border-light)}
+.hours-title{font-size:10px;font-weight:800;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px}
+.hours-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.hours-row:last-child{border-bottom:none}
+body[data-mode="light"] .hours-row{border-color:var(--border-light)}
+.hours-day{font-size:12px;color:var(--text-secondary)}
+.hours-time{font-size:12px;font-weight:600;color:var(--text-primary)}
+.hours-emerg{margin-top:6px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06)}
+body[data-mode="light"] .hours-emerg{border-color:var(--border-light)}
+.sp{height:8px;flex-shrink:0}
+.sp16{height:16px;flex-shrink:0}
+
+/* ═══════════════════════════════════════
+   V3 BEST OF ENHANCEMENTS
+═══════════════════════════════════════ */
+.sos-hero{
+  background:var(--urgente-hero-bg);
+}
+</style>
+</head>
+<body data-mode="dark">
+
+<!-- ════ ICON DEFS ════ -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+<symbol id="ic-car" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+<symbol id="ic-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+<symbol id="ic-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.54-.54a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="ic-bag" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+<symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+<symbol id="ic-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+<symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+<symbol id="ic-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="ic-chevron-left" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></symbol>
+<symbol id="ic-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+<symbol id="ic-truck" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+<symbol id="ic-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+<symbol id="ic-wa" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="ic-battery" viewBox="0 0 24 24"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="13" x2="23" y2="11"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="9" y1="12" x2="3" y2="12"/></symbol>
+<symbol id="ic-tow" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+<symbol id="ic-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+<symbol id="ic-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+<symbol id="ic-tire" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+</defs>
+</svg>
+
+<!-- ════ SIDEBAR ════ -->
+<aside class="sidebar">
+  <div class="sb-hdr">
+    <div class="sb-brand">KAUFMANN</div>
+    <div class="sb-sub">Contactar v3 · 2026</div>
+  </div>
+
+  <div class="sb-info">
+    <div class="sb-sname" id="sb-sname">Servicio 24H — Automóvil</div>
+    <div class="sb-sdesc" id="sb-sdesc">Emergencias vehículos particulares</div>
+    <span class="sb-ver">v3 · 30 Mar 2026</span>
+  </div>
+
+  <div class="mode-toggler" id="mode-toggler">
+    <div class="mode-tog-label">Modo</div>
+    <div class="mode-tog-wrap">
+      <button class="mode-tog-btn" id="mode-light" onclick="setMode('light')">Claro</button>
+      <button class="mode-tog-btn on" id="mode-dark" onclick="setMode('dark')">Oscuro</button>
+    </div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="sb-nav-lbl">Servicio 24H (3 segmentos)</div>
+    <button class="sb-btn on" id="nav-svc24" onclick="goScreen('svc24')">
+      <div class="sb-btn-n">9</div>
+      <div class="sb-btn-i">
+        <div class="sb-btn-t">Servicio 24H — Automóvil</div>
+        <div class="sb-btn-d">Emergencias autos particulares</div>
+      </div>
+    </button>
+    <button class="sb-btn" id="nav-svc24-vans" onclick="goScreen('svc24-vans')">
+      <div class="sb-btn-n">10</div>
+      <div class="sb-btn-i">
+        <div class="sb-btn-t">Servicio 24H — Vans</div>
+        <div class="sb-btn-d">Asistencia vehículos comerciales</div>
+      </div>
+    </button>
+    <button class="sb-btn" id="nav-svc24-camiones" onclick="goScreen('svc24-camiones')">
+      <div class="sb-btn-n">11</div>
+      <div class="sb-btn-i">
+        <div class="sb-btn-t">Servicio 24H — Camiones</div>
+        <div class="sb-btn-d">Asistencia transporte pesado</div>
+      </div>
+    </button>
+    <div class="sb-nav-lbl">Contactar</div>
+    <button class="sb-btn" id="nav-contactar" onclick="goScreen('contactar')">
+      <div class="sb-btn-n">12</div>
+      <div class="sb-btn-i">
+        <div class="sb-btn-t">Contactar</div>
+        <div class="sb-btn-d">Canales con WhatsApp destacado</div>
+      </div>
+    </button>
+  </nav>
+
+  <div class="sb-notes">
+    <div class="sb-notes-t">Notas de Diseño</div>
+    <div class="sb-note">
+      <div class="sb-nn">1</div>
+      <div class="sb-nt">Estructura V2 (SOS pulsante + segmento 3 tabs) con CSS V3 Best Of aplicado.</div>
+    </div>
+    <div class="sb-note">
+      <div class="sb-nn">2</div>
+      <div class="sb-nt">Default dark: --background:#0B1018, --surface:#131A24, blue glow shadows, glassmorphism.</div>
+    </div>
+    <div class="sb-note">
+      <div class="sb-nn">3</div>
+      <div class="sb-nt">WhatsApp CTA principal verde #25D366 en pantalla Contactar. Emergencias 24/7 badge rojo pulsante.</div>
+    </div>
+    <div class="sb-note">
+      <div class="sb-nn">4</div>
+      <div class="sb-nt">Bottom nav: Inicio | Mis Autos | Tienda(featured) | Servicios | Contactar(on).</div>
+    </div>
+  </div>
+
+  <div class="sb-foot">
+    <div class="sb-foot-t">Grupo Kaufmann · Diseño UI v3 · 2026</div>
+  </div>
+</aside>
+
+<!-- ════ MAIN ════ -->
+<main class="main">
+  <div class="device">
+    <div class="notch"><div class="notch-pill"></div></div>
+    <div class="device-scr">
+
+      <!-- ═══ SCREEN S9: SERVICIO 24H — AUTOMOVIL ═══ -->
+      <div class="screen active" id="s-svc24">
+        <div class="sbar">
+          <span class="s-time">9:41</span>
+          <div class="s-icons">
+            <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+            <div class="batt"><div class="batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="nbar">
+          <button class="nbar-back" onclick="goScreen('contactar')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="nbar-title">Servicio 24 Horas</div>
+          <div class="name-pill" onclick="navTo('perfil')">
+            <svg viewBox="0 0 24 24"><use href="#ic-user"/></svg>
+            <span class="name-pill-text">Pedro G.</span>
+          </div>
+        </div>
+        <div class="seg-wrap">
+          <div class="seg">
+            <button class="seg-btn on" onclick="goScreen('svc24')">Automóvil</button>
+            <button class="seg-btn" onclick="goScreen('svc24-vans')">Vans</button>
+            <button class="seg-btn" onclick="goScreen('svc24-camiones')">Camiones</button>
+          </div>
+        </div>
+        <div class="sos-hero">
+          <button class="sos-btn">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg>
+          </button>
+          <div class="sos-title">Llamar emergencia ahora</div>
+          <div class="sos-sub">GLA 200 · BCDF-12 · Asistencia inmediata en ruta, disponible 24/7 sin costo adicional</div>
+          <div class="sos-avail"><div class="sos-avail-dot"></div>Disponible 24/7</div>
+        </div>
+        <div class="body">
+          <div class="sec-lbl">SOLICITAR SERVICIO</div>
+          <div class="svc-list">
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-tow"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Grúa y remolque</div>
+                <div class="svc-sub">Asistencia en carretera y ciudad</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Auto de reemplazo</div>
+                <div class="svc-sub">Disponible mientras tu vehículo es reparado</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon alert"><svg viewBox="0 0 24 24"><use href="#ic-tool"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Mecánico en ruta</div>
+                <div class="svc-sub">Para fallas menores en carretera</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-tire"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Llantas y neumáticos</div>
+                <div class="svc-sub">Cambio de neumático en sitio</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+          </div>
+          <div class="sp16"></div>
+        </div>
+        <div class="bnav">
+        <button class="tab" onclick="navTo('home')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></div>
+            <span class="tab-label">Inicio</span>
+          </button>
+        <button class="tab" onclick="navTo('vehículos')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg></div>
+            <span class="tab-label">Mis Autos</span>
+          </button>
+        <button class="tab" onclick="navTo('tienda')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg></div>
+            <span class="tab-label">Tienda</span>
+          </button>
+        <button class="tab" onclick="navTo('servicios')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg></div>
+            <span class="tab-label">Servicios</span>
+          </button>
+        <button class="tab on" onclick="goScreen('contactar')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg></div>
+            <span class="tab-label">Contactar</span>
+          </button>
+      </div>
+      </div>
+
+      <!-- ═══ SCREEN S10: SERVICIO 24H — VANS ═══ -->
+      <div class="screen" id="s-svc24-vans">
+        <div class="sbar">
+          <span class="s-time">9:41</span>
+          <div class="s-icons">
+            <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+            <div class="batt"><div class="batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="nbar">
+          <button class="nbar-back" onclick="goScreen('svc24')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="nbar-title">Servicio 24 Horas</div>
+          <div class="name-pill" onclick="navTo('perfil')">
+            <svg viewBox="0 0 24 24"><use href="#ic-user"/></svg>
+            <span class="name-pill-text">Pedro G.</span>
+          </div>
+        </div>
+        <div class="seg-wrap">
+          <div class="seg">
+            <button class="seg-btn" onclick="goScreen('svc24')">Automóvil</button>
+            <button class="seg-btn on" onclick="goScreen('svc24-vans')">Vans</button>
+            <button class="seg-btn" onclick="goScreen('svc24-camiones')">Camiones</button>
+          </div>
+        </div>
+        <div class="sos-hero">
+          <button class="sos-btn">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg>
+          </button>
+          <div class="sos-title">Llamar emergencia ahora</div>
+          <div class="sos-sub">Sprinter 316 · GHKL-34 · Soporte especializado para Vans Mercedes-Benz disponible 24/7</div>
+          <div class="sos-avail"><div class="sos-avail-dot"></div>Disponible — resp. 15 min</div>
+        </div>
+        <div class="body">
+          <div class="svc-list" style="margin-top:8px">
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-truck"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Asistencia en ruta</div>
+                <div class="svc-sub">Soporte inmediato en carretera y ciudad</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-tow"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Grúa especializada vans</div>
+                <div class="svc-sub">Remolque adaptado para vehículos comerciales</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-tool"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Mantención Sprinter</div>
+                <div class="svc-sub">Servicio técnico certificado Mercedes-Benz</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-shield"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Repuestos originales</div>
+                <div class="svc-sub">Piezas Mercedes-Benz certificadas en stock</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+          </div>
+          <div class="sp16"></div>
+        </div>
+        <div class="bnav">
+        <button class="tab" onclick="navTo('home')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></div>
+            <span class="tab-label">Inicio</span>
+          </button>
+        <button class="tab" onclick="navTo('vehículos')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg></div>
+            <span class="tab-label">Mis Autos</span>
+          </button>
+        <button class="tab" onclick="navTo('tienda')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg></div>
+            <span class="tab-label">Tienda</span>
+          </button>
+        <button class="tab" onclick="navTo('servicios')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg></div>
+            <span class="tab-label">Servicios</span>
+          </button>
+        <button class="tab on" onclick="goScreen('contactar')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg></div>
+            <span class="tab-label">Contactar</span>
+          </button>
+      </div>
+      </div>
+
+      <!-- ═══ SCREEN S11: SERVICIO 24H — CAMIONES ═══ -->
+      <div class="screen" id="s-svc24-camiones">
+        <div class="sbar">
+          <span class="s-time">9:41</span>
+          <div class="s-icons">
+            <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+            <div class="batt"><div class="batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="nbar">
+          <button class="nbar-back" onclick="goScreen('svc24')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <div class="nbar-title">Servicio 24 Horas</div>
+          <div class="name-pill" onclick="navTo('perfil')">
+            <svg viewBox="0 0 24 24"><use href="#ic-user"/></svg>
+            <span class="name-pill-text">Pedro G.</span>
+          </div>
+        </div>
+        <div class="seg-wrap">
+          <div class="seg">
+            <button class="seg-btn" onclick="goScreen('svc24')">Automóvil</button>
+            <button class="seg-btn" onclick="goScreen('svc24-vans')">Vans</button>
+            <button class="seg-btn on" onclick="goScreen('svc24-camiones')">Camiones</button>
+          </div>
+        </div>
+        <div class="sos-hero">
+          <button class="sos-btn">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg>
+          </button>
+          <div class="sos-title">Llamar emergencia ahora</div>
+          <div class="sos-sub">Actros 2645 · WXYZ-99 · Asistencia ruta pesada Mercedes-Benz disponible 24/7</div>
+          <div class="sos-avail"><div class="sos-avail-dot"></div>Disponible — resp. 20 min</div>
+        </div>
+        <div class="body">
+          <div class="svc-list" style="margin-top:8px">
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-truck"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Asistencia ruta pesada</div>
+                <div class="svc-sub">Respuesta prioritaria para transporte de carga</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon alert"><svg viewBox="0 0 24 24"><use href="#ic-star"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Grúa alto tonelaje</div>
+                <div class="svc-sub">Equipamiento certificado hasta 40 toneladas</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-tool"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Servicio técnico en terreno</div>
+                <div class="svc-sub">Mecánicos certificados se desplazan al sitio</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon"><svg viewBox="0 0 24 24"><use href="#ic-monitor"/></svg></div>
+              <div class="svc-info">
+                <div class="svc-title">Diagnóstico remoto</div>
+                <div class="svc-sub">Telemetría en tiempo real Actros FleetBoard</div>
+              </div>
+              <button class="btn-sol">Solicitar</button>
+            </div>
+          </div>
+          <div class="sp16"></div>
+        </div>
+        <div class="bnav">
+        <button class="tab" onclick="navTo('home')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></div>
+            <span class="tab-label">Inicio</span>
+          </button>
+        <button class="tab" onclick="navTo('vehículos')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg></div>
+            <span class="tab-label">Mis Autos</span>
+          </button>
+        <button class="tab" onclick="navTo('tienda')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg></div>
+            <span class="tab-label">Tienda</span>
+          </button>
+        <button class="tab" onclick="navTo('servicios')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg></div>
+            <span class="tab-label">Servicios</span>
+          </button>
+        <button class="tab on" onclick="goScreen('contactar')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg></div>
+            <span class="tab-label">Contactar</span>
+          </button>
+      </div>
+      </div>
+
+      <!-- ═══ SCREEN S12: CONTACTAR ═══ -->
+      <div class="screen" id="s-contactar">
+        <div class="sbar">
+          <span class="s-time">9:41</span>
+          <div class="s-icons">
+            <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+            <div class="batt"><div class="batt-fill"></div></div>
+          </div>
+        </div>
+        <div class="aheader">
+          <div class="header-logo-wrap">
+            <svg viewBox="0 0 130 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:20px;width:auto">
+              <text x="0" y="15" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="15" font-weight="800" fill="#FFFFFF" letter-spacing="1.5">KAUFMANN</text>
+            </svg>
+          </div>
+          <button class="ah-btn" onclick="navTo('notificaciónes')" style="position:relative">
+            <svg viewBox="0 0 24 24" width="20" height="20"><use href="#ic-bell"/></svg>
+            <span class="ah-badge">3</span>
+          </button>
+          <div class="name-pill" onclick="navTo('perfil')">
+            <svg viewBox="0 0 24 24"><use href="#ic-user"/></svg>
+            <span class="name-pill-text">Pedro G.</span>
+          </div>
+        </div>
+        <!-- Contact hero: black background, 24/7 badge, urgente style -->
+        <div class="contact-hero">
+          <div class="contact-hero-deco"></div>
+          <div class="emerg-badge">
+            <div class="emerg-dot"></div>
+            <span class="emerg-label">Emergencias activas 24/7</span>
+          </div>
+          <div class="contact-hero-title">¿Necesitas ayuda<br>ahora mismo?</div>
+          <div class="contact-hero-sub">Conectamos con el equipo correcto de Kaufmann según tu necesidad.</div>
+          <div class="cta-row">
+            <button class="btn-call">
+              <svg width="18" height="18" viewBox="0 0 24 24"><use href="#ic-phone"/></svg>
+              Llamar — +56 2 2345 6789
+            </button>
+            <button class="btn-wa">
+              <svg width="18" height="18" viewBox="0 0 24 24"><use href="#ic-wa"/></svg>
+              WhatsApp — respuesta inmediata
+            </button>
+          </div>
+        </div>
+        <div class="body">
+          <div class="ch-lbl">Otros canales</div>
+          <div class="ch-section">
+            <div class="ch-card">
+              <div class="ch-ic"><svg viewBox="0 0 24 24"><use href="#ic-mail"/></svg></div>
+              <div class="ch-info">
+                <div class="ch-name">Correo electrónico</div>
+                <div class="ch-sub">Respuesta en menos de 24 hrs</div>
+              </div>
+              <div class="ch-arr"><svg viewBox="0 0 24 24"><use href="#ic-chevron-right"/></svg></div>
+            </div>
+            <div class="ch-card">
+              <div class="ch-ic"><svg viewBox="0 0 24 24"><use href="#ic-globe"/></svg></div>
+              <div class="ch-info">
+                <div class="ch-name">Portal web</div>
+                <div class="ch-sub">kaufmann.cl — formulario de contacto</div>
+              </div>
+              <div class="ch-arr"><svg viewBox="0 0 24 24"><use href="#ic-chevron-right"/></svg></div>
+            </div>
+          </div>
+          <div class="hours-block">
+            <div class="hours-title">Horario de atención</div>
+            <div class="hours-row">
+              <span class="hours-day">Lunes — Viernes</span>
+              <span class="hours-time">08:30 – 19:00</span>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Sábado</span>
+              <span class="hours-time">09:00 – 14:00</span>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Domingo</span>
+              <span class="hours-time" style="color:var(--text-tertiary)">Cerrado</span>
+            </div>
+            <div class="hours-row hours-emerg">
+              <span class="hours-day" style="color:var(--danger);font-weight:800">Emergencias</span>
+              <span class="hours-time" style="color:var(--danger);font-weight:800">24/7</span>
+            </div>
+          </div>
+          <!-- Link a Servicio 24h -->
+          <div style="padding:0 16px 16px">
+            <button onclick="goScreen('svc24')" style="width:100%;padding:13px 16px;border-radius:14px;border:1px solid var(--border-light);background:var(--surface);box-shadow:var(--card-shadow);display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left">
+              <div style="width:40px;height:40px;border-radius:12px;background:var(--emerg-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--danger)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-shield"/></svg>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:2px">Servicio 24 Horas</div>
+                <div style="font-size:11px;color:var(--text-tertiary)">Asistencia en ruta · *2400</div>
+              </div>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text-tertiary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-right"/></svg>
+            </button>
+          </div>
+          <div class="sp"></div>
+        </div>
+        <div class="bnav">
+        <button class="tab" onclick="navTo('home')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-home"/></svg></div>
+            <span class="tab-label">Inicio</span>
+          </button>
+        <button class="tab" onclick="navTo('vehículos')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-car"/></svg></div>
+            <span class="tab-label">Mis Autos</span>
+          </button>
+        <button class="tab" onclick="navTo('tienda')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-bag"/></svg></div>
+            <span class="tab-label">Tienda</span>
+          </button>
+        <button class="tab" onclick="navTo('servicios')">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-wrench"/></svg></div>
+            <span class="tab-label">Servicios</span>
+          </button>
+        <button class="tab on">
+            <div class="tab-icon"><svg viewBox="0 0 24 24"><use href="#ic-phone"/></svg></div>
+            <span class="tab-label">Contactar</span>
+          </button>
+      </div>
+      </div>
+
+    </div><!-- /device-scr -->
+  </div><!-- /device -->
+</main>
+
+<script>
+const SCREENS=['svc24','svc24-vans','svc24-camiones','contactar'];
+const NAV_MAP={
+  'svc24':'nav-svc24',
+  'svc24-vans':'nav-svc24-vans',
+  'svc24-camiones':'nav-svc24-camiones',
+  'contactar':'nav-contactar'
+};
+const DESC_MAP={
+  'svc24':['Servicio 24H — Automóvil','Emergencias vehículos particulares · SOS pulsante'],
+  'svc24-vans':['Servicio 24H — Vans','Asistencia vehículos comerciales · Sprinter 316'],
+  'svc24-camiones':['Servicio 24H — Camiones','Asistencia transporte pesado · Actros 2645'],
+  'contactar':['Contactar — Principal','Canales con WhatsApp destacado + Servicio 24H']
+};
+
+function goScreen(id){
+  SCREENS.forEach(s=>{
+    const el=document.getElementById('s-'+s);
+    if(el) el.classList.toggle('active',s===id);
+  });
+  Object.keys(NAV_MAP).forEach(k=>{
+    const btn=document.getElementById(NAV_MAP[k]);
+    if(btn) btn.classList.toggle('on',k===id);
+  });
+  if(DESC_MAP[id]){
+    document.getElementById('sb-sname').textContent=DESC_MAP[id][0];
+    document.getElementById('sb-sdesc').textContent=DESC_MAP[id][1];
+  }
+}
+
+function setMode(m){
+  document.body.setAttribute('data-mode',m);
+  document.getElementById('mode-light').classList.toggle('on',m==='light');
+  document.getElementById('mode-dark').classList.toggle('on',m==='dark');
+}
+
+function navTo(module){
+  if(window.parent!==window) window.parent.postMessage({action:'navigate',module:module},'*');
+}
+
+// Init
+setMode('dark');
+goScreen('svc24');
+</script>
+</body>
+</html>

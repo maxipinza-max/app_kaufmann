@@ -1,0 +1,4832 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaufmann App — Servicios/Taller · Versión Final</title>
+    <style>
+      /* ══════════════════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════════════════ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #0a0e14;
+        display: flex;
+        min-height: 100vh;
+        color: var(--text-primary);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   V3 BEST OF — DARK DEFAULT
+   bg #0B1018, surface #131A24, primary #0071BB
+   Blue-glow shadows, 4-stop hero gradient, glassmorphism
+══════════════════════════════════════════════════════════════ */
+      :root {
+        --primary: #3b9eff;
+        --primary-dark: #0060cc;
+        --primary-mid: #2080e8;
+        --primary-tint: rgba(59, 158, 255, 0.14);
+        --primary-tint-2: rgba(59, 158, 255, 0.07);
+        --background: #0b1018;
+        --surface: #131a24;
+        --text-primary: #e8eef5;
+        --text-secondary: #8a96a6;
+        --text-tertiary: #5a6878;
+        --border: rgba(59, 158, 255, 0.1);
+        --border-light: rgba(255, 255, 255, 0.04);
+        --hero-grad: linear-gradient(
+          160deg,
+          #050c16 0%,
+          #071426 30%,
+          #0a2040 65%,
+          #0d3060 100%
+        );
+        --card-shadow:
+          0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(59, 158, 255, 0.08);
+        --card-shadow-md:
+          0 4px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(59, 158, 255, 0.07);
+        --card-shadow-strong:
+          0 4px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(59, 158, 255, 0.07);
+        --success: #3fc76a;
+        --success-bg: rgba(63, 199, 106, 0.12);
+        --warning: #f0b840;
+        --warning-bg: rgba(240, 184, 64, 0.12);
+        --danger: #f05454;
+        --danger-bg: rgba(240, 84, 84, 0.12);
+        --header-bg: #000000;
+        --bnav-bg: #0b1018;
+        --bnav-border: rgba(59, 158, 255, 0.1);
+        --bnav-active: #0071bb;
+        --bnav-inactive: #5a6878;
+        --seg-bg: rgba(255, 255, 255, 0.06);
+        --seg-active-bg: #1a2638;
+        --seg-active-shadow:
+          0 1px 6px rgba(59, 158, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.4);
+        --accent: #0071bb;
+        --tl-done: #3fc76a;
+        --tl-done-bg: rgba(63, 199, 106, 0.12);
+        --tl-active: #3b9eff;
+        --tl-active-bg: rgba(59, 158, 255, 0.12);
+        --tl-active-glow: 0 0 18px rgba(59, 158, 255, 0.55);
+        --tl-future-border: rgba(59, 158, 255, 0.12);
+        --tl-future-line: rgba(255, 255, 255, 0.04);
+        --tl-done-circle: #3fc76a;
+        --tl-done-line: #3fc76a;
+        --tl-active-circle: #3b9eff;
+        --advisor-bg: rgba(19, 26, 36, 0.9);
+        --advisor-border: rgba(59, 158, 255, 0.14);
+        --wa-bg: #25d366;
+        --wa-text: #ffffff;
+        --phone-bg: rgba(59, 158, 255, 0.14);
+        --phone-text: #3b9eff;
+        --badge-prog-bg: rgba(59, 158, 255, 0.12);
+        --badge-prog-text: #3b9eff;
+        --badge-prog-border: rgba(59, 158, 255, 0.28);
+        --badge-done-bg: rgba(63, 199, 106, 0.12);
+        --badge-done-text: #3fc76a;
+        --badge-done-border: rgba(63, 199, 106, 0.28);
+        --badge-warn-bg: rgba(240, 184, 64, 0.12);
+        --badge-warn-text: #f0b840;
+        --badge-warn-border: rgba(240, 184, 64, 0.28);
+        --proforma-bg: rgba(240, 184, 64, 0.07);
+        --proforma-border: rgba(240, 184, 64, 0.22);
+        --fab-bg: #3b9eff;
+        --fab-shadow:
+          0 4px 20px rgba(59, 158, 255, 0.5), 0 0 0 1px rgba(59, 158, 255, 0.15);
+        --chip-active-bg: #0071bb;
+        --chip-active-text: #ffffff;
+        --chip-inactive-bg: #131a24;
+        --chip-inactive-text: #8a96a6;
+        --chip-inactive-border: rgba(59, 158, 255, 0.12);
+        --stepper-active-bg: #0071bb;
+        --stepper-active-text: #ffffff;
+        --stepper-done-bg: #3fc76a;
+        --stepper-done-text: #ffffff;
+        --stepper-inactive-bg: rgba(59, 158, 255, 0.1);
+        --stepper-inactive-text: #5a6878;
+        --stepper-line-done: #3fc76a;
+        --stepper-line-idle: rgba(255, 255, 255, 0.06);
+        --btn-primary-bg: #00adef;
+        --btn-primary-text: #ffffff;
+        --btn-secondary-text: #3b9eff;
+        --btn-secondary-border: #3b9eff;
+        --st-received-bg: rgba(59, 158, 255, 0.12);
+        --st-received-text: #3b9eff;
+        --st-received-border: rgba(59, 158, 255, 0.28);
+        --st-working-bg: rgba(240, 184, 64, 0.12);
+        --st-working-text: #f0b840;
+        --st-working-border: rgba(240, 184, 64, 0.28);
+        --st-prep-bg: rgba(180, 120, 240, 0.15);
+        --st-prep-text: #c084fc;
+        --st-prep-border: rgba(180, 120, 240, 0.35);
+        --st-invoice-bg: rgba(63, 199, 106, 0.12);
+        --st-invoice-text: #3fc76a;
+        --st-invoice-border: rgba(63, 199, 106, 0.28);
+        --icon-bg-taller: rgba(59, 158, 255, 0.14);
+        --icon-stroke-taller: #3b9eff;
+        --alert-bg: rgba(240, 184, 64, 0.1);
+        --alert-border: #f0b840;
+        --alert-text: #f0b840;
+        --alert-sub: #c89a30;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   LIGHT MODE — body[data-mode="light"]
+══════════════════════════════════════════════════════════════ */
+      body[data-mode="light"] {
+        --primary: #0071bb;
+        --primary-dark: #003252;
+        --primary-mid: #005a96;
+        --primary-tint: #eaf4fb;
+        --primary-tint-2: #d0e8f7;
+        --background: #f0f3f8;
+        --surface: #ffffff;
+        --text-primary: #0f1923;
+        --text-secondary: #4a5a6a;
+        --text-tertiary: #8a96a6;
+        --border: #d8dee8;
+        --border-light: #eef2f8;
+        --hero-grad: linear-gradient(
+          160deg,
+          #001e3c 0%,
+          #003a6b 40%,
+          #005a96 80%,
+          #006bad 100%
+        );
+        --card-shadow:
+          0 2px 8px rgba(0, 20, 50, 0.07), 0 0 0 1px rgba(0, 113, 187, 0.06);
+        --card-shadow-md:
+          0 4px 20px rgba(0, 20, 50, 0.1), 0 0 1px rgba(0, 113, 187, 0.1);
+        --card-shadow-strong: 0 4px 20px rgba(0, 20, 50, 0.1);
+        --success: #18963a;
+        --success-bg: #e6f7ec;
+        --warning: #d97706;
+        --warning-bg: #fef3c7;
+        --danger: #dc2626;
+        --danger-bg: #fee2e2;
+        --header-bg: #000000;
+        --bnav-bg: #ffffff;
+        --bnav-border: #d8dee8;
+        --bnav-active: #0071bb;
+        --bnav-inactive: #8a96a6;
+        --seg-bg: rgba(120, 120, 128, 0.14);
+        --seg-active-bg: #ffffff;
+        --seg-active-shadow:
+          0 1px 4px rgba(0, 113, 187, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08);
+        --accent: #0071bb;
+        --tl-done: #18963a;
+        --tl-done-bg: #e6f7ec;
+        --tl-active: #0071bb;
+        --tl-active-bg: #eaf4fb;
+        --tl-active-glow: 0 0 14px rgba(0, 113, 187, 0.35);
+        --tl-future-border: #d8dee8;
+        --tl-future-line: #eef2f8;
+        --tl-done-circle: #18963a;
+        --tl-done-line: #18963a;
+        --tl-active-circle: #0071bb;
+        --advisor-bg: #ffffff;
+        --advisor-border: #d8dee8;
+        --wa-bg: #25d366;
+        --wa-text: #ffffff;
+        --phone-bg: #eaf4fb;
+        --phone-text: #0071bb;
+        --badge-prog-bg: rgba(0, 113, 187, 0.1);
+        --badge-prog-text: #0071bb;
+        --badge-prog-border: rgba(0, 113, 187, 0.28);
+        --badge-done-bg: #e6f7ec;
+        --badge-done-text: #18963a;
+        --badge-done-border: rgba(24, 150, 58, 0.28);
+        --badge-warn-bg: #fef3c7;
+        --badge-warn-text: #d97706;
+        --badge-warn-border: rgba(217, 119, 6, 0.28);
+        --proforma-bg: rgba(217, 119, 6, 0.05);
+        --proforma-border: rgba(217, 119, 6, 0.25);
+        --fab-bg: #0071bb;
+        --fab-shadow: 0 4px 16px rgba(0, 113, 187, 0.38);
+        --chip-active-bg: #0071bb;
+        --chip-active-text: #ffffff;
+        --chip-inactive-bg: #ffffff;
+        --chip-inactive-text: #5a6a7a;
+        --chip-inactive-border: #d8dee8;
+        --stepper-active-bg: #0071bb;
+        --stepper-active-text: #ffffff;
+        --stepper-done-bg: #18963a;
+        --stepper-done-text: #ffffff;
+        --stepper-inactive-bg: #d8dee8;
+        --stepper-inactive-text: #8a96a6;
+        --stepper-line-done: #18963a;
+        --stepper-line-idle: #d8dee8;
+        --btn-primary-bg: #00adef;
+        --btn-primary-text: #ffffff;
+        --btn-secondary-text: #0071bb;
+        --btn-secondary-border: #0071bb;
+        --st-received-bg: rgba(0, 113, 187, 0.1);
+        --st-received-text: #0071bb;
+        --st-received-border: rgba(0, 113, 187, 0.28);
+        --st-working-bg: rgba(217, 119, 6, 0.1);
+        --st-working-text: #b87800;
+        --st-working-border: rgba(217, 119, 6, 0.35);
+        --st-prep-bg: rgba(138, 95, 200, 0.1);
+        --st-prep-text: #6e3fbb;
+        --st-prep-border: rgba(138, 95, 200, 0.28);
+        --st-invoice-bg: rgba(24, 150, 58, 0.1);
+        --st-invoice-text: #18963a;
+        --st-invoice-border: rgba(24, 150, 58, 0.28);
+        --icon-bg-taller: #eaf4fb;
+        --icon-stroke-taller: #0071bb;
+        --alert-bg: #fef3c7;
+        --alert-border: #f59e0b;
+        --alert-text: #92400e;
+        --alert-sub: #b45309;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════════════════ */
+      .sidebar {
+        width: 272px;
+        background: #06090f;
+        padding: 0;
+        overflow-y: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #111820;
+      }
+      .sb-hdr {
+        padding: 22px 20px 16px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-brand {
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+      .sb-sub {
+        font-size: 9px;
+        color: #1e2e40;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-top: 6px;
+      }
+      .sb-info {
+        padding: 14px 20px 10px;
+        border-bottom: 1px solid #111820;
+      }
+      .sb-sname {
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 3px;
+      }
+      .sb-sdesc {
+        font-size: 10px;
+        color: #2e3f52;
+        line-height: 1.5;
+      }
+      .sb-ver {
+        display: inline-block;
+        background: #111820;
+        color: #0071bb;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 5px;
+        margin-top: 6px;
+        letter-spacing: 0.5px;
+      }
+
+      .mode-toggler {
+        padding: 10px 20px;
+        border-bottom: 1px solid #111820;
+      }
+      .mode-tog-label {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .mode-tog-wrap {
+        display: flex;
+        background: #111820;
+        border-radius: 9px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .mode-tog-btn {
+        flex: 1;
+        padding: 6px 4px;
+        border: none;
+        border-radius: 7px;
+        font-size: 9.5px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: #2e3f52;
+        line-height: 1.3;
+      }
+      .mode-tog-btn.on {
+        background: #1a2a3a;
+        color: #e6edf3;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .sb-nav {
+        padding: 8px 10px 4px;
+        flex: 1;
+      }
+      .sb-nav-lbl {
+        color: #192430;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        padding: 0 8px;
+        margin: 8px 0 4px;
+      }
+      .sb-btn {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: 100%;
+        text-align: left;
+        padding: 7px 10px;
+        border: none;
+        border-radius: 7px;
+        background: transparent;
+        color: #3a4a5a;
+        font-size: 11.5px;
+        cursor: pointer;
+        transition: all 0.15s;
+        line-height: 1.3;
+        margin-bottom: 1px;
+      }
+      .sb-btn:hover {
+        background: #111820;
+        color: #8aaabb;
+      }
+      .sb-btn.on {
+        background: #111820;
+        color: #fff;
+      }
+      .sb-btn-n {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 800;
+        flex-shrink: 0;
+        background: #0a1018;
+        color: #1e2e40;
+      }
+      .sb-btn.on .sb-btn-n {
+        background: #0071bb;
+        color: #fff;
+      }
+      .sb-btn-i {
+        flex: 1;
+        min-width: 0;
+      }
+      .sb-btn-t {
+        font-weight: 600;
+        font-size: 11.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sb-btn-d {
+        font-size: 9.5px;
+        color: #1e2e40;
+        margin-top: 1px;
+        line-height: 1.3;
+      }
+      .sb-btn.on .sb-btn-d {
+        color: #3a5a7a;
+      }
+
+      .sb-notes {
+        padding: 12px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-notes-t {
+        color: #1e2e40;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .sb-note {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: flex-start;
+      }
+      .sb-nn {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #111820;
+        color: #0071bb;
+        font-size: 8px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .sb-nt {
+        color: #2e4055;
+        font-size: 9.5px;
+        line-height: 1.55;
+      }
+
+      .sb-foot {
+        padding: 10px 20px;
+        border-top: 1px solid #111820;
+      }
+      .sb-foot-t {
+        color: #192430;
+        font-size: 8.5px;
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 1.6;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   LAYOUT MAIN + DEVICE FRAME
+══════════════════════════════════════════════════════════════ */
+      .main {
+        margin-left: 272px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 32px 40px;
+      }
+      .device {
+        width: 390px;
+        height: 844px;
+        background: #060a0e;
+        border-radius: 48px;
+        padding: 10px;
+        box-shadow:
+          0 0 0 1px #2a3040,
+          0 0 0 3px #060a0e,
+          0 0 0 4.5px #181e28,
+          0 50px 120px rgba(0, 0, 0, 0.98);
+        position: relative;
+        flex-shrink: 0;
+      }
+      .notch {
+        width: 120px;
+        height: 30px;
+        background: #060a0e;
+        border-radius: 0 0 16px 16px;
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .notch-pill {
+        width: 72px;
+        height: 6px;
+        background: #141c28;
+        border-radius: 3px;
+      }
+      .device-scr {
+        width: 100%;
+        height: 100%;
+        background: var(--background);
+        border-radius: 40px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════════════════════ */
+      .screen {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   STATUS BAR
+══════════════════════════════════════════════════════════════ */
+      .sbar {
+        height: 50px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 0 24px 8px;
+        flex-shrink: 0;
+        background: #000000;
+      }
+      .s-time {
+        font-size: 15px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+      .s-icons {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 1px;
+      }
+      .bar {
+        width: 3px;
+        border-radius: 1px;
+        background: #ffffff;
+      }
+      .bar:nth-child(1) {
+        height: 4px;
+      }
+      .bar:nth-child(2) {
+        height: 7px;
+      }
+      .bar:nth-child(3) {
+        height: 10px;
+      }
+      .bar:nth-child(4) {
+        height: 13px;
+      }
+      .batt-ic {
+        width: 22px;
+        height: 11px;
+        border: 1.5px solid #ffffff;
+        border-radius: 3px;
+        position: relative;
+        padding: 1.5px;
+      }
+      .batt-ic::after {
+        content: "";
+        position: absolute;
+        right: -4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 5px;
+        background: #ffffff;
+        border-radius: 0 1px 1px 0;
+      }
+      .batt-fill {
+        height: 100%;
+        border-radius: 1px;
+        width: 75%;
+        background: #ffffff;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   NBAR — V2 header: black chrome KAUFMANN + bell + Name Pill
+══════════════════════════════════════════════════════════════ */
+      .nbar {
+        height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        flex-shrink: 0;
+        gap: 10px;
+        background: #000000;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .nbar-logo {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: #ffffff;
+        flex-shrink: 0;
+      }
+      .nbar-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: #fff;
+        flex: 1;
+      }
+      .nbar-back {
+        font-size: 22px;
+        color: #fff;
+        cursor: pointer;
+        background: none;
+        border: none;
+        flex-shrink: 0;
+        line-height: 1;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   AVATAR NAME PILL
+══════════════════════════════════════════════════════════════ */
+      .av-pill {
+        height: 28px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0 10px 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.06);
+        transition: background 0.2s;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .av-pill:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .av-pill svg {
+        stroke: rgba(255, 255, 255, 0.7);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .av-pill-name {
+        font-size: 11px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        letter-spacing: 0.3px;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BELL ICON (in nbar)
+══════════════════════════════════════════════════════════════ */
+      .nbar-bell {
+        position: relative;
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 10px;
+        flex-shrink: 0;
+      }
+      .nbar-bell svg {
+        width: 20px;
+        height: 20px;
+        stroke: #ffffff;
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .nbar-bell-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 16px;
+        height: 16px;
+        background: var(--danger);
+        border-radius: 50%;
+        font-size: 8px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        border: 2px solid #000000;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BODY (scrollable)
+══════════════════════════════════════════════════════════════ */
+      .body {
+        flex: 1;
+        overflow-y: auto;
+        background: var(--background);
+      }
+      .body::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BOTTOM NAV — 5 tabs: Inicio|Mis Autos|Tienda(featured)|Servicios|Contactar
+══════════════════════════════════════════════════════════════ */
+      .bnav {
+        height: 82px;
+        background: var(--bnav-bg);
+        border-top: 1px solid var(--bnav-border);
+        display: flex;
+        padding: 8px 0 0;
+        flex-shrink: 0;
+      }
+      .tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0 2px;
+      }
+      .tab svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--bnav-inactive);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: stroke 0.18s;
+      }
+      .tab-label {
+        font-size: 9px;
+        text-align: center;
+        line-height: 1.2;
+        color: var(--bnav-inactive);
+        transition: color 0.18s;
+        font-weight: 500;
+      }
+      .tab.on svg {
+        stroke: var(--bnav-active);
+      }
+      .tab.on .tab-label {
+        color: var(--bnav-active);
+        font-weight: 700;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SEGMENT CONTROL — V3 Best Of styling
+══════════════════════════════════════════════════════════════ */
+      .seg {
+        display: flex;
+        background: var(--seg-bg);
+        border-radius: 11px;
+        padding: 3px;
+        gap: 2px;
+        flex-shrink: 0;
+      }
+      .seg-btn {
+        flex: 1;
+        padding: 7px 4px;
+        border: none;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: var(--text-tertiary);
+      }
+      .seg-btn.on {
+        background: var(--seg-active-bg);
+        color: var(--text-primary);
+        box-shadow: var(--seg-active-shadow);
+        font-weight: 700;
+      }
+      .seg-content {
+        display: none;
+      }
+      .seg-content.active {
+        display: block;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SECTION LABEL
+══════════════════════════════════════════════════════════════ */
+      .sec-label {
+        padding: 14px 16px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   CARD BASE — V3 Best Of: 22px radius, glassmorphism dark, blue glow
+══════════════════════════════════════════════════════════════ */
+      .card {
+        background: rgba(19, 26, 36, 0.88);
+        border: 1px solid rgba(59, 158, 255, 0.1);
+        border-radius: 22px;
+        margin: 0 16px 10px;
+        padding: 14px;
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      body[data-mode="light"] .card {
+        background: var(--surface);
+        border: 1px solid var(--border-light);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: var(--card-shadow-md);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BADGES
+══════════════════════════════════════════════════════════════ */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        border: 1px solid;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .badge-received {
+        background: var(--st-received-bg);
+        color: var(--st-received-text);
+        border-color: var(--st-received-border);
+      }
+      .badge-working {
+        background: var(--st-working-bg);
+        color: var(--st-working-text);
+        border-color: var(--st-working-border);
+      }
+      .badge-prep {
+        background: var(--st-prep-bg);
+        color: var(--st-prep-text);
+        border-color: var(--st-prep-border);
+      }
+      .badge-invoice {
+        background: var(--st-invoice-bg);
+        color: var(--st-invoice-text);
+        border-color: var(--st-invoice-border);
+      }
+      .badge-done {
+        background: var(--badge-done-bg);
+        color: var(--badge-done-text);
+        border-color: var(--badge-done-border);
+      }
+      .badge-green {
+        background: var(--success-bg);
+        color: var(--success);
+        border: none;
+      }
+      .badge-orange {
+        background: var(--warning-bg);
+        color: var(--warning);
+        border: none;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   ACTIVE JOB CARD — V2 B:CREATIVA + V3 Best Of glow
+══════════════════════════════════════════════════════════════ */
+      .active-job-card {
+        margin: 0 16px 12px;
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow:
+          0 4px 24px rgba(0, 0, 0, 0.18),
+          0 0 0 1px rgba(59, 158, 255, 0.12);
+        cursor: pointer;
+      }
+      .active-job-grad {
+        background: linear-gradient(
+          135deg,
+          #050c16 0%,
+          #0a1e38 45%,
+          #0d3060 100%
+        );
+        padding: 16px 16px 14px;
+        position: relative;
+        overflow: hidden;
+      }
+      .active-job-grad::before {
+        content: "";
+        position: absolute;
+        right: -30px;
+        top: -30px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(59, 158, 255, 0.18) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .active-job-grad::after {
+        content: "";
+        position: absolute;
+        left: -20px;
+        bottom: -40px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(59, 158, 255, 0.08) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .aj-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 1;
+      }
+      .aj-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+        background: rgba(240, 184, 64, 0.18);
+        border: 1px solid rgba(240, 184, 64, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .aj-icon svg {
+        width: 22px;
+        height: 22px;
+        stroke: var(--warning);
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .aj-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .aj-title {
+        font-size: 15px;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 3px;
+        line-height: 1.2;
+      }
+      .aj-vehicle {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 2px;
+      }
+      .aj-branch {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.38);
+      }
+      .aj-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(240, 184, 64, 0.15);
+        border: 1.5px solid rgba(240, 184, 64, 0.45);
+        color: #f0b840;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.3px;
+        flex-shrink: 0;
+      }
+      .aj-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #f0b840;
+        flex-shrink: 0;
+      }
+
+      /* Timeline progress dots */
+      .tl-dots {
+        display: flex;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 12px;
+      }
+      .tl-dot-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+      }
+      .tl-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+        flex-shrink: 0;
+      }
+      .tl-dot.tld-done {
+        background: var(--success);
+        box-shadow: 0 0 0 3px rgba(63, 199, 106, 0.18);
+      }
+      .tl-dot.tld-done svg {
+        width: 13px;
+        height: 13px;
+        stroke: #fff;
+        stroke-width: 2.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tl-dot.tld-active {
+        background: var(--warning);
+        box-shadow:
+          0 0 0 5px rgba(240, 184, 64, 0.25),
+          0 0 16px rgba(240, 184, 64, 0.4);
+      }
+      .tl-dot.tld-active svg {
+        width: 13px;
+        height: 13px;
+        stroke: #000;
+        stroke-width: 2.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tl-dot.tld-future {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+      .tl-dot-label {
+        font-size: 9px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.45);
+        margin-top: 5px;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .tl-dot-label.tld-done {
+        color: rgba(63, 199, 106, 0.9);
+      }
+      .tl-dot-label.tld-active {
+        color: #f0b840;
+        font-weight: 800;
+      }
+      .tl-connector {
+        flex: 1;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.12);
+        margin: 0 -2px;
+        margin-bottom: 14px;
+        z-index: 1;
+      }
+      .tl-connector.done {
+        background: var(--success);
+      }
+      .tl-connector.partial {
+        background: linear-gradient(
+          90deg,
+          var(--success) 0%,
+          rgba(255, 255, 255, 0.12) 100%
+        );
+      }
+      .aj-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+      }
+      .aj-eta {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .aj-cta {
+        font-size: 12px;
+        font-weight: 700;
+        color: #f0b840;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+
+      /* Done job card */
+      .done-job-card {
+        margin: 0 16px 8px;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 14px;
+        background: linear-gradient(135deg, #0a1a12 0%, #070f0a 100%);
+        border: 1px solid rgba(63, 199, 106, 0.15);
+      }
+      .done-job-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        background: rgba(63, 199, 106, 0.18);
+        border: 1px solid rgba(63, 199, 106, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .done-job-icon svg {
+        width: 17px;
+        height: 17px;
+        stroke: #3fc76a;
+        stroke-width: 2.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .done-job-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .done-job-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #e6edf3;
+        margin-bottom: 2px;
+      }
+      .done-job-sub {
+        font-size: 11px;
+        color: rgba(180, 200, 180, 0.55);
+      }
+      .done-job-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(63, 199, 106, 0.15);
+        border: 1px solid rgba(63, 199, 106, 0.3);
+        color: #3fc76a;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 20px;
+        flex-shrink: 0;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   LIVE TRACKING COMPONENTS — V2 C:LIVE + V3 Best Of colors
+══════════════════════════════════════════════════════════════ */
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow:
+            0 0 0 0 rgba(63, 199, 106, 0.4),
+            0 0 20px rgba(63, 199, 106, 0.1);
+        }
+        50% {
+          box-shadow:
+            0 0 0 8px rgba(63, 199, 106, 0),
+            0 0 30px rgba(63, 199, 106, 0.2);
+        }
+      }
+      @keyframes pulse-active-dot {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.6;
+          transform: scale(1.3);
+        }
+      }
+      @keyframes pulse-step-ring {
+        0% {
+          transform: scale(1);
+          opacity: 0.7;
+        }
+        70% {
+          transform: scale(1.6);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1.6);
+          opacity: 0;
+        }
+      }
+
+      .live-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(63, 199, 106, 0.15);
+        border: 1px solid rgba(63, 199, 106, 0.3);
+        color: #3fc76a;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+      .live-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #3fc76a;
+        animation: pulse-active-dot 1.5s ease-in-out infinite;
+      }
+
+      .gauge-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 14px 16px 10px;
+        flex-shrink: 0;
+      }
+      .gauge-outer {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: conic-gradient(
+          var(--success) 0% 75%,
+          rgba(255, 255, 255, 0.08) 75% 100%
+        );
+        animation: pulse-glow 3s ease-in-out infinite;
+        position: relative;
+      }
+      .gauge-inner {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+      }
+      .gauge-pct {
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--success);
+        line-height: 1;
+      }
+      .gauge-sub {
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 2px;
+      }
+      .gauge-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-top: 8px;
+      }
+
+      /* Live timeline steps */
+      .live-tl {
+        display: flex;
+        flex-direction: column;
+        padding: 0 16px;
+      }
+      .live-step {
+        display: flex;
+        gap: 14px;
+        position: relative;
+      }
+      .live-step-spine {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 36px;
+        flex-shrink: 0;
+      }
+      .live-step-circle {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 1;
+      }
+      .live-step-circle svg {
+        width: 15px;
+        height: 15px;
+        stroke-width: 2.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .live-step-circle.lsc-done {
+        background: var(--success);
+      }
+      .live-step-circle.lsc-done svg {
+        stroke: #fff;
+      }
+      .live-step-circle.lsc-active {
+        background: linear-gradient(135deg, var(--warning) 0%, #c89830 100%);
+        box-shadow: 0 0 0 4px rgba(240, 184, 64, 0.2);
+      }
+      .live-step-circle.lsc-active svg {
+        stroke: #000;
+      }
+      .live-step-ring {
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        border: 2px solid var(--warning);
+        animation: pulse-step-ring 2s ease-out infinite;
+        pointer-events: none;
+      }
+      .live-step-circle.lsc-future {
+        background: var(--surface);
+        border: 2px solid var(--border);
+      }
+      .live-step-circle.lsc-future svg {
+        stroke: var(--text-tertiary);
+      }
+      .live-step-line {
+        width: 2px;
+        flex: 1;
+        min-height: 16px;
+        margin: 2px 0;
+      }
+      .live-step-line.done {
+        background: var(--success);
+      }
+      .live-step-line.partial {
+        background: linear-gradient(
+          180deg,
+          var(--warning) 0%,
+          rgba(255, 255, 255, 0.08) 100%
+        );
+      }
+      .live-step-line.future {
+        background: var(--border);
+      }
+      .live-step-content {
+        flex: 1;
+        padding-bottom: 16px;
+        min-width: 0;
+      }
+      .live-step-label {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .live-step-label.done {
+        color: var(--success);
+      }
+      .live-step-label.active {
+        color: var(--text-primary);
+      }
+      .live-step-label.future {
+        color: var(--text-tertiary);
+        font-weight: 500;
+      }
+      .live-step-time {
+        font-size: 11px;
+        color: var(--text-tertiary);
+        margin-bottom: 3px;
+      }
+      .live-step-highlight {
+        background: rgba(240, 184, 64, 0.06);
+        border: 1px solid rgba(240, 184, 64, 0.2);
+        border-radius: 14px;
+        padding: 9px 12px;
+        margin-top: 6px;
+      }
+      .live-step-highlight-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--warning);
+        margin-bottom: 3px;
+      }
+      .live-step-highlight-sub {
+        font-size: 11px;
+        color: var(--text-secondary);
+        line-height: 1.45;
+      }
+      .live-notify-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 5px;
+      }
+      .live-notify-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--text-tertiary);
+        flex-shrink: 0;
+      }
+      .live-notify-text {
+        font-size: 10.5px;
+        color: var(--text-tertiary);
+        font-style: italic;
+      }
+
+      .contact-advisor-btn {
+        margin: 4px 16px 10px;
+        background: rgba(59, 158, 255, 0.08);
+        border: 1.5px solid rgba(59, 158, 255, 0.2);
+        border-radius: 18px;
+        padding: 13px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .contact-advisor-btn svg {
+        stroke: var(--primary);
+        stroke-width: 1.75;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        flex-shrink: 0;
+      }
+      .contact-advisor-label {
+        flex: 1;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      .contact-advisor-sub {
+        font-size: 10.5px;
+        color: var(--text-tertiary);
+        margin-top: 1px;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   ADVISOR BAR — V3 Best Of glassmorphism
+══════════════════════════════════════════════════════════════ */
+      .advisor-bar {
+        margin: 0 16px 10px;
+        background: rgba(19, 26, 36, 0.9);
+        border: 1px solid rgba(59, 158, 255, 0.14);
+        border-radius: 18px;
+        padding: 13px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow:
+          0 0 0 1px rgba(59, 158, 255, 0.06),
+          0 4px 20px rgba(0, 0, 0, 0.4);
+      }
+      body[data-mode="light"] .advisor-bar {
+        background: var(--surface);
+        border: 1px solid var(--border-light);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: var(--card-shadow);
+      }
+      .advisor-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, #0071bb 0%, #003252 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        color: #fff;
+        font-weight: 800;
+      }
+      .advisor-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .advisor-role {
+        font-size: 10px;
+        color: var(--text-tertiary);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 2px;
+      }
+      .advisor-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      .advisor-actions {
+        display: flex;
+        gap: 7px;
+        flex-shrink: 0;
+      }
+      .advisor-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .advisor-btn svg {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .adv-wa {
+        background: #25d366;
+      }
+      .adv-wa svg {
+        stroke: #fff;
+      }
+      .adv-phone {
+        background: var(--phone-bg);
+      }
+      .adv-phone svg {
+        stroke: var(--phone-text);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BUDGET CTA — V3 Best Of tokens
+══════════════════════════════════════════════════════════════ */
+      .budget-cta {
+        margin: 0 16px 10px;
+        background: var(--proforma-bg);
+        border: 1.5px solid var(--proforma-border);
+        border-radius: 18px;
+        padding: 14px;
+      }
+      .budget-cta-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 3px;
+      }
+      .budget-cta-desc {
+        font-size: 11.5px;
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+        line-height: 1.4;
+      }
+      .budget-cta-amount {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 12px;
+      }
+      .budget-actions {
+        display: flex;
+        gap: 8px;
+      }
+      .btn-outline-warn {
+        flex: 1;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1.5px solid rgba(240, 184, 64, 0.5);
+        background: transparent;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--warning);
+        cursor: pointer;
+      }
+      .btn-solid-warn {
+        flex: 1;
+        padding: 10px;
+        border-radius: 12px;
+        border: none;
+        background: var(--warning);
+        font-size: 13px;
+        font-weight: 700;
+        color: #000;
+        cursor: pointer;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   VEHICLE HEADER
+══════════════════════════════════════════════════════════════ */
+      .veh-header {
+        background: var(--hero-grad);
+        padding: 12px 16px 20px;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 50px rgba(59, 158, 255, 0.08);
+      }
+      .veh-ot {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.35);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+      .veh-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 4px;
+        line-height: 1.2;
+        letter-spacing: -0.4px;
+      }
+      .veh-sub {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 12px;
+      }
+      .veh-plate-chip {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        padding: 4px 10px;
+        border-radius: 7px;
+        margin-right: 8px;
+      }
+
+      /* Vehicle filter */
+      .veh-filter {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        overflow-x: auto;
+        flex-shrink: 0;
+        background: #000000;
+      }
+      .veh-filter::-webkit-scrollbar {
+        display: none;
+      }
+      .veh-chip {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.18s;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.6);
+        flex-shrink: 0;
+      }
+      .veh-chip.on {
+        background: #0071bb;
+        color: #fff;
+        border-color: #0071bb;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   STEPPER — V3 Best Of colors
+══════════════════════════════════════════════════════════════ */
+      .stepper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 24px 10px;
+        gap: 0;
+        flex-shrink: 0;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border-light);
+      }
+      .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        flex: 1;
+      }
+      .step-circle {
+        width: 28px;
+        height: 28px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+      }
+      .step-circle.done {
+        background: var(--stepper-done-bg);
+        color: var(--stepper-done-text);
+      }
+      .step-circle.active {
+        background: var(--stepper-active-bg);
+        color: var(--stepper-active-text);
+        box-shadow: 0 0 0 3px rgba(0, 113, 187, 0.2);
+      }
+      .step-circle.pending {
+        background: var(--stepper-inactive-bg);
+        color: var(--stepper-inactive-text);
+      }
+      .step-label {
+        font-size: 8px;
+        font-weight: 600;
+        color: var(--text-tertiary);
+        text-align: center;
+        line-height: 1.2;
+      }
+      .step-label.active {
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .step-conn {
+        flex: 1;
+        height: 2px;
+        background: var(--stepper-line-idle);
+        margin-bottom: 16px;
+        max-width: 32px;
+      }
+      .step-conn.done {
+        background: var(--stepper-line-done);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   VEHICLE SELECT CARD
+══════════════════════════════════════════════════════════════ */
+      .v-card {
+        background: rgba(19, 26, 36, 0.88);
+        border: 2px solid transparent;
+        border-radius: 18px;
+        margin: 0 16px 8px;
+        padding: 12px;
+        box-shadow: var(--card-shadow);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: border-color 0.15s;
+      }
+      .v-card.sel {
+        border-color: var(--accent);
+      }
+      body[data-mode="light"] .v-card {
+        background: var(--surface);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+      .v-card-radio {
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .v-card.sel .v-card-radio {
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+      .v-card-radio-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        background: #fff;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   SERVICE LIST
+══════════════════════════════════════════════════════════════ */
+      .svc-list {
+        background: rgba(19, 26, 36, 0.88);
+        border: 1px solid rgba(59, 158, 255, 0.1);
+        border-radius: 18px;
+        margin: 0 16px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      body[data-mode="light"] .svc-list {
+        background: var(--surface);
+        border-color: var(--border-light);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+      .svc-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border-light);
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .svc-row:last-child {
+        border-bottom: none;
+      }
+      .svc-row.sel {
+        background: rgba(0, 113, 187, 0.06);
+      }
+      .svc-radio {
+        width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+      }
+      .svc-row.sel .svc-radio {
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   CALENDAR
+══════════════════════════════════════════════════════════════ */
+      .cal-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px 6px;
+      }
+      .cal-month {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      .cal-arr {
+        font-size: 20px;
+        color: var(--text-tertiary);
+        cursor: pointer;
+        background: none;
+        border: none;
+        line-height: 1;
+      }
+      .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+        padding: 0 16px 8px;
+      }
+      .cal-hdr {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text-tertiary);
+        text-align: center;
+        padding: 4px 0;
+      }
+      .cal-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .cal-day.unavail {
+        color: var(--text-tertiary);
+        opacity: 0.38;
+        cursor: default;
+      }
+      .cal-day.avail {
+        color: var(--text-primary);
+      }
+      .cal-day.avail:hover {
+        background: var(--border-light);
+      }
+      .cal-day.sel {
+        background: var(--accent);
+        color: #fff;
+      }
+      .cal-day.today {
+        border: 1.5px solid var(--accent);
+        color: var(--accent);
+      }
+
+      /* Time slots */
+      .time-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding: 0 16px 12px;
+      }
+      .time-pill {
+        padding: 8px 4px;
+        text-align: center;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        color: var(--text-primary);
+      }
+      .time-pill.sel {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .time-pill.unavail {
+        background: var(--border-light);
+        color: var(--text-tertiary);
+        cursor: not-allowed;
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   BUTTONS — V3 Best Of
+══════════════════════════════════════════════════════════════ */
+      .btn-prim {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        background: var(--btn-primary-bg);
+        color: var(--btn-primary-text);
+        border: none;
+        border-radius: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        text-align: center;
+      }
+      .btn-ghost {
+        display: block;
+        width: 100%;
+        padding: 13px;
+        background: transparent;
+        color: var(--btn-secondary-text);
+        border: 1.5px solid var(--btn-secondary-border);
+        border-radius: 16px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+      }
+      .btn-danger {
+        display: block;
+        width: 100%;
+        padding: 13px;
+        background: transparent;
+        color: var(--danger);
+        border: 1.5px solid var(--danger);
+        border-radius: 16px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      /* FAB */
+      .fab {
+        position: absolute;
+        bottom: 94px;
+        right: 16px;
+        background: var(--fab-bg);
+        color: #fff;
+        border: none;
+        border-radius: 16px;
+        padding: 12px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: var(--fab-shadow);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        z-index: 5;
+      }
+
+      /* Branch pill */
+      .branch-pill {
+        background: rgba(19, 26, 36, 0.88);
+        border: 1px solid rgba(59, 158, 255, 0.1);
+        border-radius: 14px;
+        padding: 10px 14px;
+        margin: 0 16px 10px;
+        box-shadow: var(--card-shadow);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      body[data-mode="light"] .branch-pill {
+        background: var(--surface);
+        border-color: var(--border-light);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+
+      /* Reagendar banner */
+      .reagendar-banner {
+        background: rgba(59, 158, 255, 0.06);
+        border: 1.5px solid rgba(59, 158, 255, 0.18);
+        border-radius: 18px;
+        padding: 14px;
+        margin: 0 16px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+
+      /* Card actions */
+      .card-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border-light);
+      }
+      .card-action-btn {
+        flex: 1;
+        padding: 8px 0;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        text-align: center;
+      }
+      .card-action-reagendar {
+        background: rgba(59, 158, 255, 0.1);
+        color: var(--primary);
+      }
+      .card-action-anular {
+        background: rgba(240, 84, 84, 0.08);
+        color: var(--danger);
+      }
+
+      /* Date badge */
+      .date-badge {
+        width: 42px;
+        height: 46px;
+        background: var(--accent);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .date-badge-mo {
+        font-size: 9px;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .date-badge-d {
+        font-size: 19px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+      }
+
+      /* Info row */
+      .info-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-row-icon {
+        font-size: 16px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .info-row-body {
+        flex: 1;
+      }
+      .info-row-val {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .info-row-sub {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 2px;
+      }
+
+      /* ══════════════════════════════════════════════════════════════
+   ADDITIONAL COMPONENTS — alert, seg-ctrl, timeline, etc.
+══════════════════════════════════════════════════════════════ */
+      /* Alert banner */
+      .alert-ban {
+        margin: 12px 16px 4px;
+        border-radius: 18px;
+        background: var(--alert-bg);
+        border: 1px solid var(--alert-border);
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .alert-ic {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: rgba(240, 184, 64, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .alert-ic svg {
+        width: 18px;
+        height: 18px;
+        stroke: var(--warning);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .alert-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .alert-t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--alert-text);
+        margin-bottom: 2px;
+      }
+      .alert-s {
+        font-size: 11px;
+        color: var(--alert-sub);
+        line-height: 1.4;
+      }
+      .alert-arr {
+        flex-shrink: 0;
+      }
+      .alert-arr svg {
+        width: 14px;
+        height: 14px;
+        stroke: var(--warning);
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* V3 seg ctrl */
+      .seg-ctrl {
+        margin: 10px 16px 8px;
+        background: var(--seg-bg);
+        border-radius: 11px;
+        padding: 3px;
+        display: flex;
+        gap: 2px;
+        flex-shrink: 0;
+      }
+      .seg-ctrl .seg-btn {
+        flex: 1;
+        padding: 7px 4px;
+        border: none;
+        border-radius: 9px;
+        font-size: 11.5px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s;
+        background: transparent;
+        color: var(--text-tertiary);
+      }
+      .seg-ctrl .seg-btn.on {
+        background: var(--seg-active-bg);
+        color: var(--text-primary);
+        box-shadow: var(--seg-active-shadow);
+        font-weight: 700;
+      }
+
+      /* V3 section header */
+      .sec-hdr {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px 6px;
+      }
+      .sec-t {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+      .sec-l {
+        font-size: 12px;
+        color: var(--primary);
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+      }
+      .sec-l svg {
+        width: 13px;
+        height: 13px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* V3 timeline list */
+      .tl {
+        padding: 0 16px 8px;
+      }
+      .tl-item {
+        display: flex;
+        gap: 12px;
+        padding-bottom: 14px;
+        position: relative;
+      }
+      .tl-item::before {
+        content: "";
+        position: absolute;
+        left: 16px;
+        top: 34px;
+        bottom: 0;
+        width: 2px;
+        background: var(--border-light);
+      }
+      .tl-item:last-child::before {
+        display: none;
+      }
+      .tl-dot-v3 {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--border);
+        background: var(--surface);
+        position: relative;
+      }
+      .tl-dot-v3 svg {
+        width: 15px;
+        height: 15px;
+        stroke: var(--text-tertiary);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tl-dot-v3.ok {
+        border-color: var(--tl-done);
+        background: var(--tl-done-bg);
+        box-shadow: 0 0 10px rgba(63, 199, 106, 0.3);
+      }
+      .tl-dot-v3.ok svg {
+        stroke: var(--tl-done);
+      }
+      .tl-dot-v3.prog {
+        border-color: var(--tl-active);
+        background: var(--tl-active-bg);
+        box-shadow:
+          var(--tl-active-glow),
+          0 0 0 5px rgba(59, 158, 255, 0.1);
+      }
+      .tl-dot-v3.prog svg {
+        stroke: var(--tl-active);
+      }
+      @keyframes pulse-tl {
+        0% {
+          transform: scale(1);
+          opacity: 0.7;
+        }
+        70% {
+          transform: scale(1.6);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1.6);
+          opacity: 0;
+        }
+      }
+      .tl-dot-v3.prog::after {
+        content: "";
+        position: absolute;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px solid var(--tl-active);
+        animation: pulse-tl 2s ease-out infinite;
+        pointer-events: none;
+        left: 0;
+        top: 0;
+      }
+      .tl-info {
+        flex: 1;
+        background: rgba(19, 26, 36, 0.88);
+        border: 1px solid rgba(59, 158, 255, 0.1);
+        border-radius: 16px;
+        padding: 11px 13px;
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+      body[data-mode="light"] .tl-info {
+        background: var(--surface);
+        border: 1px solid var(--border-light);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: var(--card-shadow-md);
+      }
+      .tl-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        gap: 8px;
+      }
+      .tl-t {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.3;
+        flex: 1;
+      }
+      .tl-date {
+        font-size: 10px;
+        color: var(--text-tertiary);
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+      .tl-sub-v3 {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+        line-height: 1.4;
+      }
+      .tl-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .tl-tag {
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .tag-ok {
+        background: var(--badge-done-bg);
+        color: var(--badge-done-text);
+        border: 1px solid var(--badge-done-border);
+      }
+      .tag-prog {
+        background: var(--badge-prog-bg);
+        color: var(--badge-prog-text);
+        border: 1px solid var(--badge-prog-border);
+      }
+      .tag-warn {
+        background: var(--badge-warn-bg);
+        color: var(--badge-warn-text);
+        border: 1px solid var(--badge-warn-border);
+      }
+      .tl-amount {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      /* V3 scheduled cards */
+      .sched-card {
+        margin: 0 16px 10px;
+        background: rgba(19, 26, 36, 0.88);
+        border: 1px solid rgba(59, 158, 255, 0.1);
+        border-radius: 18px;
+        padding: 13px 14px;
+        box-shadow: var(--card-shadow);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+      body[data-mode="light"] .sched-card {
+        background: var(--surface);
+        border-color: var(--border-light);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: var(--card-shadow-md);
+      }
+      .sched-date-col {
+        width: 42px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(59, 158, 255, 0.14);
+        border: 1px solid rgba(59, 158, 255, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      body[data-mode="light"] .sched-date-col {
+        background: var(--primary-tint);
+        border: none;
+      }
+      .sched-day {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--primary);
+        line-height: 1;
+      }
+      .sched-mon {
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 1px;
+      }
+      .sched-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .sched-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+      }
+      .sched-sub {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-bottom: 2px;
+      }
+      .sched-branch {
+        font-size: 10.5px;
+        color: var(--text-tertiary);
+      }
+      .sched-badge {
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        background: var(--badge-prog-bg);
+        color: var(--badge-prog-text);
+        border: 1px solid var(--badge-prog-border);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      /* V3 detail components */
+      .work-hero {
+        background: var(--hero-grad);
+        padding: 16px 16px 20px;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 50px rgba(59, 158, 255, 0.08);
+      }
+      .work-hero-d1 {
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+        pointer-events: none;
+      }
+      .work-hero-d2 {
+        position: absolute;
+        left: -30px;
+        bottom: -35px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.03);
+        pointer-events: none;
+      }
+      .work-ot-label {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.4);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+      }
+      .work-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 3px;
+        line-height: 1.2;
+        letter-spacing: -0.4px;
+      }
+      .work-sub {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 12px;
+        line-height: 1.4;
+      }
+      .work-chips {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .work-plate {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        padding: 4px 10px;
+        border-radius: 7px;
+        font-family: "Courier New", monospace;
+      }
+      .work-status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 10px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+      .work-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #ffb347;
+        flex-shrink: 0;
+      }
+
+      /* V3 info card */
+      .info-card {
+        background: rgba(19, 26, 36, 0.88);
+        margin: 10px 16px 8px;
+        border: 1px solid rgba(59, 158, 255, 0.1);
+        border-radius: 18px;
+        padding: 2px 14px;
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+      body[data-mode="light"] .info-card {
+        background: var(--surface);
+        border-color: var(--border-light);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: var(--card-shadow-md);
+      }
+      .info-card .info-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .info-card .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-l {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        font-weight: 500;
+      }
+      .info-v {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+        text-align: right;
+      }
+      .info-v-mono {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+        text-align: right;
+        font-family: "Courier New", monospace;
+        letter-spacing: 1px;
+      }
+
+      /* V3 vertical timeline */
+      .vt {
+        padding: 2px 16px 8px;
+      }
+      .vt-step {
+        display: flex;
+        gap: 14px;
+        position: relative;
+      }
+      .vt-spine {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 32px;
+        flex-shrink: 0;
+      }
+      .vt-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+      }
+      .vt-circle.done {
+        background: var(--tl-done-bg);
+        border: 2px solid var(--tl-done);
+        box-shadow: 0 0 10px rgba(63, 199, 106, 0.28);
+      }
+      .vt-circle.done svg {
+        stroke: var(--tl-done);
+      }
+      .vt-circle.active {
+        background: var(--tl-active-bg);
+        border: 2px solid var(--tl-active);
+        box-shadow:
+          var(--tl-active-glow),
+          0 0 0 5px rgba(59, 158, 255, 0.1);
+      }
+      .vt-circle.active svg {
+        stroke: var(--tl-active);
+      }
+      .vt-circle.future {
+        background: var(--surface);
+        border: 2px solid var(--tl-future-border);
+      }
+      .vt-circle.future svg {
+        stroke: var(--text-tertiary);
+      }
+      .vt-circle svg {
+        width: 13px;
+        height: 13px;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      @keyframes pulse-vt {
+        0% {
+          transform: scale(1);
+          opacity: 0.6;
+        }
+        70% {
+          transform: scale(1.8);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1.8);
+          opacity: 0;
+        }
+      }
+      .vt-circle.active::before {
+        content: "";
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        border: 1.5px solid var(--tl-active);
+        animation: pulse-vt 2s ease-out infinite;
+        pointer-events: none;
+      }
+      .vt-line {
+        width: 2px;
+        flex: 1;
+        min-height: 16px;
+        margin: 2px 0;
+      }
+      .vt-line.done {
+        background: var(--tl-done);
+      }
+      .vt-line.active {
+        background: linear-gradient(
+          180deg,
+          var(--tl-active) 0%,
+          var(--tl-future-line) 100%
+        );
+      }
+      .vt-line.future {
+        background: var(--tl-future-line);
+      }
+      .vt-content {
+        flex: 1;
+        padding-bottom: 18px;
+        min-width: 0;
+      }
+      .vt-label {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 2px;
+        line-height: 1.3;
+      }
+      .vt-label.done {
+        color: var(--tl-done);
+      }
+      .vt-label.active {
+        color: var(--text-primary);
+      }
+      .vt-label.future {
+        color: var(--text-tertiary);
+        font-weight: 500;
+      }
+      .vt-ts {
+        font-size: 11px;
+        color: var(--text-tertiary);
+        margin-bottom: 3px;
+      }
+      .vt-desc {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.45;
+      }
+      .vt-active-note {
+        background: var(--tl-active-bg);
+        border: 1px solid var(--badge-prog-border);
+        border-radius: 12px;
+        padding: 9px 11px;
+        margin-top: 6px;
+      }
+      .vt-active-note-t {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--tl-active);
+        margin-bottom: 2px;
+      }
+      .vt-active-note-d {
+        font-size: 11px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      /* V3 proforma card */
+      .proforma-card {
+        margin: 0 16px 12px;
+        background: var(--proforma-bg);
+        border: 1.5px solid var(--proforma-border);
+        border-radius: 18px;
+        padding: 14px;
+      }
+      .proforma-hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .proforma-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      .proforma-badge {
+        background: var(--badge-warn-bg);
+        color: var(--badge-warn-text);
+        border: 1px solid var(--badge-warn-border);
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .proforma-items {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+      .proforma-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .proforma-item-name {
+        font-size: 11.5px;
+        color: var(--text-secondary);
+      }
+      .proforma-item-price {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .proforma-divider {
+        border: none;
+        border-top: 1px solid var(--border-light);
+        margin: 4px 0;
+      }
+      .proforma-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .proforma-total-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      .proforma-total-amount {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text-primary);
+      }
+      .proforma-iva {
+        font-size: 10px;
+        color: var(--text-tertiary);
+        margin-left: 4px;
+        font-weight: 400;
+      }
+      .proforma-actions {
+        display: flex;
+        gap: 8px;
+      }
+      .btn-proforma-view {
+        flex: 1;
+        padding: 9px;
+        border-radius: 12px;
+        border: 1.5px solid var(--border);
+        background: transparent;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+      .btn-proforma-view svg {
+        width: 14px;
+        height: 14px;
+        stroke: var(--text-secondary);
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .btn-proforma-approve {
+        flex: 1;
+        padding: 9px;
+        border-radius: 12px;
+        border: none;
+        background: var(--primary);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      /* Empty state */
+      .empty-state {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 24px;
+        text-align: center;
+      }
+      .empty-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 20px;
+        background: var(--primary-tint);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+      .empty-icon svg {
+        width: 28px;
+        height: 28px;
+        stroke: var(--primary);
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* Spacers */
+      .sp {
+        height: 8px;
+        flex-shrink: 0;
+      }
+      .sp12 {
+        height: 12px;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body data-mode="dark">
+    <!-- ════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sb-hdr">
+        <div class="sb-brand">KAUFMANN</div>
+        <div class="sb-sub">Servicios · Versión Final</div>
+      </div>
+
+      <div class="sb-info">
+        <div class="sb-sname" id="sb-sname">Mis Trabajos</div>
+        <div class="sb-sdesc" id="sb-sdesc">Lista activos + terminados</div>
+        <span class="sb-ver">Versión Final · 31 Mar 2026</span>
+      </div>
+
+      <div class="mode-toggler">
+        <div class="mode-tog-label">Modo</div>
+        <div class="mode-tog-wrap">
+          <button
+            class="mode-tog-btn"
+            id="mode-light"
+            onclick="setMode('light')"
+          >
+            Claro
+          </button>
+          <button
+            class="mode-tog-btn on"
+            id="mode-dark"
+            onclick="setMode('dark')"
+          >
+            Oscuro
+          </button>
+        </div>
+      </div>
+
+      <nav class="sb-nav" id="sb-nav-final">
+        <div class="sb-nav-lbl">Trabajos</div>
+        <button class="sb-btn on" id="nav-f1" onclick="go('f1')">
+          <div class="sb-btn-n">1</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Mis Trabajos</div>
+            <div class="sb-btn-d">Lista activos + terminados</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-f2" onclick="go('f2')">
+          <div class="sb-btn-n">2</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Detalle + Tracking</div>
+            <div class="sb-btn-d">Live timeline + presupuesto</div>
+          </div>
+        </button>
+        <div class="sb-nav-lbl">Reservas</div>
+        <button class="sb-btn" id="nav-f3" onclick="go('f3')">
+          <div class="sb-btn-n">3</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Mis Reservas</div>
+            <div class="sb-btn-d">Próximas + historial</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-f4" onclick="go('f4')">
+          <div class="sb-btn-n">4a</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Agendar — Vehículo</div>
+            <div class="sb-btn-d">Paso 1</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-f4b" onclick="go('f4b')">
+          <div class="sb-btn-n">4b</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Agendar — Fecha</div>
+            <div class="sb-btn-d">Paso 2</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-f4c" onclick="go('f4c')">
+          <div class="sb-btn-n">4c</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Agendar — Resumen</div>
+            <div class="sb-btn-d">Paso 3</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-f5" onclick="go('f5')">
+          <div class="sb-btn-n">5</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Confirmacion</div>
+            <div class="sb-btn-d">Exito post-agendamiento</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-f6" onclick="go('f6')">
+          <div class="sb-btn-n">6</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Anular Reserva</div>
+            <div class="sb-btn-d">Retencion + cancelacion</div>
+          </div>
+        </button>
+        <div class="sb-nav-lbl">Presupuesto</div>
+        <button class="sb-btn" id="nav-f7" onclick="go('f7')">
+          <div class="sb-btn-n">7</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Presupuesto Detalle</div>
+            <div class="sb-btn-d">Items + aprobar/rechazar</div>
+          </div>
+        </button>
+        <button class="sb-btn" id="nav-f7b" onclick="go('f7b')">
+          <div class="sb-btn-n">7b</div>
+          <div class="sb-btn-i">
+            <div class="sb-btn-t">Presupuesto Aprobado</div>
+            <div class="sb-btn-d">Confirmacion</div>
+          </div>
+        </button>
+      </nav>
+
+      <div class="sb-notes">
+        <div class="sb-notes-t">Notas de Diseño</div>
+        <div class="sb-note">
+          <div class="sb-nn">1</div>
+          <div class="sb-nt">
+            V3 Best Of visual: dark #0B1018, surface #131A24, 22px radius, blue
+            glow shadows, glassmorphism on detail cards.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">2</div>
+          <div class="sb-nt">
+            10 screens: Trabajos, Detalle+Tracking, Reservas, Agendar 3-step,
+            Confirmacion, Anular, Presupuesto, Presupuesto Aprobado.
+          </div>
+        </div>
+        <div class="sb-note">
+          <div class="sb-nn">3</div>
+          <div class="sb-nt">
+            Bottom nav: Inicio | Mis Autos | Tienda(featured) | Servicios(on) |
+            Contactar. navTo() cross-file navigation.
+          </div>
+        </div>
+      </div>
+
+      <div class="sb-foot">
+        <div class="sb-foot-t">
+          Grupo Kaufmann · Servicios Versión Final · 31 Mar 2026<br />Propuesta
+          diseñada por CEBA
+        </div>
+      </div>
+    </aside>
+
+    <!-- ════════════════════════════════════
+     DEVICE FRAME
+════════════════════════════════════ -->
+    <div class="main">
+      <div class="device">
+        <div class="notch"><div class="notch-pill"></div></div>
+        <div class="device-scr">
+          <!-- HUB: SERVICIOS HUB (grid 2x2) -->
+          <div class="screen active" id="s-hub">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar" style="border-bottom: none">
+              <span class="nbar-logo">KAUFMANN</span>
+              <div class="nbar-title" style="text-align: center">Servicios</div>
+              <div class="av-pill" onclick="navTo('perfil')">
+                <svg width="14" height="14" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span class="av-pill-name">Pedro</span>
+              </div>
+            </div>
+            <div class="body" style="background: var(--background)">
+              <div style="padding: 20px 16px 8px">
+                <div
+                  style="
+                    font-size: 18px;
+                    font-weight: 800;
+                    color: var(--text-primary);
+                  "
+                >
+                  Servicios
+                </div>
+                <div
+                  style="
+                    font-size: 13px;
+                    color: var(--text-secondary);
+                    margin-top: 4px;
+                  "
+                >
+                  Gestiona tus servicios Kaufmann
+                </div>
+              </div>
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 10px;
+                  padding: 12px 16px;
+                "
+              >
+                <div
+                  style="
+                    background: var(--surface);
+                    border-radius: 18px;
+                    padding: 18px 14px;
+                    box-shadow: var(--card-shadow);
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    border: 1px solid var(--border);
+                  "
+                  onclick="go('f1')"
+                >
+                  <div
+                    style="
+                      width: 42px;
+                      height: 42px;
+                      border-radius: 12px;
+                      background: rgba(59, 158, 255, 0.15);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#3B9EFF"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Taller
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--text-secondary);
+                        margin-top: 2px;
+                      "
+                    >
+                      Estado de trabajos
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    background: var(--surface);
+                    border-radius: 18px;
+                    padding: 18px 14px;
+                    box-shadow: var(--card-shadow);
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    border: 1px solid var(--border);
+                  "
+                  onclick="navTo('reservas')"
+                >
+                  <div
+                    style="
+                      width: 42px;
+                      height: 42px;
+                      border-radius: 12px;
+                      background: rgba(139, 92, 246, 0.15);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#8A6AE8"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Reservas
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--text-secondary);
+                        margin-top: 2px;
+                      "
+                    >
+                      Agendar servicio
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    background: var(--surface);
+                    border-radius: 18px;
+                    padding: 18px 14px;
+                    box-shadow: var(--card-shadow);
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    border: 1px solid var(--border);
+                  "
+                  onclick="navTo('facturas')"
+                >
+                  <div
+                    style="
+                      width: 42px;
+                      height: 42px;
+                      border-radius: 12px;
+                      background: rgba(240, 184, 64, 0.15);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#F0B840"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Facturas
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--text-secondary);
+                        margin-top: 2px;
+                      "
+                    >
+                      Deudas y pagos
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    background: var(--surface);
+                    border-radius: 18px;
+                    padding: 18px 14px;
+                    box-shadow: var(--card-shadow);
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    border: 1px solid var(--border);
+                  "
+                  onclick="navTo('sucursales', 'sucursales')"
+                >
+                  <div
+                    style="
+                      width: 42px;
+                      height: 42px;
+                      border-radius: 12px;
+                      background: rgba(63, 199, 106, 0.15);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#3FC76A"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                      />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Sucursales
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--text-secondary);
+                        margin-top: 2px;
+                      "
+                    >
+                      Ubicaciones y horarios
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 5th button centered -->
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  padding: 0 16px 16px;
+                "
+              >
+                <div
+                  style="
+                    background: var(--surface);
+                    border-radius: 18px;
+                    padding: 18px 14px;
+                    box-shadow: var(--card-shadow);
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    border: 1px solid var(--border);
+                    width: calc(50% - 5px);
+                  "
+                  onclick="navTo('svc24')"
+                >
+                  <div
+                    style="
+                      width: 42px;
+                      height: 42px;
+                      border-radius: 12px;
+                      background: rgba(240, 84, 84, 0.15);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#F05454"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Servicios 24H
+                    </div>
+                    <div
+                      style="
+                        font-size: 11px;
+                        color: var(--text-secondary);
+                        margin-top: 2px;
+                      "
+                    >
+                      Asistencia en ruta
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" /></svg
+                ><span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M5 17h14M5 17a2 2 0 0 1-2-2v-4h1l2-4h12l2 4h1v4a2 2 0 0 1-2 2M5 17a2 2 0 1 0 4 0m6 0a2 2 0 1 0 4 0"
+                  /></svg
+                ><span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path
+                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                  /></svg
+                ><span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab on" onclick="navTo('servicios')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                  /></svg
+                ><span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                  /></svg
+                ><span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- F1: MIS TRABAJOS -->
+          <div class="screen" id="s-f1">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar" style="border-bottom: none">
+              <span class="nbar-logo">KAUFMANN</span>
+              <div class="nbar-title" style="text-align: center">
+                Mis Trabajos
+              </div>
+              <div class="av-pill" onclick="navTo('perfil')">
+                <svg width="14" height="14" viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+                <span class="av-pill-name">Pedro</span>
+              </div>
+            </div>
+            <div style="background: #000; padding: 0 16px 12px; flex-shrink: 0">
+              <div class="seg" id="seg-f1">
+                <button
+                  class="seg-btn on"
+                  onclick="
+                    toggleSeg('seg-f1', 'seg-encurso', 'seg-terminados', this)
+                  "
+                >
+                  En Curso
+                </button>
+                <button
+                  class="seg-btn"
+                  onclick="
+                    toggleSeg('seg-f1', 'seg-terminados', 'seg-encurso', this)
+                  "
+                >
+                  Terminados
+                </button>
+              </div>
+            </div>
+            <div class="body">
+              <div id="seg-encurso" class="seg-content active">
+                <div class="sec-label">1 trabajo activo</div>
+                <div class="active-job-card" onclick="go('f2')">
+                  <div class="active-job-grad">
+                    <div class="aj-top">
+                      <div class="aj-icon">
+                        <svg viewBox="0 0 24 24">
+                          <path
+                            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                          />
+                        </svg>
+                      </div>
+                      <div class="aj-info">
+                        <div class="aj-title">Mantención 50.000 km</div>
+                        <div class="aj-vehicle">
+                          Mercedes-Benz GLC 300 · KWRS-21
+                        </div>
+                        <div class="aj-branch">
+                          Sucursal Las Condes · Ingreso: 19/03/2026
+                        </div>
+                      </div>
+                      <div class="aj-status-badge">
+                        <div class="aj-status-dot"></div>
+                        En Reparacion
+                      </div>
+                    </div>
+                    <div class="tl-dots">
+                      <div class="tl-dot-wrap">
+                        <div class="tl-dot tld-done">
+                          <svg viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        </div>
+                        <span class="tl-dot-label tld-done">Recibido</span>
+                      </div>
+                      <div class="tl-connector done"></div>
+                      <div class="tl-dot-wrap">
+                        <div class="tl-dot tld-done">
+                          <svg viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        </div>
+                        <span class="tl-dot-label tld-done">Diagnóstico</span>
+                      </div>
+                      <div class="tl-connector partial"></div>
+                      <div class="tl-dot-wrap">
+                        <div class="tl-dot tld-active">
+                          <svg viewBox="0 0 24 24">
+                            <path
+                              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                            />
+                          </svg>
+                        </div>
+                        <span class="tl-dot-label tld-active">En Trabajo</span>
+                      </div>
+                      <div class="tl-connector"></div>
+                      <div class="tl-dot-wrap">
+                        <div class="tl-dot tld-future"></div>
+                        <span class="tl-dot-label">Entrega</span>
+                      </div>
+                      <div class="tl-connector"></div>
+                      <div class="tl-dot-wrap">
+                        <div class="tl-dot tld-future"></div>
+                        <span class="tl-dot-label">Factura</span>
+                      </div>
+                    </div>
+                    <div class="aj-footer">
+                      <div class="aj-eta">Est. entrega: hoy 17:00 hrs</div>
+                      <button class="aj-cta">
+                        Ver EN VIVO
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div style="height: 16px"></div>
+              </div>
+              <div id="seg-terminados" class="seg-content">
+                <div class="sec-label">3 trabajos completados</div>
+                <div class="done-job-card" onclick="go('f2')">
+                  <div class="done-job-icon">
+                    <svg viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                  <div class="done-job-info">
+                    <div class="done-job-title">Mantención 40.000 km</div>
+                    <div class="done-job-sub">
+                      GLC 300 · KWRS-21 · 15/02/2026 · Providencia
+                    </div>
+                  </div>
+                  <div class="done-job-badge">
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >Listo
+                  </div>
+                </div>
+                <div class="done-job-card">
+                  <div class="done-job-icon">
+                    <svg viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                  <div class="done-job-info">
+                    <div class="done-job-title">
+                      Cambio de frenos delanteros
+                    </div>
+                    <div class="done-job-sub">
+                      Clase C 200 · BCDF-12 · 28/01/2026 · Las Condes
+                    </div>
+                  </div>
+                  <div class="done-job-badge">
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >Listo
+                  </div>
+                </div>
+                <div class="done-job-card" style="margin-bottom: 16px">
+                  <div class="done-job-icon">
+                    <svg viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </div>
+                  <div class="done-job-info">
+                    <div class="done-job-title">Revisión técnica anual</div>
+                    <div class="done-job-sub">
+                      GLC 300 · KWRS-21 · 10/12/2025 · Vitacura
+                    </div>
+                  </div>
+                  <div class="done-job-badge">
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" /></svg
+                    >Listo
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" /></svg
+                ><span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="1" y="3" width="15" height="13" rx="2" />
+                  <path d="M16 8h4l3 5v3h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" /></svg
+                ><span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path
+                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                  /></svg
+                ><span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab on">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                  /></svg
+                ><span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.36a16 16 0 0 0 5.55 5.55l1.9-1.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                  /></svg
+                ><span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- F2: DETALLE + TRACKING -->
+          <div class="screen" id="s-f2">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar" style="justify-content: space-between">
+              <button
+                onclick="go('f1')"
+                style="
+                  background: none;
+                  border: none;
+                  cursor: pointer;
+                  color: #fff;
+                  font-size: 22px;
+                  line-height: 1;
+                  flex-shrink: 0;
+                "
+              >
+                &#8249;
+              </button>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  flex: 1;
+                  justify-content: center;
+                "
+              >
+                <span style="font-size: 16px; font-weight: 700; color: #fff"
+                  >Detalle de Trabajo</span
+                >
+                <div class="live-badge">
+                  <div class="live-dot"></div>
+                  EN VIVO
+                </div>
+              </div>
+              <span class="nbar-logo" style="flex-shrink: 0">KAUFMANN</span>
+            </div>
+            <div class="veh-header">
+              <div class="veh-ot">OT-2026-00892</div>
+              <div class="veh-title">Mantención 50.000 km</div>
+              <div class="veh-sub">Mercedes-Benz GLC 300 · 2022</div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  margin-top: 4px;
+                "
+              >
+                <span class="veh-plate-chip">KWRS-21</span>
+                <div class="aj-status-badge">
+                  <div class="aj-status-dot"></div>
+                  En Reparacion
+                </div>
+              </div>
+            </div>
+            <div class="body">
+              <div class="gauge-wrap">
+                <div class="gauge-outer">
+                  <div class="gauge-inner">
+                    <div class="gauge-pct">75%</div>
+                    <div class="gauge-sub">completado</div>
+                  </div>
+                </div>
+                <div class="gauge-label">
+                  Progreso del servicio · Est. entrega hoy 17:00 hrs
+                </div>
+              </div>
+              <div class="advisor-bar" style="margin-bottom: 6px">
+                <div class="advisor-avatar">LC</div>
+                <div class="advisor-info">
+                  <div class="advisor-role">Asesor de servicio</div>
+                  <div class="advisor-name">Laura Castillo</div>
+                </div>
+                <div class="advisor-actions">
+                  <button class="advisor-btn adv-wa">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+                      />
+                    </svg>
+                  </button>
+                  <button class="advisor-btn adv-phone">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.08 6.08l1.97-1.97a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="sec-label">Seguimiento en tiempo real</div>
+              <div class="live-tl">
+                <div class="live-step">
+                  <div class="live-step-spine">
+                    <div class="live-step-circle lsc-done">
+                      <svg viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="live-step-line done"></div>
+                  </div>
+                  <div class="live-step-content">
+                    <div class="live-step-label done">Recepcionado</div>
+                    <div class="live-step-time">19/03/2026 · 09:15 hrs</div>
+                    <div
+                      style="
+                        font-size: 11.5px;
+                        color: var(--text-secondary);
+                        line-height: 1.45;
+                      "
+                    >
+                      Vehículo ingresado. Kilometraje: 50.340 km.
+                    </div>
+                  </div>
+                </div>
+                <div class="live-step">
+                  <div class="live-step-spine">
+                    <div class="live-step-circle lsc-done">
+                      <svg viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <div class="live-step-line done"></div>
+                  </div>
+                  <div class="live-step-content">
+                    <div class="live-step-label done">
+                      Diagnóstico completado
+                    </div>
+                    <div class="live-step-time">19/03/2026 · 10:45 hrs</div>
+                    <div
+                      style="
+                        font-size: 11.5px;
+                        color: var(--text-secondary);
+                        line-height: 1.45;
+                      "
+                    >
+                      Revisión inicial OK. Se identifico desgaste en frenos.
+                    </div>
+                  </div>
+                </div>
+                <div class="live-step">
+                  <div class="live-step-spine">
+                    <div
+                      class="live-step-circle lsc-active"
+                      style="position: relative"
+                    >
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                        />
+                      </svg>
+                      <div class="live-step-ring"></div>
+                    </div>
+                    <div class="live-step-line partial"></div>
+                  </div>
+                  <div class="live-step-content">
+                    <div class="live-step-label active">
+                      En Trabajo
+                      <span
+                        style="
+                          font-size: 10px;
+                          color: var(--warning);
+                          font-weight: 800;
+                          margin-left: 4px;
+                        "
+                        >AHORA</span
+                      >
+                    </div>
+                    <div class="live-step-time">19/03/2026 · 11:00 hrs</div>
+                    <div class="live-step-highlight">
+                      <div class="live-step-highlight-title">
+                        Cambio de aceite y filtros en progreso
+                      </div>
+                      <div class="live-step-highlight-sub">
+                        Aceite 5W-30 Mobil 1, filtros motor y habitaculo.
+                        Entrega estimada 17:00 hrs.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="live-step">
+                  <div class="live-step-spine">
+                    <div class="live-step-circle lsc-future">
+                      <svg viewBox="0 0 24 24" width="15" height="15">
+                        <path d="M20 12V22H4V12" />
+                        <path d="M22 7H2v5h20V7z" />
+                        <path d="M12 22V7" />
+                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                      </svg>
+                    </div>
+                    <div class="live-step-line future"></div>
+                  </div>
+                  <div class="live-step-content">
+                    <div class="live-step-label future">Preparando Entrega</div>
+                    <div class="live-notify-row">
+                      <div class="live-notify-dot"></div>
+                      <div class="live-notify-text">
+                        Te notificaremos cuando tu auto este listo.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="live-step">
+                  <div class="live-step-spine">
+                    <div class="live-step-circle lsc-future">
+                      <svg viewBox="0 0 24 24" width="15" height="15">
+                        <path
+                          d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                        />
+                        <polyline points="14 2 14 8 20 8" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="live-step-content" style="padding-bottom: 8px">
+                    <div class="live-step-label future">Factura Emitida</div>
+                    <div class="live-notify-row">
+                      <div class="live-notify-dot"></div>
+                      <div class="live-notify-text">
+                        Te notificaremos cuando la factura este disponible.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="budget-cta" style="margin-top: 4px">
+                <div class="budget-cta-title">
+                  Presupuesto pendiente de aprobacion
+                </div>
+                <div class="budget-cta-desc">
+                  Desgaste en pastillas de freno delanteras detectado. Requiere
+                  tu aprobacion para incluir el cambio.
+                </div>
+                <div class="budget-cta-amount">
+                  $48.500
+                  <span
+                    style="
+                      font-size: 12px;
+                      font-weight: 400;
+                      color: var(--text-tertiary);
+                    "
+                    >IVA incluido</span
+                  >
+                </div>
+                <div class="budget-actions">
+                  <button class="btn-outline-warn" onclick="go('f7')">
+                    Ver detalle</button
+                  ><button class="btn-solid-warn" onclick="go('f7')">
+                    Aprobar
+                  </button>
+                </div>
+              </div>
+              <div class="contact-advisor-btn">
+                <svg width="22" height="22" viewBox="0 0 24 24">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.36a16 16 0 0 0 5.55 5.55l1.9-1.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                  />
+                </svg>
+                <div style="flex: 1">
+                  <div class="contact-advisor-label">Contactar a mi asesor</div>
+                  <div class="contact-advisor-sub">
+                    Laura Castillo · Taller Las Condes
+                  </div>
+                </div>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--primary)"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+              <div style="height: 16px"></div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" /></svg
+                ><span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="1" y="3" width="15" height="13" rx="2" />
+                  <path d="M16 8h4l3 5v3h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" /></svg
+                ><span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path
+                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                  /></svg
+                ><span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab on">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                  /></svg
+                ><span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.36a16 16 0 0 0 5.55 5.55l1.9-1.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                  /></svg
+                ><span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- F3: MIS RESERVAS -->
+          <div class="screen" id="s-f7">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar">
+              <button class="nbar-back" onclick="go('f2')">&#8249;</button>
+              <div class="nbar-title">Presupuesto</div>
+              <span class="nbar-logo">KAUFMANN</span>
+            </div>
+            <div class="body" style="padding-top: 4px">
+              <div class="info-card" style="margin-top: 10px">
+                <div class="info-row">
+                  <span class="info-l">Vehículo</span
+                  ><span class="info-v">GLC 300 · KWRS-21</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-l">OT</span
+                  ><span class="info-v-mono">OT-2026-0847</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-l">Sucursal</span
+                  ><span class="info-v">Las Condes</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-l">Asesor</span
+                  ><span class="info-v">Carlos Moya</span>
+                </div>
+              </div>
+              <div class="sec-label" style="padding-top: 14px">
+                Mano de obra
+              </div>
+              <div class="info-card">
+                <div class="info-row">
+                  <span style="font-size: 13px; color: var(--text-primary)"
+                    >Revisión y mantención</span
+                  ><span
+                    style="
+                      font-size: 13px;
+                      font-weight: 700;
+                      color: var(--text-primary);
+                    "
+                    >$185.000</span
+                  >
+                </div>
+              </div>
+              <div class="sec-label" style="padding-top: 14px">Repuestos</div>
+              <div class="info-card">
+                <div class="info-row">
+                  <span style="font-size: 13px; color: var(--text-primary)"
+                    >Filtro de aceite</span
+                  ><span
+                    style="
+                      font-size: 13px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >$32.000</span
+                  >
+                </div>
+                <div class="info-row">
+                  <span style="font-size: 13px; color: var(--text-primary)"
+                    >Filtro de aire</span
+                  ><span
+                    style="
+                      font-size: 13px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >$28.000</span
+                  >
+                </div>
+                <div class="info-row">
+                  <span style="font-size: 13px; color: var(--text-primary)"
+                    >Pastillas de freno</span
+                  ><span
+                    style="
+                      font-size: 13px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >$67.000</span
+                  >
+                </div>
+                <div class="info-row">
+                  <span style="font-size: 13px; color: var(--text-primary)"
+                    >Liquido de frenos</span
+                  ><span
+                    style="
+                      font-size: 13px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >$15.000</span
+                  >
+                </div>
+              </div>
+              <div class="info-card" style="margin-top: 12px">
+                <div class="info-row">
+                  <span style="font-size: 13px; color: var(--text-secondary)"
+                    >Subtotal</span
+                  ><span
+                    style="
+                      font-size: 13px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >$327.000</span
+                  >
+                </div>
+                <div class="info-row">
+                  <span style="font-size: 13px; color: var(--text-secondary)"
+                    >IVA 19%</span
+                  ><span
+                    style="
+                      font-size: 13px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >$62.130</span
+                  >
+                </div>
+                <div
+                  class="info-row"
+                  style="
+                    background: rgba(0, 113, 187, 0.04);
+                    margin: 0 -14px;
+                    padding: 12px 14px;
+                    border-radius: 0 0 18px 18px;
+                  "
+                >
+                  <span
+                    style="
+                      font-size: 14px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                    "
+                    >Total</span
+                  ><span
+                    style="
+                      font-size: 17px;
+                      font-weight: 800;
+                      color: var(--accent);
+                    "
+                    >$389.130</span
+                  >
+                </div>
+              </div>
+              <div
+                style="
+                  padding: 10px 16px 16px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                "
+              >
+                <button class="btn-danger" onclick="go('f2')">
+                  Rechazar presupuesto
+                </button>
+                <button class="btn-prim" onclick="go('f7b')">
+                  Aprobar presupuesto
+                </button>
+              </div>
+              <div style="height: 8px"></div>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" /></svg
+                ><span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="1" y="3" width="15" height="13" rx="2" />
+                  <path d="M16 8h4l3 5v3h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" /></svg
+                ><span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path
+                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                  /></svg
+                ><span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab on">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                  /></svg
+                ><span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.36a16 16 0 0 0 5.55 5.55l1.9-1.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                  /></svg
+                ><span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- F7B: PRESUPUESTO APROBADO -->
+          <div class="screen" id="s-f7b">
+            <div class="sbar">
+              <div class="s-time">9:41</div>
+              <div class="s-icons">
+                <div class="bars">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+                <div class="batt-ic"><div class="batt-fill"></div></div>
+              </div>
+            </div>
+            <div class="nbar">
+              <div style="width: 32px"></div>
+              <div class="nbar-title" style="flex: 1"></div>
+              <span class="nbar-logo">KAUFMANN</span>
+            </div>
+            <div
+              class="body"
+              style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 32px 24px;
+              "
+            >
+              <div
+                style="
+                  width: 84px;
+                  height: 84px;
+                  border-radius: 42px;
+                  background: var(--success-bg);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin-bottom: 18px;
+                  box-shadow: 0 0 0 10px rgba(63, 199, 106, 0.08);
+                "
+              >
+                <svg
+                  style="
+                    width: 44px;
+                    height: 44px;
+                    stroke: var(--success);
+                    stroke-width: 2;
+                    fill: none;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                  "
+                  viewBox="0 0 24 24"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div
+                style="
+                  font-size: 22px;
+                  font-weight: 800;
+                  color: var(--text-primary);
+                  text-align: center;
+                  margin-bottom: 6px;
+                  line-height: 1.3;
+                "
+              >
+                Presupuesto aprobado
+              </div>
+              <div
+                style="
+                  font-size: 14px;
+                  color: var(--text-secondary);
+                  text-align: center;
+                  margin-bottom: 24px;
+                  line-height: 1.45;
+                  padding: 0 8px;
+                "
+              >
+                Tu asesor será notificado y procedera con los trabajos
+              </div>
+              <div class="card" style="width: 100%; margin-bottom: 24px">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 0;
+                    border-bottom: 1px solid var(--border-light);
+                  "
+                >
+                  <span style="font-size: 12px; color: var(--text-tertiary)"
+                    >Total aprobado</span
+                  ><span
+                    style="
+                      font-size: 16px;
+                      font-weight: 800;
+                      color: var(--success);
+                    "
+                    >$389.130</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 0;
+                    border-bottom: 1px solid var(--border-light);
+                  "
+                >
+                  <span style="font-size: 12px; color: var(--text-tertiary)"
+                    >Vehículo</span
+                  ><span
+                    style="
+                      font-size: 12px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >GLC 300 · KWRS-21</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 0;
+                  "
+                >
+                  <span style="font-size: 12px; color: var(--text-tertiary)"
+                    >Orden de trabajo</span
+                  ><span
+                    style="
+                      font-size: 12px;
+                      font-weight: 600;
+                      color: var(--text-primary);
+                    "
+                    >OT-2026-0847</span
+                  >
+                </div>
+              </div>
+              <button class="btn-prim" style="width: 100%" onclick="go('f1')">
+                Volver a mis trabajos
+              </button>
+            </div>
+            <div class="bnav">
+              <button class="tab" onclick="navTo('home')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" /></svg
+                ><span class="tab-label">Inicio</span>
+              </button>
+              <button class="tab" onclick="navTo('vehículos')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="1" y="3" width="15" height="13" rx="2" />
+                  <path d="M16 8h4l3 5v3h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" /></svg
+                ><span class="tab-label">Mis Autos</span>
+              </button>
+              <button class="tab" onclick="navTo('tienda')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path
+                    d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                  /></svg
+                ><span class="tab-label">Tienda</span>
+              </button>
+              <button class="tab on">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                  /></svg
+                ><span class="tab-label">Servicios</span>
+              </button>
+              <button class="tab" onclick="navTo('contactar')">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.36a16 16 0 0 0 5.55 5.55l1.9-1.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                  /></svg
+                ><span class="tab-label">Contactar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /device-scr -->
+      </div>
+      <!-- /device -->
+    </div>
+    <!-- /main -->
+
+    <script>
+      // ═══════════════════════════════════════════════
+      // ALL SCREEN IDS
+      // ═══════════════════════════════════════════════
+      const ALL_SCREENS = ["hub", "f1", "f2", "f7", "f7b"];
+
+      const DESC_MAP = {
+        hub: ["Servicios Hub", "Taller, Reservas, Facturas, Sucursales"],
+        f1: ["Mis Trabajos", "Lista activos + terminados"],
+        f2: ["Detalle + Tracking", "Live timeline + presupuesto"],
+        f3: ["Mis Reservas", "Próximas + historial"],
+        f4: ["Agendar — Vehículo", "Paso 1"],
+        f4b: ["Agendar — Fecha", "Paso 2"],
+        f4c: ["Agendar — Resumen", "Paso 3"],
+        f5: ["Confirmacion", "Exito post-agendamiento"],
+        f6: ["Anular Reserva", "Retencion + cancelacion"],
+        f7: ["Presupuesto", "Items + aprobar/rechazar"],
+        f7b: ["Presupuesto Aprobado", "Confirmacion"],
+      };
+
+      function go(id) {
+        ALL_SCREENS.forEach((s) => {
+          const el = document.getElementById("s-" + s);
+          if (el) {
+            el.classList.remove("active");
+            el.style.display = "none";
+          }
+        });
+        const t = document.getElementById("s-" + id);
+        if (t) {
+          t.classList.add("active");
+          t.style.display = "flex";
+        }
+        // Update sidebar nav
+        document
+          .querySelectorAll(".sb-btn")
+          .forEach((b) => b.classList.remove("on"));
+        const nb = document.getElementById("nav-" + id);
+        if (nb) nb.classList.add("on");
+        // Update sidebar info
+        if (DESC_MAP[id]) {
+          document.getElementById("sb-sname").textContent = DESC_MAP[id][0];
+          document.getElementById("sb-sdesc").textContent = DESC_MAP[id][1];
+        }
+      }
+
+      function setMode(m) {
+        document.body.setAttribute("data-mode", m);
+        document
+          .getElementById("mode-light")
+          .classList.toggle("on", m === "light");
+        document
+          .getElementById("mode-dark")
+          .classList.toggle("on", m === "dark");
+      }
+
+      function toggleSeg(segId, showId, hideId, btn) {
+        const segEl = document.getElementById(segId);
+        segEl
+          .querySelectorAll(".seg-btn")
+          .forEach((b) => b.classList.remove("on"));
+        btn.classList.add("on");
+        const showEl = document.getElementById(showId);
+        const hideEl = document.getElementById(hideId);
+        if (hideEl) hideEl.classList.remove("active");
+        if (showEl) showEl.classList.add("active");
+      }
+
+      function navTo(module, screen) {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage(
+            { action: "navigate", module: module, screen: screen || null },
+            "*",
+          );
+        }
+      }
+
+      // Init
+      var hs = window.location.hash.replace("#", "");
+      go(hs || "hub");
+      setMode("dark");
+    </script>
+  </body>
+</html>
